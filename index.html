@@ -1300,7 +1300,7 @@
 
   <!-- Top Announcement -->
   <aside class="market-banner">
-    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Scope-Sensitive Precision Matrix) — Accurate, deterministic cost modeling.
+    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Domain-Driven Precision Engine) — Accurate, deterministic cost modeling.
   </aside>
 
   <!-- Navigation -->
@@ -1368,7 +1368,7 @@
             <div>
               <div class="mode-icon">💡</div>
               <h3>I Have an Idea</h3>
-              <p>Describe what you want to build in plain English. We extract your exact requirements, honor your exclusions, and compute a tailored quote.</p>
+              <p>Describe what you want to build in plain English. We extract your exact domain requirements, honor your exclusions, and compute a tailored quote.</p>
               
               <div class="idea-box">
                 <textarea 
@@ -1383,7 +1383,7 @@
                   <button class="btn btn-outline btn-sm" onclick="clearIdeaInput()" title="Clear text">Clear</button>
                 </div>
                 <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
-                  🔒 Negative statements (e.g. 'no payment', 'no customer login') are strictly honored as scope exclusions.
+                  🔒 Negative statements (e.g. 'no online payment', 'no customer login') strictly override inferred features.
                 </span>
               </div>
             </div>
@@ -1573,12 +1573,12 @@
           <div class="analysis-header-badge">
             <div style="display:flex; align-items:center; gap:0.5rem;">
               <span class="badge badge-ai">✨ Smart Requirement Extraction</span>
-              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Precision Scoping Engine</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Domain Scoping Engine</span>
             </div>
             <span class="badge badge-success" id="effort-hours-badge">0 Dev Hours</span>
           </div>
           <p style="font-size: 0.9rem; color: var(--text-muted);">
-            CostPilot analyzed your concept, mapped explicit inclusions, and strictly honored your exclusions:
+            CostPilot analyzed your concept, mapped domain workflows, and strictly enforced your exclusions:
           </p>
           <div class="analysis-prompt-quote" id="analysis-prompt-text"></div>
           <div class="analysis-interpretations-grid" id="analysis-chips-grid"></div>
@@ -1927,7 +1927,7 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Commercial Software Standards • Dynamic Complexity Accumulation Engine</div>
+        <div>Commercial Software Standards • Domain-Driven Scoping Engine</div>
       </div>
     </div>
   </footer>
@@ -2190,8 +2190,7 @@
     };
 
     // ==========================================================================
-    // CUMULATIVE COMPLEXITY PRICING ENGINE
-    // Base + Feature + Backend + Roles + Dashboards + Integrations + Workflows + Scale
+    // CUMULATIVE COMPLEXITY PRICING ENGINE (UNTOUCHED PRICING WEIGHTS)
     // ==========================================================================
     function calculateCostModels(cfg) {
       const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
@@ -2229,7 +2228,7 @@
       accumulatedHours += (ui.hours || 0);
       accumulatedHours += (fScale.hours || 0);
 
-      // 3. Dynamic questions from wizard (if any)
+      // 3. Dynamic questions from wizard
       cfg.dynamicScope.forEach(id => {
         const item = (p.dynamicQuestions || []).find(q => q.id === id);
         if (item) {
@@ -2245,32 +2244,28 @@
         }
       });
 
-      // ========================================================================
-      // DEEP COMPLEXITY ACCUMULATION
-      // ========================================================================
-
-      // A. BACKEND & DATABASE COMPLEXITY
+      // Backend / Database
       const needsDatabase = hasRequirement(["database", "db", "crud", "data storage", "records", "sql", "postgres", "mongodb"], null, null) ||
                             cfg.projectType === "lms" || cfg.projectType === "saas_product" || cfg.projectType === "ecommerce" || cfg.projectType === "web_app";
       if (needsDatabase && !isExplicitlyExcluded("database")) {
         accumulatedHours += 24;
       }
 
-      // B. USER AUTHENTICATION & LOGIN (Strictly checks customer auth exclusions)
+      // Customer Authentication
       const needsAuth = hasRequirement(["login", "auth", "register", "registration", "signup", "user account", "password", "jwt"], "feat_auth", null) &&
-                        !isExplicitlyExcluded("customer login") && !isExplicitlyExcluded("login");
+                        !isExplicitlyExcluded("customer login") && !isExplicitlyExcluded("login") && !isExplicitlyExcluded("customer registration");
       if (needsAuth && !cfg.selectedFeatures.includes("feat_auth")) {
         accumulatedHours += 14;
       }
 
-      // C. USER ROLES & RBAC PERMISSIONS
+      // Roles & RBAC
       const needsRoles = hasRequirement(["role", "roles", "rbac", "permission", "permissions", "access control", "multi-role", "multiple roles"], null, "app_roles_multi") ||
                          hasRequirement(["student and teacher", "customer and admin", "buyer and seller", "vendor and admin", "instructor", "multi-tenant"], null, null);
       if (needsRoles && !isExplicitlyExcluded("roles")) {
         accumulatedHours += 22;
       }
 
-      // D. DASHBOARDS (Customer Dashboard vs Admin Dashboard)
+      // Dashboards
       const needsAdminDashboard = (hasRequirement(["admin dashboard", "admin panel", "admin portal", "management panel", "admin console", "admin"], null, null) || cfg.hasAdminPanel) &&
                                   !isExplicitlyExcluded("admin");
       if (needsAdminDashboard) {
@@ -2283,14 +2278,14 @@
         accumulatedHours += 22;
       }
 
-      // E. WORKFLOWS
+      // Workflows
       const hasBookingWorkflow = hasRequirement(["booking", "reserve", "slot", "appointment", "schedule", "reservation"], null, null);
       if (hasBookingWorkflow && !isExplicitlyExcluded("booking")) {
         accumulatedHours += 18;
       }
 
       const hasOrderingWorkflow = hasRequirement(["cart", "shopping cart", "ordering", "order management", "checkout flow"], null, null);
-      if (hasOrderingWorkflow && !isExplicitlyExcluded("cart") && !isExplicitlyExcluded("shopping cart") && !isExplicitlyExcluded("checkout")) {
+      if (hasOrderingWorkflow && !isExplicitlyExcluded("cart") && !isExplicitlyExcluded("shopping cart") && !isExplicitlyExcluded("checkout") && !isExplicitlyExcluded("ordering")) {
         accumulatedHours += 18;
       }
 
@@ -2299,7 +2294,7 @@
         accumulatedHours += 18;
       }
 
-      // F. INTEGRATIONS
+      // Integrations
       const needsPayment = hasRequirement(["payment", "payments", "pay", "fee", "fees", "razorpay", "stripe", "gateway", "online payment"], "feat_payments", null) &&
                            !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("online payment");
       if (needsPayment && !cfg.selectedFeatures.includes("feat_payments")) {
@@ -2312,8 +2307,9 @@
         accumulatedHours += 18;
       }
 
-      const needsWhatsApp = hasRequirement(["whatsapp", "sms", "text alert"], "feat_wa_sms", null) && !isExplicitlyExcluded("whatsapp");
-      if (needsWhatsApp && !cfg.selectedFeatures.includes("feat_wa_sms")) {
+      const needsWhatsAppAPI = hasRequirement(["whatsapp api", "sms gateway", "otp", "automated notifications", "text alerts", "sms integration"], "feat_wa_sms", null) &&
+                              !isExplicitlyExcluded("whatsapp") && !isExplicitlyExcluded("sms");
+      if (needsWhatsAppAPI && !cfg.selectedFeatures.includes("feat_wa_sms")) {
         accumulatedHours += 10;
       }
 
@@ -2342,7 +2338,7 @@
         accumulatedHours += 14;
       }
 
-      // G. PLATFORM SCOPE
+      // Mobile
       const hasMobileApp = hasRequirement(["mobile app", "android", "ios", "flutter", "react native"], null, null) &&
                            !isExplicitlyExcluded("mobile app") &&
                            !isExplicitlyExcluded("app");
@@ -2355,13 +2351,10 @@
         accumulatedHours += 80;
       }
 
-      // ========================================================================
-      // CALCULATE UNCOMPRESSED MARKET PRICE & DISCOUNTED PRICE
-      // ========================================================================
+      // Calculate Market Price and Discounted Price
       const calculatedMarketPrice = Math.round(accumulatedHours * pricingData.hourlyRateStandard);
       let standardA = calculatedMarketPrice;
 
-      // Calibration sanity floor & ceiling alignment
       if (cfg.projectType === "portfolio" && accumulatedHours <= 30) {
         standardA = Math.min(standardA, 22000);
         standardA = Math.max(standardA, 12000);
@@ -2372,19 +2365,15 @@
         standardA = Math.max(standardA, 95000);
       }
 
-      // Discounted Price: Exactly ~15% direct optimization
       const optimizedA = Math.round(standardA * 0.85);
       const savingsA = standardA - optimizedA;
-
       const monthlyA = 1000;
 
-      // PACKAGE B: Dedicated Enterprise Cluster
       let standardB = Math.round(standardA * 1.65 + 25000);
       let optimizedB = Math.round(standardB * 0.85);
       let savingsB = standardB - optimizedB;
       let monthlyB = (cfg.infra && cfg.infra.users === "10k+") ? 8500 : 5000;
 
-      // TCO Projections
       const year1A = optimizedA + (monthlyA * 12);
       const year3A = optimizedA + (monthlyA * 36);
       const year5A = optimizedA + (monthlyA * 60);
@@ -2537,7 +2526,6 @@
       includedList.innerHTML = "";
       deferredList.innerHTML = "";
 
-      // SCENARIO 1: RED FLAG ZONE
       if (counterAmount < absoluteMinimumBuildFloor * 0.75 || (!isFreeTierOperational && counterAmount < absoluteMinimumBuildFloor)) {
         verdictBox.classList.add("audit-verdict-red");
         statusBadge.className = "badge badge-danger";
@@ -2561,9 +2549,7 @@
           <li>4. "Will you charge extra for mobile tablet responsiveness and cross-browser testing?"</li>
           <li>5. "Are you using clean custom code or an unlicensed/pirated template that risks security?"</li>
         `;
-      } 
-      // SCENARIO 2: YELLOW ZONE
-      else if (counterAmount < packageABuild * 0.88) {
+      } else if (counterAmount < packageABuild * 0.88) {
         verdictBox.classList.add("audit-verdict-yellow");
         statusBadge.className = "badge badge-warning";
         statusBadge.innerText = "🟡 Conditional Match Feasible";
@@ -2591,9 +2577,7 @@
           <li>✓ Full 30-day post-launch warranty included at this matched rate.</li>
           <li>✓ Zero code quality compromises—clean, maintainable architecture.</li>
         `;
-      } 
-      // SCENARIO 3: GREEN ZONE
-      else {
+      } else {
         verdictBox.classList.add("audit-verdict-green");
         statusBadge.className = "badge badge-success";
         statusBadge.innerText = "🟢 Match Approved";
@@ -2658,7 +2642,7 @@
             </td>
             <td>
               <span class="cell-title" style="color:#b91c1c;">❌ Manual Checking Nightmare</span>
-              <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but course is locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
+              <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
             </td>
           </tr>
         `;
@@ -2776,405 +2760,7 @@
     }
 
     // ==========================================================================
-    // UI CONTROLLERS & RESULTS RENDERING
-    // ==========================================================================
-    function showLanding() {
-      document.getElementById("landing-section").style.display = "block";
-      document.getElementById("estimator-section").style.display = "none";
-      document.getElementById("results-section").style.display = "none";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function startWizardMode() {
-      state.fromIdeaMode = false;
-      state.customProjectTitle = null;
-      state.estimatedHoursMin = null;
-      state.estimatedHoursMax = null;
-      state.includedList = [];
-      state.excludedList = [];
-      document.getElementById("landing-section").style.display = "none";
-      document.getElementById("estimator-section").style.display = "block";
-      document.getElementById("results-section").style.display = "none";
-      renderWizardStep(state.currentStep);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function showResultsView() {
-      state.computedResult = calculateCostModels(state);
-      document.getElementById("landing-section").style.display = "none";
-      document.getElementById("estimator-section").style.display = "none";
-      document.getElementById("results-section").style.display = "block";
-      renderResults();
-      document.getElementById("parity-section").style.display = "none";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function editEstimate() {
-      document.getElementById("results-section").style.display = "none";
-      document.getElementById("estimator-section").style.display = "block";
-      renderWizardStep(state.currentStep);
-    }
-
-    function resetEstimator() {
-      if (confirm("Reset current configuration to default benchmarks?")) {
-        clearCurrentProjectSession();
-      }
-    }
-
-    function clearCurrentProjectSession() {
-      document.getElementById("idea-input").value = "";
-      document.getElementById("audit-quote-amount").value = "";
-
-      state.currentStep = 1;
-      state.fromIdeaMode = false;
-      state.rawIdeaText = "";
-      state.customProjectTitle = null;
-      state.analysisBreakdown = [];
-      state.includedList = [];
-      state.excludedList = [];
-      state.hasAdminPanel = false;
-      state.userRolesCount = 1;
-      state.platformScope = "website_only";
-      state.estimatedHoursMin = null;
-      state.estimatedHoursMax = null;
-      state.projectType = "biz_website";
-      state.dynamicScope = [];
-      state.uiuxTier = "custom";
-      state.formScale = "1-3";
-      state.selectedFeatures = [];
-      state.infra.users = "under100";
-      state.infra.storage = "5gb";
-      state.computedResult = null;
-
-      document.getElementById("results-section").style.display = "none";
-      document.getElementById("estimator-section").style.display = "none";
-      document.getElementById("landing-section").style.display = "block";
-      document.getElementById("parity-section").style.display = "none";
-      document.getElementById("audit-verdict-box").className = "audit-verdict-box";
-
-      showToast("Current project session cleared. Ready for a new estimate!");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function clearIdeaInput() {
-      document.getElementById("idea-input").value = "";
-      showToast("Idea text cleared.");
-    }
-
-    function jumpToStep(stepNum) {
-      state.currentStep = stepNum;
-      renderWizardStep(stepNum);
-    }
-
-    function wizardNext() {
-      if (state.currentStep < state.totalSteps) {
-        state.currentStep++;
-        renderWizardStep(state.currentStep);
-      } else {
-        showResultsView();
-      }
-    }
-
-    function wizardPrev() {
-      if (state.currentStep > 1) {
-        state.currentStep--;
-        renderWizardStep(state.currentStep);
-      } else {
-        showLanding();
-      }
-    }
-
-    function renderWizardStep(step) {
-      document.querySelectorAll(".step-item").forEach(el => {
-        const s = parseInt(el.getAttribute("data-step"));
-        el.classList.remove("active", "completed");
-        if (s === step) el.classList.add("active");
-        if (s < step) el.classList.add("completed");
-      });
-
-      document.querySelectorAll(".step-pane").forEach(p => p.classList.remove("active"));
-      const currentPane = document.getElementById(`wizard-step-${step}`);
-      if (currentPane) currentPane.classList.add("active");
-
-      document.getElementById("current-step-display").innerText = step;
-      document.getElementById("wizard-next-btn").innerText = (step === state.totalSteps) ? "Generate Estimate 🎉" : "Continue →";
-
-      if (step === 1) renderStep1();
-      if (step === 2) renderStep2();
-      if (step === 3) renderStep3();
-      if (step === 4) renderStep4();
-      if (step === 5) renderStep5();
-
-      window.scrollTo({ top: 120, behavior: "smooth" });
-    }
-
-    function renderStep1() {
-      const container = document.getElementById("project-types-container");
-      container.innerHTML = "";
-      Object.values(pricingData.projectTypes).forEach(pt => {
-        const isSel = state.projectType === pt.id;
-        const card = document.createElement("div");
-        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
-        card.onclick = () => {
-          state.projectType = pt.id;
-          state.dynamicScope = [];
-          renderStep1();
-        };
-        card.innerHTML = `
-          <div class="card-check">✓</div>
-          <div style="font-size:1.8rem; margin-bottom:0.5rem;">${pt.icon}</div>
-          <div style="font-weight:700; margin-bottom:0.25rem;">${pt.title}</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">${pt.desc}</div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderStep2() {
-      const p = pricingData.projectTypes[state.projectType] || pricingData.projectTypes["biz_website"];
-      document.getElementById("scope-dynamic-title").innerText = `${p.title} Requirements`;
-      
-      const dynBox = document.getElementById("scope-dynamic-options");
-      dynBox.innerHTML = "";
-      if (p.dynamicQuestions && p.dynamicQuestions.length > 0) {
-        p.dynamicQuestions.forEach(q => {
-          const isSel = state.dynamicScope.includes(q.id);
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = `pill-btn ${isSel ? 'selected' : ''}`;
-          btn.innerText = (isSel ? "✓ " : "+ ") + q.label;
-          btn.onclick = () => {
-            if (state.dynamicScope.includes(q.id)) {
-              state.dynamicScope = state.dynamicScope.filter(x => x !== q.id);
-            } else {
-              state.dynamicScope.push(q.id);
-            }
-            renderStep2();
-          };
-          dynBox.appendChild(btn);
-        });
-      } else {
-        dynBox.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">Standard architecture scope applies.</span>`;
-      }
-
-      // UI/UX
-      const uiBox = document.getElementById("uiux-options-container");
-      uiBox.innerHTML = "";
-      Object.values(pricingData.uiuxTiers).forEach(tier => {
-        const isSel = state.uiuxTier === tier.id;
-        const card = document.createElement("div");
-        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
-        card.onclick = () => {
-          state.uiuxTier = tier.id;
-          renderStep2();
-        };
-        card.innerHTML = `
-          <div class="card-check">✓</div>
-          <div style="font-weight:700; margin-bottom:0.25rem;">${tier.title}</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">${tier.desc}</div>
-        `;
-        uiBox.appendChild(card);
-      });
-
-      // Forms
-      document.querySelectorAll("#form-count-options .pill-btn").forEach(btn => {
-        btn.classList.toggle("selected", btn.getAttribute("data-forms") === state.formScale);
-      });
-    }
-
-    function selectFormCount(scale) {
-      state.formScale = scale;
-      document.querySelectorAll("#form-count-options .pill-btn").forEach(btn => {
-        btn.classList.toggle("selected", btn.getAttribute("data-forms") === scale);
-      });
-    }
-
-    function renderStep3() {
-      const container = document.getElementById("features-categorized-container");
-      container.innerHTML = "";
-
-      const grid = document.createElement("div");
-      grid.className = "feature-grid";
-
-      Object.entries(pricingData.features).forEach(([fid, feat]) => {
-        const checked = state.selectedFeatures.includes(fid);
-        const label = document.createElement("label");
-        label.className = "feature-item";
-        label.innerHTML = `
-          <input type="checkbox" ${checked ? 'checked' : ''} value="${fid}">
-          <span>${feat.label}</span>
-        `;
-        label.querySelector("input").onchange = (e) => {
-          if (e.target.checked) {
-            if (!state.selectedFeatures.includes(fid)) state.selectedFeatures.push(fid);
-          } else {
-            state.selectedFeatures = state.selectedFeatures.filter(x => x !== fid);
-          }
-        };
-        grid.appendChild(label);
-      });
-
-      container.appendChild(grid);
-    }
-
-    function renderStep4() {
-      document.querySelectorAll("#infra-users-selector .pill-btn").forEach(b => {
-        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.users);
-      });
-      document.querySelectorAll("#infra-storage-selector .pill-btn").forEach(b => {
-        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.storage);
-      });
-    }
-
-    function setInfraParam(param, val) {
-      state.infra[param] = val;
-      renderStep4();
-    }
-
-    function renderStep5() {
-      const container = document.getElementById("maint-support-options");
-      container.innerHTML = "";
-      const maintOptions = [
-        { id: "basic", title: "Managed Cloud & Uptime Continuity", desc: "Domain renewal, weekly automated backups, and 1hr minor updates/month." },
-        { id: "standard", title: "Active Monthly Sprints", desc: "Includes 4 hours of active monthly feature development and SLA guarantee." }
-      ];
-
-      maintOptions.forEach(tier => {
-        const isSel = state.maintenanceTier === tier.id;
-        const card = document.createElement("div");
-        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
-        card.onclick = () => {
-          state.maintenanceTier = tier.id;
-          renderStep5();
-        };
-        card.innerHTML = `
-          <div class="card-check">✓</div>
-          <div style="font-weight:700; margin-bottom:0.25rem;">${tier.title}</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">${tier.desc}</div>
-        `;
-        container.appendChild(card);
-      });
-
-      document.querySelectorAll("#maint-freq-selector .pill-btn").forEach(b => {
-        b.classList.toggle("selected", b.getAttribute("data-val") === state.maintenanceFreq);
-      });
-    }
-
-    function setMaintFreq(freq) {
-      state.maintenanceFreq = freq;
-      renderStep5();
-    }
-
-    // Results Renderer
-    function renderResults() {
-      const res = state.computedResult;
-      document.getElementById("res-estimate-id").innerText = res.estimateId;
-      document.getElementById("res-project-name").innerText = `${res.projectTitle} Specification`;
-
-      const hoursBadge = document.getElementById("effort-hours-badge");
-      if (res.hoursMin && res.hoursMax) {
-        hoursBadge.innerText = `${res.hoursMin}–${res.hoursMax} Dev Hours`;
-      }
-
-      const banner = document.getElementById("smart-analysis-banner");
-      if (state.fromIdeaMode) {
-        banner.classList.add("active");
-        document.getElementById("analysis-prompt-text").innerText = `"${state.rawIdeaText}"`;
-        
-        const chipsGrid = document.getElementById("analysis-chips-grid");
-        chipsGrid.innerHTML = "";
-        state.analysisBreakdown.forEach(item => {
-          const div = document.createElement("div");
-          div.className = "analysis-chip-card";
-          div.innerHTML = `<strong>${item.title}</strong><span>${item.desc}</span>`;
-          chipsGrid.appendChild(div);
-        });
-      } else {
-        banner.classList.remove("active");
-      }
-
-      updateSelectedPackageDisplay();
-
-      const chips = document.getElementById("why-chips-container");
-      chips.innerHTML = "";
-      res.reasons.forEach(r => {
-        const chip = document.createElement("div");
-        chip.className = "why-chip";
-        chip.innerHTML = `<span>⚡</span> <span>${r}</span>`;
-        chips.appendChild(chip);
-      });
-    }
-
-    function selectPackageView(pkgKey) {
-      state.activePackageView = pkgKey;
-      document.getElementById("btn-toggle-serverless").classList.toggle("active", pkgKey === "serverless");
-      document.getElementById("btn-toggle-enterprise").classList.toggle("active", pkgKey === "enterprise");
-      updateSelectedPackageDisplay();
-      showToast(`Switched view to ${pkgKey === 'serverless' ? 'Cloud-Optimized Architecture' : 'Dedicated Enterprise Cluster'}`);
-    }
-
-    function updateSelectedPackageDisplay() {
-      const res = state.computedResult;
-      const isA = state.activePackageView === "serverless";
-      const active = isA ? res.packageA : res.packageB;
-
-      document.getElementById("res-hero-arch-badge").innerText = isA ? "Package A: Cloud-Optimized Architecture" : "Package B: Dedicated Enterprise Cluster";
-      document.getElementById("res-overkill-warning-badge").style.display = (!isA && !res.isHighScale) ? "inline-flex" : "none";
-
-      document.getElementById("val-standard-price").innerText = formatINR(active.standardPrice);
-      document.getElementById("val-optimized-price").innerText = formatINR(active.optimizedPrice);
-      document.getElementById("val-savings-badge").innerText = `You save ${formatINR(active.savings)}`;
-
-      document.getElementById("val-monthly-price").innerText = `₹${active.monthly.toLocaleString('en-IN')} / mo`;
-      document.getElementById("val-monthly-desc").innerText = active.monthlyDesc;
-
-      document.getElementById("tco-package-indicator").innerHTML = `Displaying projection for: <strong>${active.name}</strong>`;
-      document.getElementById("dev-active-pkg-label").innerText = isA ? "Package A (Cloud-Optimized)" : "Package B (Dedicated Enterprise)";
-      document.getElementById("infra-active-pkg-label").innerText = isA ? "Package A (Zero-Idle Stack)" : "Package B (Dedicated VPC Cluster)";
-
-      document.getElementById("tco-val-1yr").innerText = formatINR(active.year1);
-      document.getElementById("tco-val-3yr").innerText = formatINR(active.year3);
-      document.getElementById("tco-val-5yr").innerText = formatINR(active.year5);
-
-      const devTbody = document.getElementById("table-dev-rows");
-      devTbody.innerHTML = "";
-      active.breakdown.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${row.phase}</strong></td>
-          <td style="color:var(--text-muted); font-size:0.85rem;">${row.desc}</td>
-          <td class="text-right" style="font-weight:700;">${formatINR(row.cost)}</td>
-        `;
-        devTbody.appendChild(tr);
-      });
-
-      const infraTbody = document.getElementById("table-infra-rows");
-      infraTbody.innerHTML = "";
-      active.infraItems.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${row.item}</strong></td>
-          <td style="color:var(--text-muted); font-size:0.85rem;">${row.spec}</td>
-          <td class="text-right" style="font-weight:700; color:var(--primary);">${row.cost}</td>
-        `;
-        infraTbody.appendChild(tr);
-      });
-    }
-
-    function toggleAccordion(id) {
-      const body = document.getElementById(id);
-      const icon = document.getElementById(`${id}-icon`);
-      if (body.classList.contains("collapsed")) {
-        body.classList.remove("collapsed");
-        if (icon) icon.innerText = "▼";
-      } else {
-        body.classList.add("collapsed");
-        if (icon) icon.innerText = "▶";
-      }
-    }
-
-    // ==========================================================================
-    // REQUIREMENT & EXCLUSION-AWARE SEMANTIC ANALYZER (WITH STRICT PRECEDENCE)
+    // DOMAIN-DRIVEN REQUIREMENT EXTRACTION & PRE-DISPLAY VALIDATOR
     // ==========================================================================
     async function processIdeaMode() {
       const inputEl = document.getElementById("idea-input");
@@ -3187,7 +2773,7 @@
       }
 
       btnEl.disabled = true;
-      btnEl.innerText = "Scrutinizing Scope & Exclusions...";
+      btnEl.innerText = "Analyzing Requirements & Domain...";
 
       if (AI_WORKER_URL) {
         try {
@@ -3202,19 +2788,19 @@
             applyAIClassification(aiData, text, true);
             btnEl.disabled = false;
             btnEl.innerText = "Analyze & Value Project →";
-            showToast("✨ Precision scope extraction complete!");
+            showToast("✨ Precision domain analysis complete!");
             showResultsView();
             return;
           }
         } catch (err) {
-          console.warn("AI proxy unavailable, switching to local exclusion analyzer.", err);
+          console.warn("AI proxy unavailable, switching to local domain analyzer.", err);
         }
       }
 
       applyLocalClassification(text);
       btnEl.disabled = false;
       btnEl.innerText = "Analyze & Value Project →";
-      showToast("Smart local requirement analysis complete!");
+      showToast("Smart domain requirement analysis complete!");
       showResultsView();
     }
 
@@ -3237,13 +2823,13 @@
       state.estimatedHoursMin = ai.estimated_dev_hours_min;
       state.estimatedHoursMax = ai.estimated_dev_hours_max;
 
-      // STRICT PRECEDENCE ENFORCEMENT ON AI OUTPUT
-      enforceStrictExclusionPrecedence(state, rawText);
+      // Internal validation check before display
+      validateAndSanitizeScope(state, rawText);
 
       const chips = [
         { title: "🎯 Scoped Product", desc: `${state.customProjectTitle}` },
         { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin || 40} – ${state.estimatedHoursMax || 75} Dev Hours` },
-        { title: "✅ Explicit Inclusions", desc: state.includedList.length ? state.includedList.slice(0, 4).join(', ') : "Core Workflow Requirements" },
+        { title: "✅ Explicit Inclusions", desc: state.includedList.length ? state.includedList.slice(0, 5).join(', ') : "Core Workflow Requirements" },
         { title: "🚫 Scope Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested add-ons)" },
         { title: "💡 Architect's Insight", desc: ai.architectural_summary || "Priced to exact requirements with zero unrequested feature inflation." }
       ];
@@ -3252,15 +2838,15 @@
       document.getElementById("ai-engine-badge").innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
     }
 
-    // Flexible negation checker: handles intermediate words (e.g. "no customer login", "without online payment")
+    // Strict negation checker
     function isNegatedInText(text, keyword) {
       const lower = text.toLowerCase();
       const kwPattern = keyword.replace(/\s+/g, '\\s+');
       const negationPatterns = [
-        `(?:no|without|excluding|excluded|out\\s+of\\s+scope|don't\\s+need|doesn't\\s+need|not\\s+needed|not\\s+required|not\\s+included|skip)\\s+(?:\\w+\\s+){0,3}${kwPattern}`,
-        `${kwPattern}\\s+(?:is\\s+)?not\\s+(?:required|needed|included)`,
-        `${kwPattern}\\s+is\\s+out\\s+of\\s+scope`,
-        `except\\s+(?:\\w+\\s+){0,2}${kwPattern}`
+        `\\b(?:no|without|excluding|excluded|out\\s+of\\s+scope|don't\\s+need|doesn't\\s+need|not\\s+needed|not\\s+required|not\\s+included|skip)\\s+(?:\\w+\\s+){0,3}${kwPattern}\\b`,
+        `\\b${kwPattern}\\s+(?:is\\s+)?not\\s+(?:required|needed|included)\\b`,
+        `\\b${kwPattern}\\s+is\\s+out\\s+of\\s+scope\\b`,
+        `\\bexcept\\s+(?:\\w+\\s+){0,2}${kwPattern}\\b`
       ];
       for (const pattern of negationPatterns) {
         if (new RegExp(pattern, 'i').test(lower)) {
@@ -3270,7 +2856,7 @@
       return false;
     }
 
-    // Local Requirement Analysis with explicit exclusion override rules
+    // Local Domain-Driven Classification & Extraction
     function applyLocalClassification(text) {
       const lower = text.toLowerCase();
       state.fromIdeaMode = true;
@@ -3285,278 +2871,293 @@
       const included = [];
       const excluded = [];
 
-      // 1. Detect Explicit Exclusions First
-      const isCustomerAuthExcluded = isNegatedInText(lower, "login") || 
-                                     isNegatedInText(lower, "customer login") || 
-                                     isNegatedInText(lower, "user login") || 
-                                     isNegatedInText(lower, "auth") || 
-                                     isNegatedInText(lower, "authentication") || 
-                                     isNegatedInText(lower, "registration") || 
-                                     isNegatedInText(lower, "accounts") || 
-                                     lower.includes("no customer login") || 
-                                     lower.includes("no user login") || 
-                                     lower.includes("no login") || 
-                                     lower.includes("no registration");
+      // 1. Identify Explicit Exclusions
+      const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "fees") || lower.includes("no online payment") || lower.includes("without online payment");
+      const isCustomerAuthExcluded = isNegatedInText(lower, "login") || isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup") || lower.includes("no customer login") || lower.includes("no user login");
+      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard") || lower.includes("no admin");
+      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout") || lower.includes("no shopping cart") || lower.includes("no cart");
+      const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || lower.includes("web only") || lower.includes("website only") || lower.includes("no mobile app");
+      const isAIExcluded = isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || isNegatedInText(lower, "llm") || lower.includes("no ai") || lower.includes("no chatbot");
+      const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "orders");
+      const isDatabaseExcluded = isNegatedInText(lower, "database") || isNegatedInText(lower, "db");
+      const isAPIExcluded = isNegatedInText(lower, "api") || isNegatedInText(lower, "integrations");
 
-      const isPaymentExcluded = isNegatedInText(lower, "payment") || 
-                                isNegatedInText(lower, "payments") || 
-                                isNegatedInText(lower, "online payment") || 
-                                isNegatedInText(lower, "gateway") || 
-                                isNegatedInText(lower, "checkout") || 
-                                lower.includes("no online payment") || 
-                                lower.includes("no payment") || 
-                                lower.includes("without payment");
-
-      const isCartExcluded = isNegatedInText(lower, "cart") || 
-                             isNegatedInText(lower, "shopping cart") || 
-                             isNegatedInText(lower, "checkout") || 
-                             lower.includes("no shopping cart") || 
-                             lower.includes("no checkout") || 
-                             lower.includes("without cart");
-
-      const isMobileExcluded = isNegatedInText(lower, "mobile app") || 
-                               isNegatedInText(lower, "mobile application") || 
-                               isNegatedInText(lower, "mobile") || 
-                               isNegatedInText(lower, "app") || 
-                               lower.includes("web only") || 
-                               lower.includes("website only") || 
-                               lower.includes("no mobile app");
-
-      const isAdminExcluded = isNegatedInText(lower, "admin") || 
-                              isNegatedInText(lower, "admin panel") || 
-                              isNegatedInText(lower, "admin dashboard") || 
-                              lower.includes("no admin");
-
-      const isDatabaseExcluded = isNegatedInText(lower, "database") || 
-                                 isNegatedInText(lower, "db") || 
-                                 lower.includes("no database");
-
-      const isAIExcluded = isNegatedInText(lower, "ai") || 
-                           isNegatedInText(lower, "chatbot") || 
-                           lower.includes("no ai");
-
-      // Populate Exclusions List
+      if (isOnlinePaymentExcluded) excluded.push("Online Payment Gateway");
       if (isCustomerAuthExcluded) excluded.push("Customer Login & Accounts");
+      if (isAdminExcluded) excluded.push("Admin Dashboard & Panel");
       if (isCartExcluded) excluded.push("Shopping Cart & Checkout");
-      if (isPaymentExcluded) excluded.push("Online Payment Gateway");
       if (isMobileExcluded) excluded.push("Mobile Application (Web Only)");
-      if (isAdminExcluded) excluded.push("Admin Panel");
+      if (isAIExcluded) excluded.push("AI / Chatbot Features");
+      if (isOrderingExcluded) excluded.push("Order Placement Workflow");
       if (isDatabaseExcluded) excluded.push("Database Storage");
-      if (isAIExcluded) excluded.push("AI / LLM Features");
+      if (isAPIExcluded) excluded.push("Third-Party API Integrations");
 
-      // 2. Identify Core Archetype
-      const isEdu = (lower.includes("learn") || lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("tuition") || lower.includes("academy") || lower.includes("lecture")) && !isNegatedInText(lower, "lms");
-      const isPortfolio = (lower.includes("portfolio") || lower.includes("photographer") || lower.includes("artist") || lower.includes("resume") || lower.includes("showcase")) && !isNegatedInText(lower, "portfolio");
-      const isEcom = (lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("storefront") || lower.includes("shopping") || lower.includes("catalog") || lower.includes("wishlist") || lower.includes("cart") || lower.includes("ordering") || lower.includes("menu")) && !isNegatedInText(lower, "ecommerce");
-      const isAI = (lower.includes("ai") || lower.includes("llm") || lower.includes("gpt") || lower.includes("rag")) && !isAIExcluded;
-      const isMobile = (lower.includes("mobile app") || lower.includes("android") || lower.includes("ios") || lower.includes("flutter")) && !isMobileExcluded;
-      const isSaaS = (lower.includes("saas") || lower.includes("subscription software") || lower.includes("b2b platform"));
+      // 2. Strict Domain Detection (Using proper word boundaries!)
+      const isRestaurant = /\b(restaurant|cafe|bakery|diner|bistro|food|eatery)\b/i.test(lower);
+      const isClinic = /\b(clinic|doctor|patient|hospital|dental|dentist|healthcare|medical)\b/i.test(lower);
+      const isDocManagement = /\b(document\s*management|pdf\s*management|document\s*portal|document\s*repository|dms)\b/i.test(lower) ||
+                              (/\b(document|pdf|file)\b/i.test(lower) && /\b(organize|upload|download|repository)\b/i.test(lower) && !/\b(course|school)\b/i.test(lower));
+      const isLMS = /\b(lms|course|courses|student|students|teacher|teachers|instructor|tuition|coaching|academy|lecture|lectures|elearning)\b/i.test(lower);
+      const isServiceBooking = /\b(service\s*booking|salon|spa|mechanic|cleaning|consultation\s*booking|slot\s*booking)\b/i.test(lower) && !isClinic;
+      const isPortfolio = /\b(portfolio|photographer|photography|artist|designer\s*portfolio|resume\s*website|showcase)\b/i.test(lower) && !isLMS;
+      const isEcom = /\b(ecommerce|e-commerce|catalog|storefront|shop|store|wishlist)\b/i.test(lower) && !isRestaurant && !isLMS;
+      const isTrueAI = /\b(ai\s*app|ai\s*platform|llm|chatgpt|gpt-?4|gpt-?3|claude|gemini|rag|vector\s*search|generative\s*ai|ai\s*chatbot)\b/i.test(lower) && !isAIExcluded;
+      const isTrueMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter\s*app|react\s*native\s*app)\b/i.test(lower) && !isMobileExcluded;
+      const isSaaS = /\b(saas|subscription\s*software|multi-tenant|b2b\s*platform)\b/i.test(lower);
 
-      if (isEdu) {
+      // Map Domain -> Archetype, Title, and Base Hours
+      if (isRestaurant) {
+        const hasOrdering = (lower.includes("order") || lower.includes("ordering") || lower.includes("cart") || lower.includes("takeout")) && !isOrderingExcluded;
+        if (hasOrdering) {
+          state.projectType = "ecommerce";
+          state.customProjectTitle = "Restaurant Ordering & Menu Web Platform";
+          state.estimatedHoursMin = 75;
+          state.estimatedHoursMax = 120;
+          included.push("Restaurant Menu & Food Categories");
+          if (!isCartExcluded) included.push("Shopping Cart");
+          included.push("Order Placement Workflow");
+          if (!isAdminExcluded) { included.push("Admin Order Management"); state.hasAdminPanel = true; }
+        } else {
+          state.projectType = "biz_website";
+          state.customProjectTitle = "Informational Restaurant Website";
+          state.estimatedHoursMin = 25;
+          state.estimatedHoursMax = 45;
+          included.push("Restaurant Menu & Food Showcase");
+          included.push("Location, Hours & Contact Details");
+          if (lower.includes("reservation") || lower.includes("table")) included.push("Table Reservation Inquiry");
+        }
+      } else if (isClinic) {
+        state.projectType = "web_app";
+        state.customProjectTitle = "Clinic Appointment Booking Platform";
+        state.estimatedHoursMin = 85;
+        state.estimatedHoursMax = 150;
+        if (!isCustomerAuthExcluded) { included.push("Patient Registration & Login"); state.selectedFeatures.push("feat_auth"); }
+        included.push("Doctor Profiles & Specialties");
+        included.push("Available Time Slots Management");
+        included.push("Appointment Booking Workflow");
+        if (!isAdminExcluded) { included.push("Admin & Receptionist Dashboard"); state.hasAdminPanel = true; }
+      } else if (isDocManagement) {
+        state.projectType = "web_app";
+        state.customProjectTitle = "Document Management Web Application";
+        state.estimatedHoursMin = 90;
+        state.estimatedHoursMax = 160;
+        included.push("PDF & Document Upload");
+        included.push("Document Organization & Categories");
+        included.push("Document Search & Filtering");
+        included.push("File Download & Cloud Storage");
+        state.selectedFeatures.push("feat_storage");
+        if (!isCustomerAuthExcluded) { included.push("User Login & Profile Accounts"); state.selectedFeatures.push("feat_auth"); }
+        if (!isAdminExcluded) { included.push("Admin Management Panel"); state.hasAdminPanel = true; }
+      } else if (isLMS) {
         state.projectType = "lms";
-        state.customProjectTitle = generateSmartTitle(text, "lms");
-        state.estimatedHoursMin = 140;
-        state.estimatedHoursMax = 250;
+        state.customProjectTitle = lower.includes("coaching") ? "Coaching Centre Learning Platform" : "Online Learning Platform";
+        state.estimatedHoursMin = 130;
+        state.estimatedHoursMax = 240;
+        included.push("Course Browsing & Details");
+        included.push("Video Lectures & Player");
+        included.push("PDF Notes & Resources");
+        if (!isCustomerAuthExcluded) { included.push("Student Registration & Login"); state.selectedFeatures.push("feat_auth"); }
+        if (!isAdminExcluded) { included.push("Admin Course Upload & Management"); state.hasAdminPanel = true; }
+        if (lower.includes("quiz") || lower.includes("test")) { included.push("Timed Quizzes & Evaluation"); state.dynamicScope.push("lms_quizzes"); }
+      } else if (isServiceBooking) {
+        state.projectType = "web_app";
+        state.customProjectTitle = "Service Booking Platform";
+        state.estimatedHoursMin = 65;
+        state.estimatedHoursMax = 110;
+        included.push("Service Catalog & Options");
+        included.push("Booking Request Submission");
+        if (!isCustomerAuthExcluded) { included.push("Customer Accounts"); state.selectedFeatures.push("feat_auth"); }
+        if (!isAdminExcluded) { included.push("Admin Booking Management"); state.hasAdminPanel = true; }
       } else if (isPortfolio) {
         state.projectType = "portfolio";
-        state.customProjectTitle = generateSmartTitle(text, "portfolio");
+        state.customProjectTitle = "Personal Creator Portfolio";
         state.estimatedHoursMin = 18;
         state.estimatedHoursMax = 32;
+        included.push("Project Gallery & Showcase");
+        included.push("About & Contact Section");
       } else if (isEcom) {
-        state.projectType = "ecommerce";
-        state.customProjectTitle = generateSmartTitle(text, "ecommerce");
-        state.estimatedHoursMin = 80;
-        state.estimatedHoursMax = 150;
-      } else if (isAI) {
+        const hasCart = (lower.includes("cart") || lower.includes("checkout") || lower.includes("order")) && !isCartExcluded;
+        if (hasCart) {
+          state.projectType = "ecommerce";
+          state.customProjectTitle = "E-Commerce Ordering Platform";
+          state.estimatedHoursMin = 90;
+          state.estimatedHoursMax = 160;
+          included.push("Product Catalog & Categories");
+          included.push("Shopping Cart & Checkout");
+          if (!isAdminExcluded) { included.push("Admin Product & Inventory Management"); state.hasAdminPanel = true; }
+        } else {
+          state.projectType = "ecommerce";
+          state.customProjectTitle = "E-Commerce Product Catalog Platform";
+          state.estimatedHoursMin = 50;
+          state.estimatedHoursMax = 85;
+          included.push("Product Catalog & Browsing");
+          if (lower.includes("wishlist")) included.push("Product Wishlist");
+          if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) { included.push("Admin Product Management"); state.hasAdminPanel = true; }
+        }
+      } else if (isTrueAI) {
         state.projectType = "ai_app";
-        state.customProjectTitle = generateSmartTitle(text, "ai_app");
+        state.customProjectTitle = "AI Workflow & Assistant Platform";
         state.estimatedHoursMin = 150;
         state.estimatedHoursMax = 270;
-      } else if (isMobile) {
+        included.push("AI Processing Pipeline");
+        included.push("Streaming Chat / Intelligence UI");
+        state.selectedFeatures.push("feat_ai_bot");
+      } else if (isTrueMobile) {
         state.projectType = "mobile_app";
-        state.customProjectTitle = generateSmartTitle(text, "mobile_app");
-        state.estimatedHoursMin = 150;
+        state.customProjectTitle = "Cross-Platform Mobile Application";
+        state.estimatedHoursMin = 160;
         state.estimatedHoursMax = 280;
+        included.push("Cross-Platform Mobile App (iOS & Android)");
+        state.platformScope = "mobile_app_only";
       } else if (isSaaS) {
         state.projectType = "saas_product";
-        state.customProjectTitle = generateSmartTitle(text, "saas_product");
+        state.customProjectTitle = "Multi-Tenant SaaS Platform";
         state.estimatedHoursMin = 160;
         state.estimatedHoursMax = 290;
+        included.push("Multi-Tenant Core Architecture");
+        included.push("User Account Management");
+        state.selectedFeatures.push("feat_auth");
       } else {
         state.projectType = "biz_website";
-        state.customProjectTitle = generateSmartTitle(text, "biz_website");
-        state.estimatedHoursMin = 35;
-        state.estimatedHoursMax = 65;
+        state.customProjectTitle = "Business Website";
+        state.estimatedHoursMin = 30;
+        state.estimatedHoursMax = 55;
+        included.push("Responsive Informational Pages");
+        included.push("Contact Form & Business Overview");
       }
 
-      // 3. Feature Detections (WITH STRICT PRECEDENCE OVER INCLUSIONS)
-      if (lower.includes("catalog") || lower.includes("browse") || (isEcom && !lower.includes("no catalog"))) {
-        included.push("Product Catalog & Browsing");
+      // 3. Granular Verb/Noun Mappings:
+      // WhatsApp: Distinguish simple button vs API gateway!
+      if (lower.includes("whatsapp") && !isNegatedInText(lower, "whatsapp")) {
+        const isTrueAPI = /\b(whatsapp\s*api|sms\s*gateway|automated\s*notifications?|otp|text\s*alerts?)\b/i.test(lower);
+        if (isTrueAPI) {
+          included.push("WhatsApp & SMS API Gateway");
+          state.selectedFeatures.push("feat_wa_sms");
+        } else {
+          included.push("WhatsApp Contact Button");
+          // Simple button: DO NOT add feat_wa_sms (0 API overhead)
+        }
       }
 
-      if (lower.includes("search") || lower.includes("filter")) {
-        included.push("Product Search & Filtering");
+      // Search & Filters
+      if ((lower.includes("search") || lower.includes("filter")) && !included.some(i => i.includes("Search"))) {
+        included.push("Search & Dynamic Filtering");
         state.selectedFeatures.push("feat_search");
       }
 
-      if (lower.includes("wishlist") || lower.includes("saved items")) {
-        included.push("Product Wishlist");
-      }
-
-      // Admin product management (Does NOT imply customer accounts!)
-      if (!isAdminExcluded && (lower.includes("admin can") || lower.includes("admin manage") || lower.includes("manage products") || lower.includes("admin panel") || lower.includes("admin dashboard"))) {
-        included.push("Admin Product Management");
-        state.hasAdminPanel = true;
-      }
-
-      // Customer login & accounts: ONLY IF NOT EXCLUDED!
-      if (!isCustomerAuthExcluded && (lower.includes("customer login") || lower.includes("user login") || lower.includes("student login") || lower.includes("register") || lower.includes("signup") || lower.includes("user accounts"))) {
-        state.selectedFeatures.push("feat_auth");
-        included.push("Customer Accounts & Authentication");
-      }
-
-      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document")) {
-        state.selectedFeatures.push("feat_storage");
-        included.push("Document / File Storage");
-      }
-
-      if (lower.includes("whatsapp") || lower.includes("sms")) {
-        state.selectedFeatures.push("feat_wa_sms");
-        included.push("WhatsApp / SMS Integration");
-      }
-
-      // Payment gateway: ONLY IF NOT EXCLUDED!
-      const mentionsPayment = (lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("razorpay") || lower.includes("stripe")) && !isPaymentExcluded;
-      if (mentionsPayment) {
-        state.selectedFeatures.push("feat_payments");
+      // Online Payment: ONLY IF EXPLICITLY REQUESTED AND NOT EXCLUDED
+      const mentionsOnlinePay = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isOnlinePaymentExcluded;
+      if (mentionsOnlinePay && !included.some(i => i.includes("Payment"))) {
         included.push("Online Payment Gateway");
-      }
-
-      if (!isAIExcluded && (lower.includes("ai") || lower.includes("chat") || lower.includes("bot"))) {
-        state.selectedFeatures.push("feat_ai_bot");
-        included.push("AI Assistant Module");
-      }
-
-      // 4. Scope Deductions for Explicit Exclusions
-      if (isPaymentExcluded) {
-        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
-        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 25);
-      }
-      if (isAdminExcluded) {
-        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 20);
-        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 30);
-      }
-      if (isMobileExcluded) {
-        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 40);
-        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 60);
-      }
-      if (isCustomerAuthExcluded) {
-        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
-        state.estimatedHoursMax = Math.max(20, state.estimatedHoursMax - 20);
-      }
-      if (isCartExcluded) {
-        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
-        state.estimatedHoursMax = Math.max(20, state.estimatedHoursMax - 20);
+        state.selectedFeatures.push("feat_payments");
       }
 
       state.includedList = included;
       state.excludedList = excluded;
 
-      // Final sanitization sweep
-      enforceStrictExclusionPrecedence(state, text);
+      // Final internal validation before state is locked
+      validateAndSanitizeScope(state, text);
 
       const chips = [
-        { title: "🎯 Scoped Project", desc: `${state.customProjectTitle}` },
-        { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
-        { title: "✅ Inclusions", desc: state.includedList.length ? state.includedList.join(', ') : "Core Workflow Requirements" },
-        { title: "🚫 Scope Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested add-ons)" },
-        { title: "💡 Architect's Note", desc: "Scope tuned precisely to your requirements. Exclusions actively subtracted from pricing." }
+        { title: "🎯 Scoped Domain", desc: `${state.customProjectTitle}` },
+        { title: "⏱️ Estimated Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
+        { title: "✅ Verified Inclusions", desc: state.includedList.join(', ') },
+        { title: "🚫 Strict Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested features)" },
+        { title: "💡 Architect's Validation", desc: "Domain workflows mapped strictly. Exclusions guaranteed 0 cost." }
       ];
 
       state.analysisBreakdown = chips;
-      document.getElementById("ai-engine-badge").innerText = "Local Scoping Engine";
+      document.getElementById("ai-engine-badge").innerText = "Domain Scoping Engine";
     }
 
-    // STRICT PRECEDENCE ENFORCER: Explicit exclusion > explicit inclusion > inferred requirement
-    function enforceStrictExclusionPrecedence(st, text) {
+    // ==========================================================================
+    // PRE-DISPLAY VALIDATION & SANITIZATION GATE
+    // Guarantees no hallucinated AI/Mobile/Payment and enforces: Exclusion > Inclusion
+    // ==========================================================================
+    function validateAndSanitizeScope(st, text) {
       const lower = text.toLowerCase();
 
-      const isCustomerAuthExcluded = st.excludedList.some(e => /login|auth|account|registration/i.test(e)) ||
-                                     isNegatedInText(lower, "login") || 
-                                     isNegatedInText(lower, "customer login") || 
-                                     isNegatedInText(lower, "auth") || 
-                                     lower.includes("no customer login") || 
-                                     lower.includes("no user login") || 
-                                     lower.includes("no login");
+      // Check for presence of AI keywords with word boundary
+      const hasExplicitAI = /\b(ai|llm|gpt|chatbot|claude|gemini|rag|vector\s*db)\b/i.test(lower) && !isNegatedInText(lower, "ai");
+      const hasExplicitMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter|react\s*native)\b/i.test(lower) && !isNegatedInText(lower, "mobile app");
+      const hasExplicitPayment = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isNegatedInText(lower, "online payment");
+      const hasExplicitCustomerLogin = /\b(customer\s*login|patient\s*login|student\s*login|user\s*login|login|register|signup)\b/i.test(lower) && !isNegatedInText(lower, "customer login") && !isNegatedInText(lower, "login");
+      const hasExplicitAdmin = /\b(admin|admin\s*panel|admin\s*dashboard|dashboard|manage\s*products|manage\s*orders)\b/i.test(lower) && !isNegatedInText(lower, "admin");
 
-      const isPaymentExcluded = st.excludedList.some(e => /payment|gateway/i.test(e)) ||
-                                isNegatedInText(lower, "payment") || 
-                                isNegatedInText(lower, "online payment") || 
-                                lower.includes("no online payment") || 
-                                lower.includes("no payment");
+      // 1. PURGE UNREQUESTED OR EXCLUDED AI
+      if (!hasExplicitAI || st.excludedList.some(e => /ai|chatbot/i.test(e))) {
+        st.includedList = (st.includedList || []).filter(item => !/\b(ai|llm|chatbot|assistant\s*module)\b/i.test(item));
+        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_ai_bot");
+        if (st.projectType === "ai_app") {
+          st.projectType = "web_app";
+        }
+      }
 
-      const isCartExcluded = st.excludedList.some(e => /cart|checkout/i.test(e)) ||
-                             isNegatedInText(lower, "cart") || 
-                             isNegatedInText(lower, "shopping cart") || 
-                             isNegatedInText(lower, "checkout") || 
-                             lower.includes("no shopping cart") || 
-                             lower.includes("no checkout");
+      // 2. PURGE UNREQUESTED OR EXCLUDED MOBILE
+      if (!hasExplicitMobile || st.excludedList.some(e => /mobile/i.test(e))) {
+        st.includedList = (st.includedList || []).filter(item => !/\bmobile\s*app|android|ios\b/i.test(item));
+        if (st.projectType === "mobile_app") {
+          st.projectType = "web_app";
+        }
+        st.platformScope = "website_only";
+      }
 
-      const isMobileExcluded = st.excludedList.some(e => /mobile/i.test(e)) ||
-                               isNegatedInText(lower, "mobile app") || 
-                               lower.includes("web only") || 
-                               lower.includes("website only") || 
-                               lower.includes("no mobile app");
+      // 3. PURGE UNREQUESTED OR EXCLUDED PAYMENTS
+      if (!hasExplicitPayment || st.excludedList.some(e => /payment|gateway/i.test(e))) {
+        st.includedList = (st.includedList || []).filter(item => !/\bpayment|gateway\b/i.test(item));
+        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
+      }
 
-      // 1. Enforce Customer Auth Exclusion
-      if (isCustomerAuthExcluded) {
+      // 4. PURGE EXCLUDED CUSTOMER LOGIN (Keep admin if separate)
+      if (isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || st.excludedList.some(e => /customer login/i.test(e))) {
+        st.includedList = (st.includedList || []).filter(item => !/\bcustomer\s*login|user\s*login|patient\s*registration|student\s*registration|user\s*accounts\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_auth");
-        st.includedList = (st.includedList || []).filter(item => !/login|auth|account|registration|user authentication/i.test(item));
-        if (!st.excludedList.some(e => /login|auth|account/i.test(e))) {
+        if (!st.excludedList.some(e => /customer login/i.test(e))) {
           st.excludedList.push("Customer Login & Accounts");
         }
       }
 
-      // 2. Enforce Payment Exclusion
-      if (isPaymentExcluded) {
-        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
-        st.includedList = (st.includedList || []).filter(item => !/payment|gateway|checkout payment/i.test(item));
-        if (!st.excludedList.some(e => /payment/i.test(e))) {
-          st.excludedList.push("Online Payment Gateway");
+      // 5. PURGE EXCLUDED ADMIN
+      if (isNegatedInText(lower, "admin") || st.excludedList.some(e => /admin/i.test(e))) {
+        st.includedList = (st.includedList || []).filter(item => !/\badmin\b/i.test(item));
+        st.hasAdminPanel = false;
+        if (!st.excludedList.some(e => /admin/i.test(e))) {
+          st.excludedList.push("Admin Dashboard & Panel");
         }
       }
 
-      // 3. Enforce Cart Exclusion
-      if (isCartExcluded) {
-        st.includedList = (st.includedList || []).filter(item => !/cart|checkout/i.test(item));
-        if (!st.excludedList.some(e => /cart/i.test(e))) {
-          st.excludedList.push("Shopping Cart & Checkout");
+      // 6. PURGE WHATSAPP API IF ONLY A BUTTON
+      const hasWhatsAppOnlyButton = /\b(whatsapp\s*button|whatsapp\s*link|contact\s*via\s*whatsapp)\b/i.test(lower) && !/\b(api|sms\s*gateway|otp)\b/i.test(lower);
+      if (hasWhatsAppOnlyButton) {
+        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_wa_sms");
+        st.includedList = (st.includedList || []).filter(item => !/whatsapp\s*&\s*sms\s*api/i.test(item));
+        if (!st.includedList.includes("WhatsApp Contact Button")) {
+          st.includedList.push("WhatsApp Contact Button");
         }
       }
 
-      // 4. Enforce Mobile Exclusion
-      if (isMobileExcluded) {
-        st.platformScope = "website_only";
-        st.includedList = (st.includedList || []).filter(item => !/mobile app|android|ios/i.test(item));
-        if (!st.excludedList.some(e => /mobile/i.test(e))) {
-          st.excludedList.push("Mobile Application (Web Only)");
-        }
-      }
+      // 7. TITLE VALIDATION
+      st.customProjectTitle = generateSmartTitle(text, st.projectType);
     }
 
     function generateSmartTitle(text, type) {
       const lower = text.toLowerCase();
-      if (lower.includes("catalog") && lower.includes("e-commerce")) return "E-Commerce Product Catalog Platform";
-      if (lower.includes("restaurant")) return "Restaurant Ordering & Menu Web Platform";
-      if (lower.includes("coaching")) return "Coaching Centre Learning Platform";
-      if (lower.includes("tuition")) return "Tuition Portal & Student System";
-      if (lower.includes("photo") || lower.includes("photography")) return "Photography Portfolio Showcase";
-      if (lower.includes("yoga") || lower.includes("fitness")) return "Studio Class Booking Web App";
+      if (/\b(clinic|doctor|patient|hospital|dental)\b/i.test(lower)) return "Clinic Appointment Booking Platform";
+      if (/\b(document\s*management|pdf\s*management|dms)\b/i.test(lower) || (/\b(document|pdf)\b/i.test(lower) && /\b(upload|download|repository)\b/i.test(lower))) return "Document Management Web Application";
+      if (/\b(restaurant|cafe|bakery|diner)\b/i.test(lower)) {
+        if (/\b(order|ordering|cart|takeout)\b/i.test(lower) && !isNegatedInText(lower, "ordering")) return "Restaurant Ordering & Menu Web Platform";
+        return "Informational Restaurant Website";
+      }
+      if (/\b(service\s*booking|salon|spa|mechanic|cleaning)\b/i.test(lower)) return "Service Booking Platform";
+      if (/\b(coaching|tuition)\b/i.test(lower)) return "Coaching Centre Learning Platform";
+      if (/\b(course|courses|lms|student)\b/i.test(lower)) return "Online Learning Platform";
+      if (/\b(catalog|browse\s*products)\b/i.test(lower) && (/\b(no\s*checkout|no\s*cart|no\s*payment)\b/i.test(lower) || isNegatedInText(lower, "cart"))) return "E-Commerce Product Catalog Platform";
+      if (/\b(ecommerce|e-commerce|storefront|shop)\b/i.test(lower)) return "Digital Storefront & Order Portal";
+      if (/\b(photo|photography)\b/i.test(lower)) return "Photography Portfolio Showcase";
       if (type === "portfolio") return "Personal Creator Portfolio";
-      if (type === "lms") return "Online Learning Platform";
-      if (type === "ecommerce") return "Digital Storefront & Order Portal";
       if (type === "ai_app") return "AI Workflow & Assistant Platform";
-      return pricingData.projectTypes[type].title;
+      if (type === "mobile_app") return "Cross-Platform Mobile Application";
+      return pricingData.projectTypes[type] ? pricingData.projectTypes[type].title : "Business Website";
     }
 
     // Utilities
