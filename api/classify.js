@@ -1,5 +1,5 @@
 // api/classify.js — Vercel Serverless Function (Node.js)
-// Enforces: Explicit exclusion > explicit inclusion > inferred requirement
+// Domain-Aware Semantic Extraction & Strict Exclusion Precedence
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -28,34 +28,47 @@ module.exports = async (req, res) => {
       });
     }
 
-    const systemPrompt = `You are a senior software architect and technical scoping expert at Ezrah Innovations.
-Analyze the user's project idea.
+    const systemPrompt = `You are a principal software architect at Ezrah Innovations.
+Classify the user's software project strictly based on their DOMAIN and ACTUAL VERBS/NOUNS.
 
-CRITICAL PRECEDENCE RULE:
-Explicit exclusion > explicit inclusion > inferred requirement
+CRITICAL RULES:
+1. DOMAIN IDENTIFICATION FIRST:
+   - Identify the primary domain before picking features:
+     * Restaurant Ordering -> "Restaurant Ordering & Menu Web Platform" (Menu, Cart, Order Placement, Admin Order Management)
+     * Informational Restaurant -> "Informational Restaurant Website" (Menu Showcase, Hours, Location, Contact)
+     * Clinic Appointment Booking -> "Clinic Appointment Booking Platform" (Doctor Profiles, Time Slots, Appointment Booking)
+     * Service Booking -> "Service Booking Platform" (Service Catalog, Booking Form, Admin Management)
+     * Document Management -> "Document Management Web Application" (PDF Upload, Organization, Search, Download)
+     * Online Learning -> "Online Learning Platform" (Course Browsing, Video Lectures, PDF Notes)
+     * E-Commerce Catalog -> "E-Commerce Product Catalog Platform" (Product Browsing, Search, Wishlist)
+   - Do NOT classify a project as AI, Mobile App, or E-Commerce unless explicitly supported.
 
-1. EXCLUSIONS OVERRIDE ALL INFERENCES:
-   - If a feature is explicitly excluded, it must NEVER appear in included_features or detected_features!
-   - Negative phrases include: "no", "not required", "without", "excluding", "don't need", "doesn't need", "not needed", "not included", "out of scope", "only", "just", "web only", "no customer login", "no payment", "no admin", "no cart", "no checkout", "no mobile app".
+2. NEVER INFER UNRELATED FEATURES:
+   - Clinic/Doctor booking does NOT imply AI.
+   - Document management does NOT imply AI.
+   - Learning platform does NOT imply AI.
+   - A simple WhatsApp button is NOT an SMS/API Gateway.
+   - Service booking does NOT imply a Mobile App.
+   - An admin order-management requirement is NOT admin product management.
 
-2. DO NOT CONFUSE ADMIN WITH CUSTOMER AUTHENTICATION:
-   - "Admin can manage products. No customer login" -> Admin management is INCLUDED. Customer login/authentication is strictly EXCLUDED! Do NOT add "User Authentication & Accounts" or "feat_auth" simply because admin manages items.
+3. STRICT EXCLUSION PRECEDENCE:
+   Explicit exclusion > explicit inclusion > inferred requirement
+   - If user says "no online payment" -> EXCLUDE online payment gateway completely.
+   - If user says "no customer login" -> EXCLUDE customer accounts/login completely.
+   - If user says "no admin panel" -> EXCLUDE admin panel completely.
+   - If user says "no mobile app" -> EXCLUDE mobile app completely.
+   - Never put an excluded feature in included_features!
 
-3. EXAMPLES OF NEGATIVE OVERRIDES:
-   - "No customer login" -> Customer authentication / registration / accounts MUST be in excluded_features and NEVER in included_features.
-   - "No shopping cart, no checkout, no online payment" -> Cart, checkout, and payment gateway MUST be in excluded_features.
-   - "No mobile app, web only" -> Mobile app MUST be in excluded_features.
-
-4. PRICE INTEGRITY:
-   - Excluded features must contribute 0 developer hours.
-   - DO NOT generate currency numbers. Output technical effort units only.`;
+4. PRICING INTEGRITY:
+   - Output realistic developer hours. Excluded items must add 0 hours.
+   - Output technical effort units only. Do NOT generate currency numbers.`;
 
     const responseSchema = {
       type: "OBJECT",
       properties: {
         project_title: {
           type: "STRING",
-          description: "Tailored title reflecting the exact project scope."
+          description: "Accurate title matching the dominant workflow (e.g. 'Restaurant Ordering & Menu Web Platform', 'Clinic Appointment Booking Platform')."
         },
         archetype: {
           type: "STRING",
@@ -76,24 +89,23 @@ Explicit exclusion > explicit inclusion > inferred requirement
         included_features: {
           type: "ARRAY",
           items: { type: "STRING" },
-          description: "List of explicitly requested features. MUST NOT contain anything the user excluded!"
+          description: "Specific functional requirements derived from the domain (e.g. 'Restaurant Menu & Food Categories', 'Available Time Slots'). No generic mismatches!"
         },
         excluded_features: {
           type: "ARRAY",
           items: { type: "STRING" },
-          description: "List of explicitly excluded features (e.g. 'Customer Login & Accounts', 'Shopping Cart & Checkout', 'Online Payment')."
+          description: "List of explicitly excluded features."
         },
         detected_features: {
           type: "ARRAY",
           items: {
             type: "STRING",
             enum: ["feat_auth", "feat_social", "feat_search", "feat_payments", "feat_wa_sms", "feat_ai_bot", "feat_storage"]
-          },
-          description: "Feature keys. MUST NOT contain feat_auth if customer login is excluded. MUST NOT contain feat_payments if payment is excluded."
+          }
         },
         architectural_summary: {
           type: "STRING",
-          description: "A 1-2 sentence technical summary explaining how scope exclusions were strictly enforced."
+          description: "1-2 sentences explaining the technical architecture and how exclusions were respected."
         }
       },
       required: [
@@ -118,7 +130,7 @@ Explicit exclusion > explicit inclusion > inferred requirement
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `Analyze and extract requirements with strict exclusion overrides:\n"${prompt}"` }] }],
+        contents: [{ parts: [{ text: `Classify domain and requirements:\n"${prompt}"` }] }],
         generationConfig: {
           response_mime_type: "application/json",
           response_schema: responseSchema,
