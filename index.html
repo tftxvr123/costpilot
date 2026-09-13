@@ -914,7 +914,7 @@
     }
 
     /* ==========================================================================
-       NEW: DELIVERABLE & SCOPE PARITY MATRIX TABLE
+       NON-TECHNICAL PLAIN-ENGLISH PARITY MATRIX
        ========================================================================== */
     .parity-section {
       background: #ffffff;
@@ -924,17 +924,50 @@
       margin-bottom: 2.5rem;
       overflow-x: auto;
     }
+    
+    /* Highlight Card: The 5 Headaches */
+    .headaches-banner {
+      background: #fff1f2;
+      border: 1.5px solid #fecdd3;
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .headaches-banner h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #9f1239;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .headaches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      font-size: 0.825rem;
+      color: #881337;
+    }
+    .headache-item {
+      background: #ffffff;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-md);
+      border: 1px solid #fbcfe8;
+    }
+
     .parity-table {
       width: 100%;
-      min-width: 650px;
+      min-width: 680px;
       border-collapse: collapse;
-      margin-top: 1.25rem;
+      margin-top: 1rem;
       font-size: 0.875rem;
     }
     .parity-table th, .parity-table td {
-      padding: 0.85rem 1rem;
+      padding: 1rem;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
     }
     .parity-table th {
       background: var(--bg-subtle);
@@ -949,6 +982,22 @@
     }
     .parity-table tr:hover td {
       background: #fdfefe;
+    }
+    .cell-title {
+      font-weight: 700;
+      color: var(--secondary);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .cell-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .cell-danger {
+      color: #b91c1c;
+      font-size: 0.825rem;
+      line-height: 1.5;
     }
 
     /* Cumulative TCO Visualizer */
@@ -1715,30 +1764,44 @@
         </div>
 
         <!-- ==========================================================================
-             NEW: APPLES-TO-APPLES DELIVERABLE & SCOPE PARITY MATRIX
+             ENHANCED: NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX
              ========================================================================== -->
         <div class="parity-section">
-          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
             <div>
-              <span class="badge badge-primary" style="margin-bottom:0.25rem;">🔍 Complete Transparency</span>
-              <h3 style="font-size:1.25rem; font-weight:800; color:var(--secondary);">Apples-to-Apples Scope & Deliverable Matrix</h3>
-              <p style="font-size:0.85rem; color:var(--text-muted);">
-                Cross-examine competitor proposals against Ezrah Innovations' verified production standards.
+              <span class="badge badge-primary" style="margin-bottom:0.25rem;">🔍 Real-World Comparison</span>
+              <h3 style="font-size:1.35rem; font-weight:800; color:var(--secondary);">
+                What You Gain with Ezrah vs. What You Miss with a Cheap Quote
+              </h3>
+              <p style="font-size:0.9rem; color:var(--text-muted);">
+                A transparent, plain-English breakdown of how your daily business operations change depending on what you pay.
               </p>
+            </div>
+          </div>
+
+          <!-- Highlight Banner: 5 Headaches -->
+          <div class="headaches-banner">
+            <h4>⚠️ The 5 Costly Headaches of Hiring a Lowball Freelancer:</h4>
+            <div class="headaches-grid">
+              <div class="headache-item"><strong>1. Manual Work:</strong> Verifying payments by hand because auto-unlock wasn't coded.</div>
+              <div class="headache-item"><strong>2. Surprise Bills:</strong> Hosting companies sending ₹8,000 bills for video bandwidth spikes.</div>
+              <div class="headache-item"><strong>3. Lost Customers:</strong> Mobile checkout buttons disappearing or breaking on phones.</div>
+              <div class="headache-item"><strong>4. Data Disaster:</strong> No automated backups; permanent customer data loss if servers crash.</div>
+              <div class="headache-item"><strong>5. Held Hostage:</strong> Freelancers refusing to hand over code unless you pay extra.</div>
             </div>
           </div>
 
           <table class="parity-table">
             <thead>
               <tr>
-                <th style="width:34%;">Scope / Architecture Dimension</th>
-                <th class="highlight" style="width:22%;">Ezrah Full Specification</th>
-                <th style="width:22%;">Ezrah Matched MVP</th>
-                <th style="width:22%; color:var(--danger);">Typical Cheap Competitor</th>
+                <th style="width:26%;">Real-World Daily Business Situation</th>
+                <th class="highlight" style="width:26%;">With Ezrah Innovations (Our Estimate)</th>
+                <th style="width:24%;">With Ezrah Matched MVP</th>
+                <th style="width:24%; color:#9f1239; background:#fff1f2;">With a Cheaper Competitor Quote</th>
               </tr>
             </thead>
             <tbody id="parity-table-body">
-              <!-- Dynamically Populated by JavaScript -->
+              <!-- Populated with Plain-English Daily Scenarios -->
             </tbody>
           </table>
         </div>
@@ -1897,7 +1960,7 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Commercial Software Standards • Production v4.0 Scrutiny Engine</div>
+        <div>Commercial Software Standards • Production v4.5 Business-Outcome Engine</div>
       </div>
     </div>
   </footer>
@@ -1972,9 +2035,6 @@
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Market Disclaimer</h3>
       <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
         CostPilot provides indicative market-based estimates for planning purposes. Actual project costs vary based on vendors, technologies, scope, requirements, team seniority, and usage.
-      </p>
-      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-        All figures reflect verified commercial engineering standards across both lean serverless models and enterprise agency frameworks.
       </p>
       <div style="margin-top: 1.5rem; text-align: right;">
         <button class="btn btn-primary btn-sm" onclick="closeModals()">I Understand</button>
@@ -2339,35 +2399,35 @@
       const p = pricingData.projectTypes[state.projectType];
       const packageABuild = state.computedResult.packageA.buildTyp;
 
-      // 1. Calculate Ezrah Direct Labor Floor (Minimum Subsistence)
+      // 1. Calculate Ezrah Direct Labor Floor
       let laborFloor = p.laborFloor || 20000;
       state.selectedFeatures.forEach(fid => {
         const feat = pricingData.features[fid];
         if (feat && feat.devFloor) laborFloor += feat.devFloor;
       });
 
-      // 2. Calculate Hard Out-of-Pocket Cloud & API Outlay Gate
-      let annualHardOutlays = 1200; // Baseline domain only on zero-idle stack
+      // 2. Calculate Hard Out-of-Pocket Cloud & API Outlays
+      let annualHardOutlays = 1200;
       let isFreeTierOperational = true;
       let worstCaseExposure = 0;
 
       if (state.projectType === "ai_app" || state.selectedFeatures.includes("feat_ai_bot")) {
         annualHardOutlays += 12000;
-        worstCaseExposure += 18000; // Risk of token quota exhaustion & surge bills
+        worstCaseExposure += 18000;
         isFreeTierOperational = false;
       }
       if (state.selectedFeatures.includes("feat_wa_sms")) {
         annualHardOutlays += 3000;
-        worstCaseExposure += 6000; // OTP spam or SMS gateway pack exhaustion
+        worstCaseExposure += 6000;
         isFreeTierOperational = false;
       }
       if (state.infra.storage === "100gb") {
         annualHardOutlays += 6000;
-        worstCaseExposure += 15000; // AWS S3 outbound bandwidth egress spikes
+        worstCaseExposure += 15000;
         isFreeTierOperational = false;
       }
       if (isFreeTierOperational) {
-        worstCaseExposure = 8000; // Rework costs if cheap vendor delivers non-functional code
+        worstCaseExposure = 8000;
       }
 
       const absoluteMinimumBuildFloor = laborFloor;
@@ -2388,7 +2448,7 @@
       includedList.innerHTML = "";
       deferredList.innerHTML = "";
 
-      // SCENARIO 1: RED FLAG ZONE (Loss or Extreme Lowball)
+      // SCENARIO 1: RED FLAG ZONE
       if (counterAmount < absoluteMinimumBuildFloor * 0.75 || (!isFreeTierOperational && counterAmount < absoluteMinimumBuildFloor)) {
         verdictBox.classList.add("audit-verdict-red");
         statusBadge.className = "badge badge-danger";
@@ -2397,10 +2457,10 @@
         titleText.innerText = "High Risk: Suspected Lowball / Hidden Surcharge Trap";
         
         descText.innerText = isFreeTierOperational
-          ? `A quote of ₹${counterAmount.toLocaleString('en-IN')} reflects under ₹150/hour of engineering effort. At this rate, vendors routinely cut critical database security or abandon projects halfway through.`
-          : `This specification involves real third-party API or cloud storage bills (~₹${annualHardOutlays.toLocaleString('en-IN')}/yr in hard outlays). A vendor quoting ₹${counterAmount.toLocaleString('en-IN')} will either hit you with surprise hosting invoices post-launch or shut down when their trial credits expire.`;
+          ? `A build quote of ₹${counterAmount.toLocaleString('en-IN')} translates to less than ₹150/hour of developer effort. At this level, freelancers routinely cut basic security, fail to test mobile screens, or abandon projects halfway.`
+          : `This project involves real third-party API or cloud storage bills (~₹${annualHardOutlays.toLocaleString('en-IN')}/yr in hard outlays). A vendor quoting ₹${counterAmount.toLocaleString('en-IN')} will either hit you with surprise hosting invoices post-launch or shut down when their trial credits expire.`;
 
-        worstCaseText.innerHTML = `Potential Hidden Post-Launch Cost: <strong>₹${worstCaseExposure.toLocaleString('en-IN')} to ₹${(worstCaseExposure * 1.8).toLocaleString('en-IN')}</strong> in emergency bug repairs, unbudgeted bandwidth, or rebuilding from scratch.`;
+        worstCaseText.innerHTML = `Estimated Hidden Post-Launch Cost: <strong>₹${worstCaseExposure.toLocaleString('en-IN')} to ₹${(worstCaseExposure * 1.8).toLocaleString('en-IN')}</strong> in emergency bug repairs, surprise video bandwidth penalties, or completely rebuilding from scratch.`;
 
         document.getElementById("scope-match-grid-box").style.display = "none";
 
@@ -2413,7 +2473,7 @@
           <li>5. "Are you using clean custom code or an unlicensed/pirated template that risks security?"</li>
         `;
       } 
-      // SCENARIO 2: YELLOW ZONE (Conditional Match via Scope-Stripping)
+      // SCENARIO 2: YELLOW ZONE
       else if (counterAmount < packageABuild * 0.85) {
         verdictBox.classList.add("audit-verdict-yellow");
         statusBadge.className = "badge badge-warning";
@@ -2426,19 +2486,18 @@
 
         document.getElementById("scope-match-grid-box").style.display = "grid";
 
-        // Scope partitioning
         includedList.innerHTML = `
-          <li>✓ Core ${p.title} Architecture & Workflows</li>
-          <li>✓ Primary Authentication & Role Access</li>
-          <li>✓ Zero-Idle Cloud Deployment & SSL</li>
-          <li>✓ 1 Year Domain & Weekly Backups</li>
-          <li>✓ Full GitHub Source Code Ownership</li>
+          <li>✓ Instant Online Payment & Auto-Access Setup</li>
+          <li>✓ Zero-Buffering Video Streaming Player</li>
+          <li>✓ Fully Tested Mobile & WhatsApp Viewports</li>
+          <li>✓ Automated Weekly Database Snapshots</li>
+          <li>✓ 100% Code Handover & 30-Day Written Warranty</li>
         `;
 
         deferredList.innerHTML = `
-          <li>⏳ Advanced Micro-Animations (Using clean component styling)</li>
-          <li>⏳ Complex Secondary Analytics & PDF Exports (Moved to Phase 2)</li>
-          <li>⏳ High-Volume WhatsApp/SMS Packs (Using standard email alerts)</li>
+          <li>⏳ Custom Micro-Animations (Using clean production component styling)</li>
+          <li>⏳ Secondary PDF Reports / Custom Invoices (Staged to Phase 2)</li>
+          <li>⏳ Paid SMS Gateway Packs (Using standard transactional emails)</li>
         `;
 
         checklist.innerHTML = `
@@ -2446,7 +2505,7 @@
           <li>✓ Zero code quality compromises—clean, maintainable architecture.</li>
         `;
       } 
-      // SCENARIO 3: GREEN ZONE (Direct Safe Match Approved)
+      // SCENARIO 3: GREEN ZONE
       else {
         verdictBox.classList.add("audit-verdict-green");
         statusBadge.className = "badge badge-success";
@@ -2469,61 +2528,136 @@
         `;
       }
 
-      // Re-populate parity table
       renderScopeParityTable(counterAmount);
       showToast("Quote audited against technical and infrastructure cost floors.");
     }
 
     // ==========================================================================
-    // NEW: RENDER SCOPE PARITY MATRIX
+    // NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX RENDERER
     // ==========================================================================
     function renderScopeParityTable(counterAmount) {
       const tbody = document.getElementById("parity-table-body");
-      const matchedPriceText = counterAmount ? `₹${counterAmount.toLocaleString('en-IN')} (Ezrah MVP)` : "Budget-Matched MVP";
-      const p = pricingData.projectTypes[state.projectType];
+      const matchedPriceText = counterAmount ? `Ezrah Matched MVP (₹${counterAmount.toLocaleString('en-IN')})` : "Ezrah Matched MVP";
 
       tbody.innerHTML = `
+        <!-- ROW 1: PAYMENTS -->
         <tr>
-          <td><strong>Core Workflow & Engineering</strong></td>
-          <td class="highlight">Full bespoke architecture tailored to your business</td>
-          <td>Clean production component architecture</td>
-          <td style="color:var(--danger);">Often modified templates with messy spaghetti code</td>
+          <td>
+            <span class="cell-title">💳 When a Customer Pays Online</span>
+            <span class="cell-desc">How payments, accounts, and fee receipts work in daily life.</span>
+          </td>
+          <td class="highlight">
+            <span class="cell-title" style="color:var(--primary);">Instant Auto-Unlock & Invoice</span>
+            <span class="cell-desc">Customer pays via UPI/Card $\rightarrow$ Account activates <strong>instantly</strong> $\rightarrow$ Branded tax receipt is emailed automatically. You do zero manual work.</span>
+          </td>
+          <td>
+            <span class="cell-title">Instant Auto-Unlock</span>
+            <span class="cell-desc">Seamless automatic access upon verified payment with standard email confirmation.</span>
+          </td>
+          <td>
+            <span class="cell-title" style="color:#b91c1c;">❌ Manual Checking Nightmare</span>
+            <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but course is locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
+          </td>
         </tr>
+
+        <!-- ROW 2: VIDEOS & HOSTING -->
         <tr>
-          <td><strong>Hosting & Bandwidth Architecture</strong></td>
-          <td class="highlight">Zero-Idle serverless compute (₹1,000/mo flat baseline)</td>
-          <td>Zero-Idle serverless compute (₹1,000/mo flat baseline)</td>
-          <td style="color:var(--danger);">Heavy VMs or raw S3 uploads (Risk: ₹5,000–₹15,000/mo surge invoices)</td>
+          <td>
+            <span class="cell-title">🎥 Watching Videos & Loading Media</span>
+            <span class="cell-desc">Playback speed and what you pay for hosting each month.</span>
+          </td>
+          <td class="highlight">
+            <span class="cell-title" style="color:var(--primary);">Zero Buffering • ₹1,000/mo Flat</span>
+            <span class="cell-desc">Streams smoothly on 4G. Even if 100 users watch at the same time, your hosting cost stays strictly at <strong>₹1,000/month</strong> with zero surprise fees.</span>
+          </td>
+          <td>
+            <span class="cell-title">Embedded Zero-Egress Player</span>
+            <span class="cell-desc">Reliable embedded playback running inside your protected user portal at fixed ₹1,000/mo.</span>
+          </td>
+          <td>
+            <span class="cell-title" style="color:#b91c1c;">❌ Freezes & Surprise ₹8,000 Bills</span>
+            <span class="cell-danger">Raw video files dumped on cheap servers. When 15 users watch at 7 PM, it buffers and crashes. Hosting companies hit you with surprise bandwidth bills or suspend your site.</span>
+          </td>
         </tr>
+
+        <!-- ROW 3: MOBILE PHONES -->
         <tr>
-          <td><strong>Intellectual Property & Code</strong></td>
-          <td class="highlight">100% full GitHub source code ownership on day one</td>
-          <td>100% full GitHub source code ownership on day one</td>
-          <td style="color:var(--danger);">Repository often withheld or locked inside proprietary systems</td>
+          <td>
+            <span class="cell-title">📱 Browsing on Mobile & WhatsApp</span>
+            <span class="cell-desc">How the website looks and works on Android, iPhones, and tablets.</span>
+          </td>
+          <td class="highlight">
+            <span class="cell-title" style="color:var(--primary);">Flawless Mobile Experience</span>
+            <span class="cell-desc">Rigorously tested on budget Androids, iPhones, and iPads. Buttons, payment fields, and forms never overlap or break.</span>
+          </td>
+          <td>
+            <span class="cell-title">Responsive Component UI</span>
+            <span class="cell-desc">Built with verified mobile component libraries so checkout works smoothly on all phone screens.</span>
+          </td>
+          <td>
+            <span class="cell-title" style="color:#b91c1c;">❌ Broken Checkout on Phones</span>
+            <span class="cell-danger">Built only on developer's laptop screen. On phones, text overlaps, the "Enroll Now" button goes off-screen, and frustrated parents leave without paying.</span>
+          </td>
         </tr>
+
+        <!-- ROW 4: DATA LOSS -->
         <tr>
-          <td><strong>Disaster Recovery & Redundancy</strong></td>
-          <td class="highlight">Automated weekly offsite database snapshots</td>
-          <td>Automated weekly offsite database snapshots</td>
-          <td style="color:var(--danger);">❌ Zero automated backups (Data lost if server crashes)</td>
+          <td>
+            <span class="cell-title">🛡️ What Happens if the Server Crashes?</span>
+            <span class="cell-desc">Disaster recovery and protecting your customer records.</span>
+          </td>
+          <td class="highlight">
+            <span class="cell-title" style="color:var(--primary);">Automated Weekly Vault Backups</span>
+            <span class="cell-desc">The database takes automatic weekly snapshots to an isolated vault. If anything ever fails, all user data and payment history are restored with 1 click.</span>
+          </td>
+          <td>
+            <span class="cell-title">Automated Weekly Backups</span>
+            <span class="cell-desc">Offsite snapshots included as part of your ₹1,000/mo operations.</span>
+          </td>
+          <td>
+            <span class="cell-title" style="color:#b91c1c;">❌ Permanent Data Loss Risk</span>
+            <span class="cell-danger">Zero automated backups. If their cheap server corrupts, all customer accounts, course progress, and fee records are erased. You have to ask users for bank screenshots.</span>
+          </td>
         </tr>
+
+        <!-- ROW 5: OWNERSHIP -->
         <tr>
-          <td><strong>Mobile & Tablet Responsiveness</strong></td>
-          <td class="highlight">Rigorous multi-device QA across 5 viewports</td>
-          <td>Responsive standard component library QA</td>
-          <td style="color:var(--danger);">❌ Tested only on developer's laptop (Breaks on iPads & Safari)</td>
+          <td>
+            <span class="cell-title">🔐 Who Actually Owns Your Platform?</span>
+            <span class="cell-desc">Code repository, database keys, and intellectual property.</span>
+          </td>
+          <td class="highlight">
+            <span class="cell-title" style="color:var(--primary);">100% Full Ownership from Day 1</span>
+            <span class="cell-desc">All source code, database access, and design assets are handed over directly to your accounts. You can switch developers anytime. You are never trapped.</span>
+          </td>
+          <td>
+            <span class="cell-title">100% Full Code Ownership</span>
+            <span class="cell-desc">Complete source code transferred directly to you upon delivery.</span>
+          </td>
+          <td>
+            <span class="cell-title" style="color:#b91c1c;">❌ Held Hostage on Their Laptop</span>
+            <span class="cell-danger">Developer keeps the code on their personal machine. If you want changes later or have an argument, they demand extra money just to give you access to your own platform.</span>
+          </td>
         </tr>
+
+        <!-- ROW 6: POST-LAUNCH HELP -->
         <tr>
-          <td><strong>Post-Launch Warranty & Support</strong></td>
-          <td class="highlight">Written 30-day bug-fix warranty in legal SOW</td>
-          <td>Written 30-day bug-fix warranty in legal SOW</td>
-          <td style="color:var(--danger);">❌ Zero written warranty (Developer disappears after final payment)</td>
-        </tr>
-        <tr>
-          <td><strong>Feature Scope Staging</strong></td>
-          <td class="highlight">All selected modules delivered in single sprint</td>
-          <td>Core MVP launched first; non-essentials staged to Phase 2</td>
-          <td style="color:var(--danger);">Promises everything upfront, then cuts corners to stay profitable</td>
+          <td>
+            <span class="cell-title">🔧 Help When Something Breaks</span>
+            <span class="cell-desc">Support and bug fixes after your site is live.</span>
+          </td>
+          <td class="highlight">
+            <span class="cell-title" style="color:var(--primary);">30-Day Written Warranty</span>
+            <span class="cell-desc">Guaranteed in writing. If any bug or issue appears in the first 30 days, Ezrah fixes it for free within 24 hours.</span>
+          </td>
+          <td>
+            <span class="cell-title">30-Day Written Warranty</span>
+            <span class="cell-desc">Formal 30-day bug-fix guarantee included in your contract.</span>
+          </td>
+          <td>
+            <span class="cell-title" style="color:#b91c1c;">❌ Disappears After Final Payment</span>
+            <span class="cell-danger">Zero written warranty. The moment you pay the final installment, they stop answering your WhatsApp calls or demand extra hourly fees to fix their own mistakes.</span>
+          </td>
         </tr>
       `;
     }
