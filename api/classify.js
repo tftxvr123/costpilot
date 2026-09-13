@@ -1,8 +1,7 @@
 // api/classify.js — Vercel Serverless Function (Node.js)
-// Zero price hallucination: Classifies features & scale, returns structured JSON.
+// Dynamic Effort-Hours Classification: Zero Price Hallucination
 
 module.exports = async (req, res) => {
-  // CORS Headers
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -22,7 +21,6 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: "Please provide a valid project description." });
     }
 
-    // Read hidden secret from Vercel Environment Variables
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ 
@@ -30,41 +28,44 @@ module.exports = async (req, res) => {
       });
     }
 
-    // System instructions: strictly classify without generating currency or numbers
-    const systemPrompt = `You are a senior software architect at Ezrah Innovations in Bangalore.
-Analyze the user's project idea and classify it strictly into the requested JSON schema.
-DO NOT generate prices, currency numbers, or hourly rates. Your job is ONLY semantic classification.
-Evaluate the true scale:
-- If they mention a small studio, single coaching branch, tuition class, or personal hobby, classify project_scale as "micro_local".
-- If they mention a typical startup or business MVP, classify as "standard_mvp".
-- If they mention multi-branch, high volume, or thousands of users, classify as "enterprise_scale".`;
+    const systemPrompt = `You are a senior software architect at Ezrah Innovations.
+Analyze the user's project idea and evaluate the REALISTIC ENGINEERING EFFORT (in hours) needed to build it.
+DO NOT generate prices, currency numbers, or hourly rates. Output ONLY technical effort units.
+
+Rules for Effort Sizing:
+1. "static_content": Simple 1-page or 3-page portfolios, photography showcases, brochure sites with NO database. Requires 8 to 20 hours of work. monthly_infra_demand must be "zero_infra".
+2. "lightweight_interactive": Filterable galleries, simple contact forms, basic blogs with light CMS. Requires 20 to 45 hours. monthly_infra_demand: "zero_infra" or "light_gateway".
+3. "full_database_platform": LMS, SaaS, E-Commerce, portals with student/user login, payments, databases. Requires 45 to 100+ hours. monthly_infra_demand: "managed_cloud_app".
+
+Feature Rule:
+- ONLY include "feat_payments" if they explicitly mention paying money, fees, pricing, checkout, or selling. If they do not ask to collect money, DO NOT include "feat_payments".`;
 
     const responseSchema = {
       type: "OBJECT",
       properties: {
+        project_title: {
+          type: "STRING",
+          description: "A tailored, professional title for their exact project (e.g. 'Photography Portfolio Showcase', 'Coaching Centre LMS')."
+        },
         archetype: {
           type: "STRING",
-          enum: ["lms", "ecommerce", "web_app", "mobile_app", "saas_product", "portfolio", "biz_website", "ai_app"]
+          enum: ["portfolio", "biz_website", "lms", "ecommerce", "web_app", "mobile_app", "saas_product", "ai_app"]
         },
-        project_scale: {
+        architecture_type: {
           type: "STRING",
-          enum: ["micro_local", "standard_mvp", "growth_scale", "enterprise_scale"]
+          enum: ["static_content", "lightweight_interactive", "full_database_platform"]
         },
-        video_strategy: {
-          type: "STRING",
-          enum: ["none", "zero_egress_embedded", "dedicated_stream"]
+        estimated_dev_hours_min: {
+          type: "INTEGER",
+          description: "Minimum realistic developer hours required (e.g. 8 for simple portfolio, 55 for LMS)."
         },
-        storage_requirement: {
-          type: "STRING",
-          enum: ["standard_assets", "document_pdf_repo", "high_volume_media"]
+        estimated_dev_hours_max: {
+          type: "INTEGER",
+          description: "Maximum realistic developer hours required (e.g. 14 for simple portfolio, 85 for LMS)."
         },
-        uiux_tier: {
+        monthly_infra_demand: {
           type: "STRING",
-          enum: ["template", "custom", "premium"]
-        },
-        form_scale: {
-          type: "STRING",
-          enum: ["none", "1-3", "4-8", "9-15", "15+"]
+          enum: ["zero_infra", "light_gateway", "managed_cloud_app"]
         },
         detected_features: {
           type: "ARRAY",
@@ -73,35 +74,30 @@ Evaluate the true scale:
             enum: ["feat_auth", "feat_social", "feat_search", "feat_payments", "feat_wa_sms", "feat_ai_bot", "feat_storage"]
           }
         },
-        dynamic_scope: {
-          type: "ARRAY",
-          items: { type: "STRING" }
-        },
         architectural_summary: {
           type: "STRING",
-          description: "A 1-2 sentence technical summary explaining how you architected this to be cost-effective for their exact scale."
+          description: "A 1-sentence technical explanation of the effort sizing and architecture class."
         }
       },
       required: [
+        "project_title",
         "archetype",
-        "project_scale",
-        "video_strategy",
-        "storage_requirement",
-        "uiux_tier",
-        "form_scale",
+        "architecture_type",
+        "estimated_dev_hours_min",
+        "estimated_dev_hours_max",
+        "monthly_infra_demand",
         "detected_features",
         "architectural_summary"
       ]
     };
 
-    // Call Google Gemini 1.5 Flash (Free Tier)
     const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const geminiRes = await fetch(geminiEndpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `Project Idea to Classify: "${prompt}"` }] }],
+        contents: [{ parts: [{ text: `User Project Description: "${prompt}"` }] }],
         generationConfig: {
           response_mime_type: "application/json",
           response_schema: responseSchema,
@@ -113,10 +109,7 @@ Evaluate the true scale:
 
     if (!geminiRes.ok) {
       const errDetails = await geminiRes.text();
-      return res.status(geminiRes.status).json({ 
-        error: "Google Gemini API error", 
-        details: errDetails 
-      });
+      return res.status(geminiRes.status).json({ error: "Gemini API error", details: errDetails });
     }
 
     const geminiData = await geminiRes.json();
@@ -126,9 +119,6 @@ Evaluate the true scale:
     return res.status(200).json(parsedClassification);
 
   } catch (error) {
-    return res.status(500).json({ 
-      error: "Internal classification failure", 
-      message: error.message 
-    });
+    return res.status(500).json({ error: "Internal classification failure", message: error.message });
   }
 };
