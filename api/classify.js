@@ -1,5 +1,5 @@
 // api/classify.js — Vercel Serverless Function (Node.js)
-// Domain-Aware Semantic Extraction & Strict Exclusion Precedence
+// Domain-Driven Semantic Requirement Extraction & Strict Exclusion Enforcement
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -29,46 +29,51 @@ module.exports = async (req, res) => {
     }
 
     const systemPrompt = `You are a principal software architect at Ezrah Innovations.
-Classify the user's software project strictly based on their DOMAIN and ACTUAL VERBS/NOUNS.
+Classify the user's project strictly based on their ACTUAL WORKFLOW, DOMAIN, and NOUNS/VERBS.
 
-CRITICAL RULES:
-1. DOMAIN IDENTIFICATION FIRST:
-   - Identify the primary domain before picking features:
-     * Restaurant Ordering -> "Restaurant Ordering & Menu Web Platform" (Menu, Cart, Order Placement, Admin Order Management)
-     * Informational Restaurant -> "Informational Restaurant Website" (Menu Showcase, Hours, Location, Contact)
-     * Clinic Appointment Booking -> "Clinic Appointment Booking Platform" (Doctor Profiles, Time Slots, Appointment Booking)
-     * Service Booking -> "Service Booking Platform" (Service Catalog, Booking Form, Admin Management)
-     * Document Management -> "Document Management Web Application" (PDF Upload, Organization, Search, Download)
-     * Online Learning -> "Online Learning Platform" (Course Browsing, Video Lectures, PDF Notes)
-     * E-Commerce Catalog -> "E-Commerce Product Catalog Platform" (Product Browsing, Search, Wishlist)
-   - Do NOT classify a project as AI, Mobile App, or E-Commerce unless explicitly supported.
+RULE 1: DOMAIN CLASSIFICATION RULES
+- Home, About, Services, Gallery, Contact, portfolio -> "Business Website" or "Personal Creator Portfolio"
+- Menu, food images, hours, contact without ordering -> "Informational Restaurant Website"
+- Menu, cart, order placement, order history -> "Restaurant Ordering & Menu Web Platform"
+- Doctor profiles, patient registration, time slots, appointments -> "Clinic Appointment Booking Platform"
+- Services, booking requests, booking status -> "Service Booking Platform"
+- PDFs, files, folders, upload, search, download -> "Document Management Web Application"
+- Courses, video lectures, PDF resources, course management -> "Online Learning Platform"
+- Workspaces, projects, tasks, task assignments -> "SaaS Task Management Platform"
+- AI-generated summaries, AI responses, LLM processing -> "AI Web Application"
+- Products, wishlist, catalog without cart/checkout/payment -> "E-Commerce Product Catalog Platform"
+- Products, cart, checkout, order placement -> "E-Commerce Ordering Platform"
+- Multiple service providers, listings, bookings, marketplace administration -> "Service Marketplace Platform"
 
-2. NEVER INFER UNRELATED FEATURES:
-   - Clinic/Doctor booking does NOT imply AI.
-   - Document management does NOT imply AI.
-   - Learning platform does NOT imply AI.
-   - A simple WhatsApp button is NOT an SMS/API Gateway.
-   - Service booking does NOT imply a Mobile App.
-   - An admin order-management requirement is NOT admin product management.
+STRICT CLASSIFICATION PROHIBITIONS:
+- NEVER classify a web app as a mobile app unless user explicitly requests Android, iOS or a native mobile app.
+- NEVER classify a project as AI unless AI/LLM functionality is explicitly requested.
+- NEVER classify a project as document management unless document/file repository management is explicitly requested (do NOT trigger on learning sites with PDF notes!).
+- NEVER classify a project as a business website when it clearly contains a transactional workflow (booking, ordering, learning, SaaS tasks, or marketplace).
 
-3. STRICT EXCLUSION PRECEDENCE:
-   Explicit exclusion > explicit inclusion > inferred requirement
-   - If user says "no online payment" -> EXCLUDE online payment gateway completely.
-   - If user says "no customer login" -> EXCLUDE customer accounts/login completely.
-   - If user says "no admin panel" -> EXCLUDE admin panel completely.
-   - If user says "no mobile app" -> EXCLUDE mobile app completely.
-   - Never put an excluded feature in included_features!
+RULE 2: SEPARATE RELATED BUT DIFFERENT FEATURES
+- Customer Login != Admin Login. "Admin can manage products" does NOT imply customer accounts.
+- Cart != Checkout. "Cart but no checkout" -> Include cart, exclude checkout.
+- Order Placement != Online Payment. "Order placement with cash/WhatsApp, no online payment" -> Include order placement, exclude payment gateway.
+- WhatsApp Button != WhatsApp API. A simple WhatsApp button is a contact link, NOT an SMS/API gateway.
+- Responsive Website != Mobile Application.
 
-4. PRICING INTEGRITY:
-   - Output realistic developer hours. Excluded items must add 0 hours.
-   - Output technical effort units only. Do NOT generate currency numbers.`;
+RULE 3: STRICT EXCLUSION PRECEDENCE (Explicit Exclusion > Explicit Inclusion > Inferred Requirement)
+- If user says "no patient login" or "no customer login" -> EXCLUDE customer accounts completely.
+- If user says "no online payment" -> EXCLUDE online payment gateway completely.
+- If user says "no admin dashboard" -> EXCLUDE admin dashboard completely.
+- If user says "no mobile app" -> EXCLUDE mobile app completely.
+- Excluded features must NEVER appear in included_features.
+
+RULE 4: PRECISE INCLUSIONS LIST
+List the actual functional capabilities (e.g. for restaurant ordering: "Restaurant Menu & Food Categories", "Shopping Cart", "Order Placement Workflow", "Admin Order Management"). Do NOT collapse multiple features into one vague generic label. Output technical effort units only. Do NOT generate currency numbers.`;
 
     const responseSchema = {
       type: "OBJECT",
       properties: {
         project_title: {
           type: "STRING",
-          description: "Accurate title matching the dominant workflow (e.g. 'Restaurant Ordering & Menu Web Platform', 'Clinic Appointment Booking Platform')."
+          description: "Dominant workflow project name (e.g. 'Restaurant Ordering & Menu Web Platform', 'Clinic Appointment Booking Platform', 'SaaS Task Management Platform')."
         },
         archetype: {
           type: "STRING",
@@ -89,12 +94,12 @@ CRITICAL RULES:
         included_features: {
           type: "ARRAY",
           items: { type: "STRING" },
-          description: "Specific functional requirements derived from the domain (e.g. 'Restaurant Menu & Food Categories', 'Available Time Slots'). No generic mismatches!"
+          description: "Specific functional requirements derived from the domain. Never include excluded items."
         },
         excluded_features: {
           type: "ARRAY",
           items: { type: "STRING" },
-          description: "List of explicitly excluded features."
+          description: "Explicitly excluded features."
         },
         detected_features: {
           type: "ARRAY",
@@ -105,7 +110,7 @@ CRITICAL RULES:
         },
         architectural_summary: {
           type: "STRING",
-          description: "1-2 sentences explaining the technical architecture and how exclusions were respected."
+          description: "1-2 sentence technical summary explaining domain alignment and exclusion enforcement."
         }
       },
       required: [
@@ -130,7 +135,7 @@ CRITICAL RULES:
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `Classify domain and requirements:\n"${prompt}"` }] }],
+        contents: [{ parts: [{ text: `Classify domain, extract explicit inclusions, and strictly enforce exclusions:\n"${prompt}"` }] }],
         generationConfig: {
           response_mime_type: "application/json",
           response_schema: responseSchema,
