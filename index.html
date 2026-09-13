@@ -117,6 +117,7 @@
     .badge-neutral { background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border-color); }
     .badge-success { background: var(--success-light); color: var(--success); }
     .badge-purple { background: var(--purple-light); color: var(--purple); border: 1px solid #ddd6fe; }
+    .badge-ai { background: linear-gradient(135deg, #eff6ff, #f5f3ff); color: #4338ca; border: 1px solid #c7d2fe; }
 
     /* Buttons */
     .btn {
@@ -615,8 +616,10 @@
     .analysis-header-badge {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
       margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
     .analysis-prompt-quote {
       font-style: italic;
@@ -1047,7 +1050,7 @@
 
   <!-- Top Announcement -->
   <aside class="market-banner">
-    📍 <strong>Bangalore Market Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Unified Dual-Matrix Engine) — Accurate, indicative cost modeling for planning.
+    📍 <strong>Bangalore Market Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: AI-Assisted Precision Matrix) — Accurate, deterministic cost modeling.
   </aside>
 
   <!-- Navigation -->
@@ -1112,11 +1115,11 @@
           
           <!-- Mode 1: Idea Analyzer -->
           <div class="mode-card">
-            <span class="badge badge-primary" style="align-self: flex-start; margin-bottom: 1rem;">Smart Requirement Analysis</span>
+            <span class="badge badge-ai" style="align-self: flex-start; margin-bottom: 1rem;">✨ Smart Semantic Analysis</span>
             <div>
               <div class="mode-icon">💡</div>
               <h3>I Have an Idea</h3>
-              <p>Tell CostPilot what you want to build in your own words. We will analyze your concept, extract requirements, and value the exact architecture.</p>
+              <p>Describe what you want to build in plain English. We analyze your requirements, classify the exact scale, and generate a tailored estimate.</p>
               
               <div class="idea-box">
                 <textarea 
@@ -1124,11 +1127,11 @@
                   class="idea-textarea" 
                   placeholder="e.g. I want to build an online learning platform for a coaching centre. Students should be able to register, watch recorded classes, download PDFs, and pay monthly fees online."
                 ></textarea>
-                <button class="btn btn-secondary" style="width:100%;" onclick="processIdeaMode()">
+                <button class="btn btn-secondary" id="btn-analyze-idea" style="width:100%;" onclick="processIdeaMode()">
                   Analyze & Value Project →
                 </button>
-                <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;">
-                  Smart local requirement analysis. Matches exact configurator calculations.
+                <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
+                  🔒 Zero math hallucinations: AI classifies requirements, your deterministic Bangalore engine calculates prices.
                 </span>
               </div>
             </div>
@@ -1140,7 +1143,7 @@
             <div>
               <div class="mode-icon">⚙️</div>
               <h3>I Know What I Need</h3>
-              <p>Step-by-step configuration for founders, product managers, and startups needing exact specifications and transparent pricing.</p>
+              <p>Step-by-step manual configuration for founders, product managers, and startups needing exact modular controls.</p>
               
               <ul style="list-style: none; margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
                 <li>✓ Dual Architecture Models (Cloud-Optimized vs Dedicated)</li>
@@ -1316,18 +1319,17 @@
         <!-- SMART REQUIREMENT ANALYSIS CALLOUT (For Idea Mode) -->
         <div class="smart-analysis-banner" id="smart-analysis-banner">
           <div class="analysis-header-badge">
-            <span class="badge badge-primary">💡 Smart Requirement Analysis</span>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--secondary);">Automated Architectural Breakdown</span>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span class="badge badge-ai">✨ AI Requirement Extraction</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Gemini 1.5 Flash Precision Engine</span>
+            </div>
+            <span class="badge badge-success">Zero Price Hallucination</span>
           </div>
           <p style="font-size: 0.9rem; color: var(--text-muted);">
-            CostPilot analyzed your concept text and configured the exact functional parameters below:
+            CostPilot classified your concept into structured parameters. Prices were computed deterministically using Bangalore market rate cards:
           </p>
-          <div class="analysis-prompt-quote" id="analysis-prompt-text">
-            <!-- User's raw text injected here -->
-          </div>
-          <div class="analysis-interpretations-grid" id="analysis-chips-grid">
-            <!-- Dynamic detected chips injected here -->
-          </div>
+          <div class="analysis-prompt-quote" id="analysis-prompt-text"></div>
+          <div class="analysis-interpretations-grid" id="analysis-chips-grid"></div>
         </div>
 
         <!-- Dashboard Header -->
@@ -1344,7 +1346,7 @@
           </div>
 
           <div class="results-actions" style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-            <button class="btn btn-outline btn-sm" onclick="editEstimate()">✏️ Edit Scope in Configurator</button>
+            <button class="btn btn-outline btn-sm" onclick="editEstimate()">✏️ Fine-Tune in Configurator</button>
             <button class="btn btn-outline btn-sm" onclick="saveCurrentEstimate()">💾 Save in Browser</button>
             <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Download / Print Report</button>
           </div>
@@ -1610,20 +1612,18 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Indicative Bangalore Market Benchmarks • Production v3.0 Unified Engine</div>
+        <div>Indicative Bangalore Market Benchmarks • Production v3.2 AI-Hybrid</div>
       </div>
     </div>
   </footer>
 
   <!-- MODALS -->
-
-  <!-- Modal: Methodology -->
   <div class="modal-backdrop" id="modal-how-it-works">
     <div class="modal-window">
       <button class="modal-close" onclick="closeModals()">✕</button>
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--secondary);">Our Estimation Methodology</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-        CostPilot operates on a single unified pricing matrix across both <strong>I Have an Idea</strong> and <strong>I Know What I Need</strong>:
+        CostPilot pairs <strong>semantic requirement analysis</strong> with a <strong>deterministic Bangalore pricing matrix</strong>:
       </p>
       <div style="margin-bottom: 1rem;">
         <strong style="color:var(--primary);">Package A: Cloud-Optimized Architecture</strong>
@@ -1643,7 +1643,6 @@
     </div>
   </div>
 
-  <!-- Modal: Consultation -->
   <div class="modal-backdrop" id="modal-contact">
     <div class="modal-window">
       <button class="modal-close" onclick="closeModals()">✕</button>
@@ -1669,7 +1668,6 @@
     </div>
   </div>
 
-  <!-- Modal: Saved Estimates -->
   <div class="modal-backdrop" id="modal-saved">
     <div class="modal-window">
       <button class="modal-close" onclick="closeModals()">✕</button>
@@ -1683,16 +1681,12 @@
     </div>
   </div>
 
-  <!-- Modal: Disclaimer -->
   <div class="modal-backdrop" id="modal-disclaimer">
     <div class="modal-window">
       <button class="modal-close" onclick="closeModals()">✕</button>
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Market Disclaimer</h3>
       <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
         CostPilot provides indicative market-based estimates for planning purposes. Actual project costs vary based on vendors, technologies, scope, requirements, team seniority, and usage.
-      </p>
-      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-        All figures reflect Q1 2026 Bangalore engineering standards across both lean serverless models and enterprise agency frameworks.
       </p>
       <div style="margin-top: 1.5rem; text-align: right;">
         <button class="btn btn-primary btn-sm" onclick="closeModals()">I Understand</button>
@@ -1705,11 +1699,12 @@
   <!-- JAVASCRIPT PRICING & APPLICATION ENGINE -->
   <script>
     /**
-     * COSTPILOT UNIFIED ENGINE (Bangalore Benchmarks)
-     * Exact 1:1 mathematical match across Wizard & Idea Modes.
-     * Package A: Cloud-Optimized Serverless (Build: ₹22k–₹65k | Monthly: ₹1,000/mo)
-     * Package B: Dedicated Enterprise Cluster (Build: ₹95k–₹250k | Monthly: ₹5,000–₹9,500/mo)
+     * SECURE AI PROXY CONFIGURATION
+     * Paste your free Cloudflare Worker URL here after completing Part 1.
+     * Leave as "" to use the built-in local smart analyzer.
      */
+    const AI_WORKER_URL = "YOUR_CLOUDFLARE_WORKER_URL_HERE";
+
     const pricingData = {
       market: "Bangalore, India",
       currency: "INR",
@@ -1900,6 +1895,13 @@
       let buildB_low = p.enterpriseBuild.low;
       let buildB_high = p.enterpriseBuild.high;
 
+      // Micro-Scale Adjuster (if prompt identified micro scale)
+      if (cfg.projectScale === "micro_local") {
+        buildA_typ = Math.round(buildA_typ * 0.8);
+        buildA_low = Math.round(buildA_low * 0.8);
+        buildA_high = Math.round(buildA_high * 0.8);
+      }
+
       // Add UI/UX
       buildA_typ += ui.costA;
       buildA_low += Math.round(ui.costA * 0.85);
@@ -2032,6 +2034,7 @@
 
     function startWizardMode() {
       state.fromIdeaMode = false;
+      state.projectScale = "standard_mvp";
       document.getElementById("landing-section").style.display = "none";
       document.getElementById("estimator-section").style.display = "block";
       document.getElementById("results-section").style.display = "none";
@@ -2273,7 +2276,7 @@
       document.getElementById("res-estimate-id").innerText = res.estimateId;
       document.getElementById("res-project-name").innerText = `${res.projectTitle} Specification`;
 
-      // Smart Analysis Callout for Idea Mode
+      // Smart Analysis Callout
       const banner = document.getElementById("smart-analysis-banner");
       if (state.fromIdeaMode) {
         banner.classList.add("active");
@@ -2374,17 +2377,80 @@
       }
     }
 
-    // ENHANCED "I HAVE AN IDEA" ANALYZER
-    // Maps deeply into identical configurator state
-    function processIdeaMode() {
-      const text = document.getElementById("idea-input").value;
+    // ==========================================================================
+    // HYBRID AI CLASSIFIER + FALLBACK ANALYZER
+    // ==========================================================================
+    async function processIdeaMode() {
+      const inputEl = document.getElementById("idea-input");
+      const btnEl = document.getElementById("btn-analyze-idea");
+      const text = inputEl.value;
+
       if (!text || text.trim().length < 8) {
         showToast("Please enter a short description of what you wish to build.");
         return;
       }
-      const lower = text.toLowerCase();
 
-      // Reset state for clean 1:1 mapping
+      btnEl.disabled = true;
+      btnEl.innerText = "Analyzing Idea with AI...";
+
+      // Attempt AI Cloudflare Worker Call
+      if (AI_WORKER_URL && !AI_WORKER_URL.includes("YOUR_CLOUDFLARE_WORKER_URL")) {
+        try {
+          const response = await fetch(AI_WORKER_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: text })
+          });
+
+          if (response.ok) {
+            const aiData = await response.json();
+            applyAIClassification(aiData, text, true);
+            btnEl.disabled = false;
+            btnEl.innerText = "Analyze & Value Project →";
+            showToast("✨ AI classification complete! Precision estimate generated.");
+            showResultsView();
+            return;
+          }
+        } catch (err) {
+          console.warn("AI worker proxy unavailable, switching to local analyzer.", err);
+        }
+      }
+
+      // Fallback: Local Semantic Classifier
+      applyLocalClassification(text);
+      btnEl.disabled = false;
+      btnEl.innerText = "Analyze & Value Project →";
+      showToast("Smart local requirement analysis complete!");
+      showResultsView();
+    }
+
+    function applyAIClassification(ai, rawText, isAiLive) {
+      state.fromIdeaMode = true;
+      state.rawIdeaText = rawText;
+      state.projectType = ai.archetype || "lms";
+      state.projectScale = ai.project_scale || "standard_mvp";
+      state.uiuxTier = ai.uiux_tier || "custom";
+      state.formScale = ai.form_scale || "1-3";
+      state.selectedFeatures = ai.detected_features || ["feat_auth"];
+      state.dynamicScope = ai.dynamic_scope || [];
+
+      // Storage & users
+      state.infra.storage = (ai.storage_requirement === "document_pdf_repo") ? "20gb" : (ai.storage_requirement === "high_volume_media" ? "100gb" : "5gb");
+      state.infra.users = (ai.project_scale === "enterprise_scale") ? "10k+" : (ai.project_scale === "growth_scale" ? "1k-10k" : "under100");
+
+      const chips = [
+        { title: "🎯 Archetype & Scale", desc: `${pricingData.projectTypes[state.projectType].title} (${formatScaleLabel(state.projectScale)})` },
+        { title: "🎥 Video Architecture", desc: ai.video_strategy === "zero_egress_embedded" ? "Zero-Egress Embedded Delivery (Keeps monthly at ₹1,000/mo)" : "Standard Web Media Pipeline" },
+        { title: "📂 Data & Forms", desc: `${state.infra.storage.toUpperCase()} Storage • ${state.formScale} Interactive Workflows` },
+        { title: "💡 Architect's Note", desc: ai.architectural_summary || "Configured for maximum cost-effectiveness and fast time to market." }
+      ];
+
+      state.analysisBreakdown = chips;
+      document.getElementById("ai-engine-badge").innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Semantic Classifier";
+    }
+
+    function applyLocalClassification(text) {
+      const lower = text.toLowerCase();
       state.fromIdeaMode = true;
       state.rawIdeaText = text;
       state.selectedFeatures = [];
@@ -2393,81 +2459,75 @@
       state.formScale = "1-3";
       state.infra.users = "under100";
       state.infra.storage = "5gb";
+      state.projectScale = "standard_mvp";
 
-      const analysis = [];
+      if (lower.includes("small") || lower.includes("tiny") || lower.includes("personal") || lower.includes("single branch")) {
+        state.projectScale = "micro_local";
+      }
 
-      // 1. Project Type
+      const chips = [];
+
+      // Project Type
       if (lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("class")) {
         state.projectType = "lms";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "Learning Management System (LMS / EdTech)" });
+        chips.push({ title: "🎯 Archetype", desc: "Learning Management System (LMS / EdTech)" });
       } else if (lower.includes("store") || lower.includes("shop") || lower.includes("ecommerce") || lower.includes("product") || lower.includes("cart")) {
         state.projectType = "ecommerce";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "E-Commerce Catalog & Checkout Platform" });
+        chips.push({ title: "🎯 Archetype", desc: "E-Commerce Catalog & Checkout Platform" });
       } else if (lower.includes("mobile") || lower.includes("android") || lower.includes("ios") || lower.includes("app")) {
         state.projectType = "mobile_app";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "Cross-Platform Mobile Application" });
+        chips.push({ title: "🎯 Archetype", desc: "Cross-Platform Mobile Application" });
       } else if (lower.includes("ai") || lower.includes("chatbot") || lower.includes("llm")) {
         state.projectType = "ai_app";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "AI / LLM Workflow Engine" });
+        chips.push({ title: "🎯 Archetype", desc: "AI / LLM Workflow Engine" });
       } else if (lower.includes("saas") || lower.includes("subscription")) {
         state.projectType = "saas_product";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "Multi-Tenant SaaS Platform" });
+        chips.push({ title: "🎯 Archetype", desc: "Multi-Tenant SaaS Platform" });
       } else if (lower.includes("portfolio")) {
         state.projectType = "portfolio";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "Interactive Brand Portfolio" });
+        chips.push({ title: "🎯 Archetype", desc: "Interactive Brand Portfolio" });
       } else {
         state.projectType = "biz_website";
-        analysis.push({ title: "🎯 Architecture Archetype", desc: "Modern Responsive Web Platform" });
+        chips.push({ title: "🎯 Archetype", desc: "Modern Responsive Web Platform" });
       }
 
-      // 2. Video Strategy
+      // Video Strategy
       if (lower.includes("video") || lower.includes("recorded") || lower.includes("lecture") || lower.includes("classes") || lower.includes("watch")) {
-        analysis.push({ 
-          title: "🎥 Video Streaming Strategy", 
-          desc: "Zero-Egress Embedded Delivery (Keeps monthly cloud at ₹1,000/mo instead of ₹10,000/mo)" 
-        });
+        chips.push({ title: "🎥 Video Streaming Strategy", desc: "Zero-Egress Embedded Delivery (Keeps monthly cloud at ₹1,000/mo instead of ₹10,000/mo)" });
       }
 
-      // 3. Authentication
+      // Features
       if (lower.includes("student") || lower.includes("register") || lower.includes("login") || lower.includes("account") || lower.includes("user")) {
         state.selectedFeatures.push("feat_auth");
-        analysis.push({ title: "🔐 User & Profile System", desc: "Student Authentication, Session Management & Profiles" });
+        chips.push({ title: "🔐 User & Profiles", desc: "User Authentication & Session Management" });
       }
-
-      // 4. Document / PDF Storage
-      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document") || lower.includes("file") || lower.includes("material")) {
+      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document") || lower.includes("file")) {
         state.selectedFeatures.push("feat_storage");
         state.infra.storage = "20gb";
-        analysis.push({ title: "📂 Asset Repository", desc: "Cloud Object Storage for PDF notes and downloadable course materials" });
+        chips.push({ title: "📂 Asset Repository", desc: "Cloud Object Storage for PDF notes and downloadable course materials" });
       }
-
-      // 5. Payments / Commerce
       if (lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("money") || lower.includes("checkout")) {
         state.selectedFeatures.push("feat_payments");
-        analysis.push({ title: "💳 Transaction Engine", desc: "Payment Gateway, webhooks, and automated receipt generation" });
+        chips.push({ title: "💳 Transaction Engine", desc: "Payment Gateway, webhooks, and automated receipt generation" });
       }
-
-      // 6. Quizzes / Testing
       if (lower.includes("quiz") || lower.includes("test") || lower.includes("exam")) {
         if (state.projectType === "lms") state.dynamicScope.push("lms_quizzes");
-        analysis.push({ title: "📝 Evaluation Engine", desc: "Timed Quizzes & Automated Scoring Module" });
+        chips.push({ title: "📝 Evaluation Engine", desc: "Timed Quizzes & Automated Scoring Module" });
       }
-
-      // 7. AI Assistant
       if (lower.includes("ai") || lower.includes("chat") || lower.includes("bot")) {
         state.selectedFeatures.push("feat_ai_bot");
-        analysis.push({ title: "🤖 Intelligence Module", desc: "Embedded AI Assistant & Streaming Chat UI" });
+        chips.push({ title: "🤖 Intelligence Module", desc: "Embedded AI Assistant & Streaming Chat UI" });
       }
 
-      // Ensure base features
-      if (state.selectedFeatures.length === 0) {
-        state.selectedFeatures = ["feat_auth"];
-      }
+      if (state.selectedFeatures.length === 0) state.selectedFeatures = ["feat_auth"];
+      state.analysisBreakdown = chips;
+      document.getElementById("ai-engine-badge").innerText = "Local Semantic Engine";
+    }
 
-      state.analysisBreakdown = analysis;
-
-      showToast("Smart analysis complete! Generated identical mathematical valuation.");
-      showResultsView();
+    function formatScaleLabel(scale) {
+      if (scale === "micro_local") return "Micro / Local Scale";
+      if (scale === "enterprise_scale") return "Enterprise High-Concurrency";
+      return "Standard Commercial MVP";
     }
 
     // Utilities
