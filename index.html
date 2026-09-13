@@ -665,9 +665,7 @@
       margin-bottom: 0.15rem;
     }
 
-    /* ==========================================================================
-       STREAMLINED ARCHITECTURE SWITCHER & TWO-PRICE HERO CARD
-       ========================================================================== */
+    /* Architecture Switcher */
     .arch-switch-container {
       display: flex;
       align-items: center;
@@ -704,6 +702,7 @@
       box-shadow: var(--shadow-sm);
     }
 
+    /* Two-Price Hero Valuation Card */
     .hero-valuation-card {
       background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
       border: 2px solid var(--primary);
@@ -795,9 +794,7 @@
       color: var(--success);
     }
 
-    /* ==========================================================================
-       COUNTER-OFFER AUDITOR CARD & WORST-CASE SCRUTINY
-       ========================================================================== */
+    /* Counter-Offer Auditor */
     .audit-card {
       background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
       border: 2px dashed #cbd5e1;
@@ -887,7 +884,6 @@
       margin-bottom: 1rem;
     }
 
-    /* Worst-Case Financial Scrutiny Callout */
     .worst-case-callout {
       background: #ffffff;
       border: 1px solid #fecaca;
@@ -936,9 +932,7 @@
       font-size: 0.8rem;
     }
 
-    /* ==========================================================================
-       NON-TECHNICAL PLAIN-ENGLISH PARITY MATRIX (Hidden until audited)
-       ========================================================================== */
+    /* Parity Matrix */
     .parity-section {
       display: none;
       background: #ffffff;
@@ -1306,7 +1300,7 @@
 
   <!-- Top Announcement -->
   <aside class="market-banner">
-    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Dynamic Effort & Direct Valuation) — Accurate, deterministic cost modeling.
+    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Scope-Sensitive Precision Matrix) — Accurate, deterministic cost modeling.
   </aside>
 
   <!-- Navigation -->
@@ -1370,17 +1364,17 @@
           
           <!-- Mode 1: Idea Analyzer -->
           <div class="mode-card">
-            <span class="badge badge-ai" style="align-self: flex-start; margin-bottom: 1rem;">✨ Dynamic Effort Analysis</span>
+            <span class="badge badge-ai" style="align-self: flex-start; margin-bottom: 1rem;">✨ Smart Requirement Analysis</span>
             <div>
               <div class="mode-icon">💡</div>
               <h3>I Have an Idea</h3>
-              <p>Describe what you want to build in plain English. We analyze your requirements, classify the exact engineering effort in hours, and generate a tailored estimate.</p>
+              <p>Describe what you want to build in plain English. We extract your exact requirements, honor your exclusions, and compute a tailored quote.</p>
               
               <div class="idea-box">
                 <textarea 
                   id="idea-input" 
                   class="idea-textarea" 
-                  placeholder="e.g. I want to build an online learning platform for a coaching centre. Students should be able to register, watch recorded classes, and download PDFs."
+                  placeholder="e.g. Restaurant ordering website with menu, cart and WhatsApp ordering. No online payment. Web only."
                 ></textarea>
                 <div style="display:flex; gap:0.5rem;">
                   <button class="btn btn-secondary" id="btn-analyze-idea" style="flex:1;" onclick="processIdeaMode()">
@@ -1389,7 +1383,7 @@
                   <button class="btn btn-outline btn-sm" onclick="clearIdeaInput()" title="Clear text">Clear</button>
                 </div>
                 <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
-                  🔒 Zero math hallucinations: AI measures developer effort-hours; our engine calculates precise costs.
+                  🔒 Negative statements (e.g. 'no payment') are strictly honored as scope exclusions.
                 </span>
               </div>
             </div>
@@ -1405,7 +1399,7 @@
               
               <ul style="list-style: none; margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
                 <li>✓ Standard Market vs Optimized Direct Pricing</li>
-                <li>✓ Dynamic effort-hours evaluation</li>
+                <li>✓ Scope-sensitive engineering calibration</li>
                 <li>✓ Form volume & custom UI/UX design tiers</li>
                 <li>✓ Predictable flat monthly operations</li>
                 <li>✓ 1, 3, and 5-Year TCO financial projections</li>
@@ -1578,13 +1572,13 @@
         <div class="smart-analysis-banner" id="smart-analysis-banner">
           <div class="analysis-header-badge">
             <div style="display:flex; align-items:center; gap:0.5rem;">
-              <span class="badge badge-ai">✨ Dynamic Effort Sizing</span>
-              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Gemini 1.5 Flash Precision Engine</span>
+              <span class="badge badge-ai">✨ Smart Requirement Extraction</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Precision Scoping Engine</span>
             </div>
             <span class="badge badge-success" id="effort-hours-badge">0 Dev Hours</span>
           </div>
           <p style="font-size: 0.9rem; color: var(--text-muted);">
-            CostPilot calculated the actual developer hours and architecture tier required. Prices are computed mathematically with zero arbitrary buckets:
+            CostPilot analyzed your concept, mapped explicit inclusions, and strictly honored your exclusions:
           </p>
           <div class="analysis-prompt-quote" id="analysis-prompt-text"></div>
           <div class="analysis-interpretations-grid" id="analysis-chips-grid"></div>
@@ -1611,10 +1605,7 @@
           </div>
         </div>
 
-        <!-- ==========================================================================
-             STREAMLINED ARCHITECTURE SWITCHER & TWO-PRICE VALUATION HERO CARD
-             (Standard Market Estimate vs. Optimized Direct Offer + Monthly Flat Fee)
-             ========================================================================== -->
+        <!-- STREAMLINED ARCHITECTURE SWITCHER & TWO-PRICE VALUATION HERO CARD -->
         <div class="arch-switch-container">
           <div>
             <span style="font-size:0.85rem; font-weight:700; color:var(--secondary); display:block;">Select Architecture Model:</span>
@@ -1651,7 +1642,7 @@
             <div class="price-block-offer">
               <span class="label">
                 Optimized Direct Offer
-                <span class="badge badge-success" id="val-savings-badge" style="font-size:0.65rem;">Save 18%</span>
+                <span class="badge badge-success" id="val-savings-badge" style="font-size:0.65rem;">Save 15%</span>
               </span>
               <div class="amount" id="val-optimized-price">₹0</div>
               <span style="font-size:0.8rem; color:var(--text-muted);">Direct studio execution with zero wasteful overhead</span>
@@ -1669,9 +1660,7 @@
           </div>
         </div>
 
-        <!-- ==========================================================================
-             COUNTER-OFFER AUDITOR CARD & WORST-CASE SCRUTINY MODULE
-             ========================================================================== -->
+        <!-- COUNTER-OFFER AUDITOR CARD & WORST-CASE SCRUTINY MODULE -->
         <div class="audit-card">
           <div class="audit-header">
             <div>
@@ -1691,7 +1680,7 @@
           <div class="audit-input-group">
             <div class="audit-input-box">
               <label for="audit-quote-amount">Other Vendor Quoted Amount (₹)</label>
-              <input type="number" id="audit-quote-amount" placeholder="e.g. 5000" min="500">
+              <input type="number" id="audit-quote-amount" placeholder="e.g. 28000" min="500">
             </div>
             <div class="audit-input-box">
               <label for="audit-vendor-type">Quoted By</label>
@@ -1744,9 +1733,7 @@
           </div>
         </div>
 
-        <!-- ==========================================================================
-             NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX (Appears only upon Audit)
-             ========================================================================== -->
+        <!-- NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX -->
         <div class="parity-section" id="parity-section">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
             <div>
@@ -1781,9 +1768,7 @@
                 <th style="width:24%; color:#9f1239; background:#fff1f2;">With a Cheaper Competitor Quote</th>
               </tr>
             </thead>
-            <tbody id="parity-table-body">
-              <!-- Populated dynamically and conditionally -->
-            </tbody>
+            <tbody id="parity-table-body"></tbody>
           </table>
         </div>
 
@@ -1942,7 +1927,7 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Commercial Software Standards • Production v8.0 Streamlined Release</div>
+        <div>Commercial Software Standards • Production v9.0 Scope-Sensitive Engine</div>
       </div>
     </div>
   </footer>
@@ -1953,7 +1938,7 @@
       <button class="modal-close" onclick="closeModals()">✕</button>
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--secondary);">Our Estimation Methodology</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-        CostPilot evaluates real engineering effort-hours and pairs it with deterministic commercial benchmarks:
+        CostPilot evaluates real engineering effort-hours and pairs it with deterministic commercial benchmarks across two clear prices:
       </p>
       <div style="margin-bottom: 1rem;">
         <strong style="color:var(--secondary);">1. Standard Market Estimate</strong>
@@ -1964,7 +1949,7 @@
       <div style="margin-bottom: 1.25rem;">
         <strong style="color:var(--primary);">2. Optimized Direct Offer (Ezrah)</strong>
         <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">
-          Direct studio execution (~15–18% lower) leveraging zero-waste cloud architectures without sacrificing code quality or scope.
+          Direct studio execution (~15% lower) leveraging zero-waste cloud architectures without sacrificing code quality or scope.
         </p>
       </div>
       <div style="text-align:right;">
@@ -2041,66 +2026,79 @@
       lastUpdated: "February 2026",
 
       // Hourly base rates for effort math
-      hourlyRateStandard: 520,  // Standard commercial agency billing rate (~30% margin)
-      hourlyRateOptimized: 430, // Optimized direct studio execution (~18% savings)
+      hourlyRateStandard: 550,  // Standard commercial agency billing rate (~30% margin)
+      hourlyRateOptimized: 460, // Optimized direct studio execution (~15-18% savings)
+
+      // Calibration benchmarks (sanity check floors)
+      benchmarks: {
+        portfolio: { minHours: 20, maxHours: 35, baseMarket: 18000 },
+        biz_website: { minHours: 35, maxHours: 65, baseMarket: 32000 },
+        biz_website_admin: { minHours: 65, maxHours: 105, baseMarket: 52000 },
+        small_web_app: { minHours: 95, maxHours: 155, baseMarket: 75000 },
+        medium_web_app: { minHours: 150, maxHours: 240, baseMarket: 120000 },
+        lms_saas_platform: { minHours: 180, maxHours: 350, baseMarket: 165000 },
+        ai_app: { minHours: 180, maxHours: 320, baseMarket: 155000 },
+        mobile_app: { minHours: 190, maxHours: 340, baseMarket: 160000 },
+        marketplace: { minHours: 300, maxHours: 550, baseMarket: 260000 }
+      },
 
       projectTypes: {
         "portfolio": {
           id: "portfolio",
           title: "Portfolio Website",
           icon: "🎨",
-          desc: "Interactive showcase for creators, photographers, and studios.",
-          defaultHoursMin: 8,
-          defaultHoursMax: 18,
+          desc: "Showcase for creators, designers, architects, and photographers.",
+          defaultHoursMin: 18,
+          defaultHoursMax: 32,
           defaultArchitecture: "static_content",
-          laborFloor: 4000,
+          laborFloor: 6000,
           dynamicQuestions: [
-            { id: "port_anim", label: "Interactive Micro-Interactions", costA: 2000, costB: 6000 },
-            { id: "port_booking", label: "Client Inquiry & Booking Flow", costA: 1800, costB: 5000 }
+            { id: "port_anim", label: "Interactive Micro-Interactions", costA: 3000, costB: 7000 },
+            { id: "port_booking", label: "Client Inquiry & Booking Flow", costA: 2500, costB: 6000 }
           ]
         },
         "biz_website": {
           id: "biz_website",
           title: "Business Website",
           icon: "🏢",
-          desc: "Corporate brand presence, conversion pages, and CMS.",
-          defaultHoursMin: 18,
-          defaultHoursMax: 35,
+          desc: "Corporate brand presence, conversion pages, and contact workflows.",
+          defaultHoursMin: 35,
+          defaultHoursMax: 60,
           defaultArchitecture: "static_content",
-          laborFloor: 8000,
+          laborFloor: 12000,
           dynamicQuestions: [
-            { id: "pages_large", label: "Expanded Content (15–30+ pages)", costA: 3500, costB: 10000 },
-            { id: "cms_blog", label: "Self-Managed Headless CMS", costA: 4500, costB: 12000 },
-            { id: "seo_adv", label: "Advanced Structured Data SEO", costA: 2500, costB: 7000 }
+            { id: "pages_large", label: "Expanded Content (15–30+ pages)", costA: 6000, costB: 14000 },
+            { id: "cms_blog", label: "Self-Managed Headless CMS", costA: 7000, costB: 16000 },
+            { id: "seo_adv", label: "Advanced Structured Data SEO", costA: 4000, costB: 9000 }
           ]
         },
         "ecommerce": {
           id: "ecommerce",
           title: "E-Commerce Platform",
           icon: "🛍️",
-          desc: "Storefront with cart, checkout, payments, and order portal.",
-          defaultHoursMin: 55,
-          defaultHoursMax: 95,
+          desc: "Online catalog, shopping cart, checkout, and inventory.",
+          defaultHoursMin: 90,
+          defaultHoursMax: 160,
           defaultArchitecture: "full_database_platform",
-          laborFloor: 22000,
+          laborFloor: 30000,
           dynamicQuestions: [
-            { id: "ecom_shipping", label: "Logistics & Courier API Integration", costA: 4500, costB: 12000 },
-            { id: "ecom_inventory", label: "Multi-Warehouse Inventory Tracking", costA: 6000, costB: 16000 }
+            { id: "ecom_shipping", label: "Logistics & Courier API Integration", costA: 6000, costB: 15000 },
+            { id: "ecom_inventory", label: "Multi-Warehouse Inventory Tracking", costA: 9000, costB: 20000 }
           ]
         },
         "web_app": {
           id: "web_app",
           title: "Web Application",
           icon: "💻",
-          desc: "Client dashboards, SaaS platforms, or internal portals.",
-          defaultHoursMin: 50,
-          defaultHoursMax: 85,
+          desc: "Client dashboards, internal portals, or dynamic SaaS MVP.",
+          defaultHoursMin: 85,
+          defaultHoursMax: 160,
           defaultArchitecture: "full_database_platform",
-          laborFloor: 20000,
+          laborFloor: 28000,
           dynamicQuestions: [
-            { id: "app_roles_multi", label: "Multi-Tenant RBAC Permissions", costA: 5000, costB: 14000 },
-            { id: "app_analytics", label: "Interactive Analytics & CSV/PDF Export", costA: 4500, costB: 12000 },
-            { id: "app_webhooks", label: "Public REST API & Webhooks", costA: 5000, costB: 15000 }
+            { id: "app_roles_multi", label: "Multi-Tenant RBAC Permissions", costA: 8000, costB: 18000 },
+            { id: "app_analytics", label: "Interactive Analytics & CSV/PDF Export", costA: 7000, costB: 15000 },
+            { id: "app_webhooks", label: "Public REST API & Webhooks", costA: 8000, costB: 18000 }
           ]
         },
         "mobile_app": {
@@ -2108,13 +2106,13 @@
           title: "Mobile Application",
           icon: "📱",
           desc: "Cross-platform iOS and Android mobile app (Flutter/React Native).",
-          defaultHoursMin: 70,
-          defaultHoursMax: 120,
+          defaultHoursMin: 140,
+          defaultHoursMax: 260,
           defaultArchitecture: "full_database_platform",
-          laborFloor: 30000,
+          laborFloor: 45000,
           dynamicQuestions: [
-            { id: "mob_push", label: "Push Notifications (FCM/APNS)", costA: 3500, costB: 10000 },
-            { id: "mob_offline", label: "Offline-First Local Sync", costA: 7000, costB: 18000 }
+            { id: "mob_push", label: "Push Notifications (FCM/APNS)", costA: 5000, costB: 12000 },
+            { id: "mob_offline", label: "Offline-First Local Sync", costA: 10000, costB: 24000 }
           ]
         },
         "saas_product": {
@@ -2122,13 +2120,13 @@
           title: "SaaS Product",
           icon: "🚀",
           desc: "Multi-tier subscription platform with billing & accounts.",
-          defaultHoursMin: 65,
-          defaultHoursMax: 110,
+          defaultHoursMin: 160,
+          defaultHoursMax: 290,
           defaultArchitecture: "full_database_platform",
-          laborFloor: 26000,
+          laborFloor: 50000,
           dynamicQuestions: [
-            { id: "saas_billing", label: "Subscription Billing & Tax Invoices", costA: 5000, costB: 15000 },
-            { id: "saas_teams", label: "Team Workspaces & Member Seats", costA: 4500, costB: 12000 }
+            { id: "saas_billing", label: "Subscription Billing & Tax Invoices", costA: 9000, costB: 20000 },
+            { id: "saas_teams", label: "Team Workspaces & Member Seats", costA: 7000, costB: 16000 }
           ]
         },
         "lms": {
@@ -2136,13 +2134,13 @@
           title: "Learning Management (LMS)",
           icon: "🎓",
           desc: "EdTech platform for students, video lectures, and quizzes.",
-          defaultHoursMin: 55,
-          defaultHoursMax: 90,
+          defaultHoursMin: 140,
+          defaultHoursMax: 260,
           defaultArchitecture: "full_database_platform",
-          laborFloor: 22000,
+          laborFloor: 42000,
           dynamicQuestions: [
-            { id: "lms_quizzes", label: "Timed Quizzes & Automated Scoring", costA: 4500, costB: 12000 },
-            { id: "lms_certs", label: "Dynamic PDF Certificate Generation", costA: 3000, costB: 8000 }
+            { id: "lms_quizzes", label: "Timed Quizzes & Automated Scoring", costA: 7000, costB: 16000 },
+            { id: "lms_certs", label: "Dynamic PDF Certificate Generation", costA: 4500, costB: 11000 }
           ]
         },
         "ai_app": {
@@ -2150,13 +2148,13 @@
           title: "AI / LLM Application",
           icon: "🤖",
           desc: "RAG knowledge base, AI customer agent, or workflow tool.",
-          defaultHoursMin: 65,
-          defaultHoursMax: 105,
+          defaultHoursMin: 150,
+          defaultHoursMax: 280,
           defaultArchitecture: "full_database_platform",
-          laborFloor: 26000,
+          laborFloor: 46000,
           dynamicQuestions: [
-            { id: "ai_rag_docs", label: "Custom Document Vector Store (RAG)", costA: 7000, costB: 20000 },
-            { id: "ai_chat_widget", label: "Streaming Chat UI with Token Quotas", costA: 4500, costB: 12000 }
+            { id: "ai_rag_docs", label: "Custom Document Vector Store (RAG)", costA: 12000, costB: 28000 },
+            { id: "ai_chat_widget", label: "Streaming Chat UI with Token Quotas", costA: 7000, costB: 16000 }
           ]
         }
       },
@@ -2167,40 +2165,40 @@
           title: "Modern Component Library",
           desc: "Clean, responsive styling built with modern UI libraries (Tailwind UI / shadcn).",
           costA: 0,
-          costB: 10000
+          costB: 12000
         },
         "custom": {
           id: "custom",
           title: "Custom Tailored UI/UX",
           desc: "Bespoke design system, custom iconography, brand identity styling, and user flows.",
-          costA: 5000,
-          costB: 20000
+          costA: 8000,
+          costB: 26000
         },
         "premium": {
           id: "premium",
           title: "High-Fidelity Studio UI/UX",
           desc: "Complete Figma prototypes, micro-animations, design sprints, and user testing.",
-          costA: 14000,
-          costB: 42000
+          costA: 20000,
+          costB: 55000
         }
       },
 
       formScale: {
         "none": { costA: 0, costB: 0 },
-        "1-3": { costA: 1200, costB: 4000 },
-        "4-8": { costA: 3500, costB: 10000 },
-        "9-15": { costA: 7000, costB: 18000 },
-        "15+": { costA: 12000, costB: 30000 }
+        "1-3": { costA: 2000, costB: 6000 },
+        "4-8": { costA: 5500, costB: 14000 },
+        "9-15": { costA: 10000, costB: 24000 },
+        "15+": { costA: 18000, costB: 42000 }
       },
 
       features: {
-        "feat_auth": { label: "User Accounts & Student Login", costA: 2200, costB: 6000, devFloor: 1500 },
-        "feat_social": { label: "Social Single Sign-on (Google/Apple)", costA: 1800, costB: 5000, devFloor: 1000 },
-        "feat_search": { label: "Search & Content Filtering", costA: 2000, costB: 6000, devFloor: 1500 },
-        "feat_payments": { label: "Online Fee & Payment Gateway", costA: 4000, costB: 10000, devFloor: 2500 },
-        "feat_wa_sms": { label: "WhatsApp & SMS Gateway", costA: 3000, costB: 8000, devFloor: 2000, annualHardOutlay: 3000 },
-        "feat_ai_bot": { label: "Embedded AI Chat Assistant", costA: 5500, costB: 15000, devFloor: 3500, annualHardOutlay: 10000 },
-        "feat_storage": { label: "Direct Cloud Document Storage", costA: 1800, costB: 5000, devFloor: 1000 }
+        "feat_auth": { label: "User Accounts & Authentication", costA: 4000, costB: 9000, devFloor: 2500 },
+        "feat_social": { label: "Social Single Sign-on (Google/Apple)", costA: 3000, costB: 7000, devFloor: 1500 },
+        "feat_search": { label: "Search & Content Filtering", costA: 3500, costB: 8000, devFloor: 2000 },
+        "feat_payments": { label: "Payment Gateway Integration (Razorpay/Stripe)", costA: 8000, costB: 18000, devFloor: 4500 },
+        "feat_wa_sms": { label: "WhatsApp & SMS Gateway", costA: 4500, costB: 11000, devFloor: 2500, annualHardOutlay: 3500 },
+        "feat_ai_bot": { label: "Embedded AI Chat Assistant", costA: 10000, costB: 24000, devFloor: 5500, annualHardOutlay: 12000 },
+        "feat_storage": { label: "Direct Cloud Document Storage", costA: 3000, costB: 8000, devFloor: 1500 }
       }
     };
 
@@ -2208,22 +2206,28 @@
     const state = {
       currentStep: 1,
       totalSteps: 5,
-      activePackageView: "serverless", // 'serverless' (Optimized) or 'enterprise'
+      activePackageView: "serverless",
       fromIdeaMode: false,
       rawIdeaText: "",
       customProjectTitle: null,
       analysisBreakdown: [],
       
+      // Extraction tracking
+      includedList: [],
+      excludedList: [],
+      hasAdminPanel: false,
+      userRolesCount: 1,
+      platformScope: "website_only",
+
       // Dynamic Effort Metrics
       estimatedHoursMin: null,
       estimatedHoursMax: null,
-      architectureType: null,
       
       projectType: "lms",
       dynamicScope: [],
       uiuxTier: "custom",
       formScale: "1-3",
-      selectedFeatures: ["feat_auth"], // Clean default: NO payments by default!
+      selectedFeatures: [], // Initialized cleanly
       
       infra: {
         users: "under100",
@@ -2236,8 +2240,9 @@
     };
 
     // ==========================================================================
-    // STREAMLINED DUAL-PRICING CALCULATION ENGINE
-    // Standard Market Estimate vs. Optimized Direct Offer + Permanent ₹1,000/mo
+    // SCOPE-SENSITIVE PRICING CALCULATION ENGINE
+    // Strictly separates Market Price from 15% Discounted Price.
+    // Calibrated across benchmarks to prevent price compression.
     // ==========================================================================
     function calculateCostModels(cfg) {
       const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["lms"];
@@ -2245,8 +2250,19 @@
       const fScale = pricingData.formScale[cfg.formScale] || pricingData.formScale["1-3"];
 
       // 1. Determine Effort Hours
-      const hoursMin = cfg.estimatedHoursMin || p.defaultHoursMin || 25;
-      const hoursMax = cfg.estimatedHoursMax || p.defaultHoursMax || 50;
+      let hoursMin = cfg.estimatedHoursMin || p.defaultHoursMin || 40;
+      let hoursMax = cfg.estimatedHoursMax || p.defaultHoursMax || 75;
+
+      // Adjust hours for exclusions and inclusions
+      if (cfg.excludedList && cfg.excludedList.length > 0) {
+        cfg.excludedList.forEach(ex => {
+          const exLow = ex.toLowerCase();
+          if (exLow.includes("payment")) { hoursMin = Math.max(15, hoursMin - 15); hoursMax = Math.max(25, hoursMax - 25); }
+          if (exLow.includes("admin")) { hoursMin = Math.max(15, hoursMin - 20); hoursMax = Math.max(25, hoursMax - 30); }
+          if (exLow.includes("app") || exLow.includes("mobile")) { hoursMin = Math.max(15, hoursMin - 40); hoursMax = Math.max(25, hoursMax - 60); }
+        });
+      }
+
       const avgHours = (hoursMin + hoursMax) / 2;
 
       // Scope add-ons
@@ -2269,23 +2285,33 @@
         }
       });
 
-      // PACKAGE A: Cloud-Optimized Architecture
-      // Standard Market Price: Full agency rate (~₹520/hr)
-      const standardA = Math.round((avgHours * pricingData.hourlyRateStandard) + (scopeA * 1.25));
-      // Optimized Direct Offer: Direct studio execution (~₹430/hr, ~15-18% savings)
-      const optimizedA = Math.round((avgHours * pricingData.hourlyRateOptimized) + scopeA);
-      const savingsA = Math.max(1500, standardA - optimizedA);
+      // Calibrate base market rates according to scope
+      let standardA = Math.round((avgHours * pricingData.hourlyRateStandard) + (scopeA * 1.2));
+      
+      // Benchmarks floor protection against unrealistic compression
+      if (cfg.projectType === "portfolio") {
+        standardA = Math.min(standardA, 24000);
+        standardA = Math.max(standardA, 12000);
+      } else if (cfg.projectType === "biz_website" && !cfg.hasAdminPanel) {
+        standardA = Math.max(standardA, 22000);
+      } else if (cfg.projectType === "lms" || cfg.projectType === "saas_product" || cfg.projectType === "ai_app") {
+        standardA = Math.max(standardA, 110000);
+      } else if (cfg.projectType === "mobile_app") {
+        standardA = Math.max(standardA, 120000);
+      }
 
-      // Monthly Operating Cost for Package A: FIXED FLAT ₹1,000 / mo (Never ₹0!)
+      // Discounted Price: Exactly ~15% direct optimization
+      const optimizedA = Math.round(standardA * 0.85);
+      const savingsA = standardA - optimizedA;
+
+      // Monthly Operating Cost for Package A: FIXED ₹1,000 / mo
       const monthlyA = 1000;
 
       // PACKAGE B: Dedicated Enterprise Cluster
-      const standardB = Math.round((avgHours * 1100) + scopeB);
-      const optimizedB = Math.round(standardB * 0.85);
-      const savingsB = standardB - optimizedB;
-
-      // Monthly Operating Cost for Package B: FLAT ₹5,000 / mo
-      const monthlyB = (cfg.infra.users === "10k+") ? 8500 : 5000;
+      let standardB = Math.round(standardA * 1.75 + scopeB);
+      let optimizedB = Math.round(standardB * 0.85);
+      let savingsB = standardB - optimizedB;
+      let monthlyB = (cfg.infra.users === "10k+") ? 8500 : 5000;
 
       // TCO Projections
       const year1A = optimizedA + (monthlyA * 12);
@@ -2296,17 +2322,16 @@
       const year3B = optimizedB + (monthlyB * 36);
       const year5B = optimizedB + (monthlyB * 60);
 
-      const isHighScale = cfg.infra.users === "10k+" || cfg.projectScale === "enterprise_scale";
+      const isHighScale = cfg.infra.users === "10k+";
       const displayProjectTitle = cfg.customProjectTitle || p.title;
 
       return {
         estimateId: "CP-2026-" + Math.floor(10000 + Math.random() * 90000),
         projectTitle: displayProjectTitle,
-        hoursMin: hoursMin,
-        hoursMax: hoursMax,
+        hoursMin: Math.round(hoursMin),
+        hoursMax: Math.round(hoursMax),
         isHighScale: isHighScale,
 
-        // Package A Data
         packageA: {
           name: "Cloud-Optimized Architecture",
           standardPrice: standardA,
@@ -2318,9 +2343,9 @@
           year5: year5A,
           monthlyDesc: "Includes custom domain management, automated weekly offsite backups, and zero server waste.",
           breakdown: [
-            { phase: "Requirements & Architecture Plan", desc: "Technical layout, components, and workflow mapping", cost: Math.round(optimizedA * 0.15) },
-            { phase: "UI/UX Layout Implementation", desc: ui.title, cost: Math.round(ui.costA + (optimizedA * 0.28)) },
-            { phase: "Core Backend, Database & Workflows", desc: "Endpoints, authentication, media delivery, and data models", cost: Math.round(optimizedA * 0.37) },
+            { phase: "Requirements & Architecture Plan", desc: "Technical specs, data modeling, and workflow mapping", cost: Math.round(optimizedA * 0.14) },
+            { phase: "UI/UX Layout Implementation", desc: ui.title, cost: Math.round(ui.costA + (optimizedA * 0.26)) },
+            { phase: "Core Backend, Database & Workflows", desc: "Endpoints, authentication, media delivery, and data models", cost: Math.round(optimizedA * 0.40) },
             { phase: "QA, Mobile Optimization & Edge Launch", desc: "Browser testing, domain verification, and edge SSL launch", cost: Math.round(optimizedA * 0.20) }
           ],
           infraItems: [
@@ -2330,7 +2355,6 @@
           ]
         },
 
-        // Package B Data
         packageB: {
           name: "Dedicated Enterprise Cluster",
           standardPrice: standardB,
@@ -2353,14 +2377,16 @@
             { item: "Priority SLA & Infrastructure Telemetry", spec: "24/7 uptime monitoring & rapid ticket resolution", cost: `₹${monthlyB - 4500} / mo` }
           ]
         },
-        reasons: generateWhyReasons(cfg, hoursMin, hoursMax)
+        reasons: generateWhyReasons(cfg, Math.round(hoursMin), Math.round(hoursMax))
       };
     }
 
     function generateWhyReasons(cfg, hMin, hMax) {
       const reasons = [];
       reasons.push(`Tailored estimate derived from ${hMin}–${hMax} hours of realistic engineering effort`);
-      reasons.push("Predictable ₹1,000/mo operations covers domain, weekly offsite backups, and zero server waste");
+      if (cfg.excludedList && cfg.excludedList.length > 0) {
+        reasons.push(`Scope reduced by explicit exclusions: ${cfg.excludedList.join(', ')}`);
+      }
       if (cfg.uiuxTier === "premium") reasons.push("High-fidelity studio UI/UX and micro-interaction sprints");
       if (cfg.formScale === "9-15" || cfg.formScale === "15+") reasons.push("Complex multi-step interactive workflows & validations");
       if (cfg.selectedFeatures.includes("feat_payments")) reasons.push("Payment gateway webhooks & automated tax receipt generation");
@@ -2388,7 +2414,6 @@
       const p = pricingData.projectTypes[state.projectType];
       const packageABuild = state.computedResult.packageA.optimizedPrice;
 
-      // 1. Calculate Ezrah Direct Labor Floor (Hours * Survival Rate)
       const hoursMin = state.computedResult.hoursMin;
       let laborFloor = Math.round(hoursMin * 300);
 
@@ -2397,7 +2422,6 @@
         if (feat && feat.devFloor) laborFloor += feat.devFloor;
       });
 
-      // 2. Hard Cloud Outlay Analysis
       let annualHardOutlays = 1200;
       let isFreeTierOperational = true;
       let worstCaseExposure = 0;
@@ -2423,7 +2447,6 @@
 
       const absoluteMinimumBuildFloor = laborFloor;
 
-      // Render Verdict
       const verdictBox = document.getElementById("audit-verdict-box");
       const statusBadge = document.getElementById("verdict-status-badge");
       const summaryText = document.getElementById("verdict-math-summary");
@@ -2618,16 +2641,16 @@
             <span class="cell-desc">Disaster recovery and protecting your content.</span>
           </td>
           <td class="highlight">
-            <span class="cell-title" style="color:var(--primary);">Automated Weekly Vault Backups</span>
-            <span class="cell-desc">The database takes automatic weekly snapshots to an isolated vault. If anything ever fails, all user data and student records are restored with 1 click.</span>
+            <span class="cell-title" style="color:var(--primary);">${isStatic ? 'Git Versioned & Zero Crash Risk' : 'Automated Weekly Vault Backups'}</span>
+            <span class="cell-desc">${isStatic ? 'Every version is saved in GitHub. If anything breaks, it can be restored to an earlier version in 1 click.' : 'The database takes automatic weekly snapshots to an isolated vault. All user data is restored with 1 click.'}</span>
           </td>
           <td>
-            <span class="cell-title">Automated Weekly Backups</span>
-            <span class="cell-desc">Offsite snapshots included as part of your ₹1,000/mo operations.</span>
+            <span class="cell-title">${isStatic ? 'Versioned Code Vault' : 'Automated Weekly Backups'}</span>
+            <span class="cell-desc">Complete source preservation and recovery included.</span>
           </td>
           <td>
             <span class="cell-title" style="color:#b91c1c;">❌ Permanent Data Loss Risk</span>
-            <span class="cell-danger">Zero automated backups or versioning. If their cheap server corrupts, your website and content are permanently erased.</span>
+            <span class="cell-danger">Zero automated backups or versioning. If the server corrupts, your website and content are permanently erased.</span>
           </td>
         </tr>
       `;
@@ -2677,9 +2700,7 @@
       `;
     }
 
-    // ==========================================================================
-    // UI CONTROLLERS & RESULTS RENDERING
-    // ==========================================================================
+    // UI Controllers
     function showLanding() {
       document.getElementById("landing-section").style.display = "block";
       document.getElementById("estimator-section").style.display = "none";
@@ -2730,14 +2751,18 @@
       state.rawIdeaText = "";
       state.customProjectTitle = null;
       state.analysisBreakdown = [];
+      state.includedList = [];
+      state.excludedList = [];
+      state.hasAdminPanel = false;
+      state.userRolesCount = 1;
+      state.platformScope = "website_only";
       state.estimatedHoursMin = null;
       state.estimatedHoursMax = null;
-      state.architectureType = null;
       state.projectType = "lms";
       state.dynamicScope = [];
       state.uiuxTier = "custom";
       state.formScale = "1-3";
-      state.selectedFeatures = ["feat_auth"];
+      state.selectedFeatures = [];
       state.infra.users = "under100";
       state.infra.storage = "5gb";
       state.computedResult = null;
@@ -2991,7 +3016,7 @@
         banner.classList.remove("active");
       }
 
-      // Render Active View (Default: Cloud-Optimized)
+      // Render Active View
       updateSelectedPackageDisplay();
 
       // Why Chips
@@ -3078,7 +3103,7 @@
     }
 
     // ==========================================================================
-    // EFFORT-DRIVEN HYBRID AI CLASSIFIER + FALLBACK ANALYZER
+    // REQUIREMENT & EXCLUSION-AWARE SEMANTIC ANALYZER
     // ==========================================================================
     async function processIdeaMode() {
       const inputEl = document.getElementById("idea-input");
@@ -3091,7 +3116,7 @@
       }
 
       btnEl.disabled = true;
-      btnEl.innerText = "Analyzing Effort & Architecture...";
+      btnEl.innerText = "Scrutinizing Scope & Exclusions...";
 
       // Attempt AI Proxy Call (/api/classify)
       if (AI_WORKER_URL) {
@@ -3107,16 +3132,16 @@
             applyAIClassification(aiData, text, true);
             btnEl.disabled = false;
             btnEl.innerText = "Analyze & Value Project →";
-            showToast("✨ AI analysis complete! Sized to exact developer effort.");
+            showToast("✨ Precision scope extraction complete!");
             showResultsView();
             return;
           }
         } catch (err) {
-          console.warn("AI proxy unavailable, switching to local semantic effort engine.", err);
+          console.warn("AI proxy unavailable, switching to local exclusion analyzer.", err);
         }
       }
 
-      // Fallback: Local Semantic Classifier
+      // Fallback: Local Exclusion-Aware Classifier
       applyLocalClassification(text);
       btnEl.disabled = false;
       btnEl.innerText = "Analyze & Value Project →";
@@ -3127,25 +3152,59 @@
     function applyAIClassification(ai, rawText, isAiLive) {
       state.fromIdeaMode = true;
       state.rawIdeaText = rawText;
-      state.projectType = ai.archetype || "portfolio";
+      state.projectType = ai.archetype || "biz_website";
       state.uiuxTier = "custom";
       state.formScale = "1-3";
       state.selectedFeatures = ai.detected_features || [];
       state.dynamicScope = [];
 
+      state.includedList = ai.included_features || [];
+      state.excludedList = ai.excluded_features || [];
+      state.hasAdminPanel = !!ai.has_admin_panel;
+      state.userRolesCount = ai.user_roles_count || 1;
+      state.platformScope = ai.platform_scope || "website_only";
+
       state.customProjectTitle = ai.project_title || generateSmartTitle(rawText, state.projectType);
-      state.estimatedHoursMin = ai.estimated_dev_hours_min || 15;
-      state.estimatedHoursMax = ai.estimated_dev_hours_max || 30;
+      state.estimatedHoursMin = ai.estimated_dev_hours_min || 30;
+      state.estimatedHoursMax = ai.estimated_dev_hours_max || 60;
 
       const chips = [
-        { title: "🎯 Identified Project", desc: `${state.customProjectTitle}` },
-        { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Developer Hours (~${Math.round(state.estimatedHoursMin/8)}–${Math.round(state.estimatedHoursMax/8)} Work Days)` },
-        { title: "🏗️ Operating Footprint", desc: "Fixed ₹1,000/mo Cloud & Support Operations" },
-        { title: "💡 Architect's Insight", desc: ai.architectural_summary || "Tailored to exact functional scope." }
+        { title: "🎯 Scoped Product", desc: `${state.customProjectTitle}` },
+        { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
+        { title: "✅ Explicit Inclusions", desc: state.includedList.length ? state.includedList.slice(0, 4).join(', ') : "Core Workflow Requirements" },
+        { title: "🚫 Scope Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested add-ons)" },
+        { title: "💡 Architect's Insight", desc: ai.architectural_summary || "Priced to exact requirements with zero unrequested feature inflation." }
       ];
 
       state.analysisBreakdown = chips;
-      document.getElementById("ai-engine-badge").innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Effort Classifier";
+      document.getElementById("ai-engine-badge").innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
+    }
+
+    // Helper: checks if a keyword appears in a negated context (e.g. "no payment", "without admin")
+    function isNegatedInText(text, keyword) {
+      const lower = text.toLowerCase();
+      const negationPatterns = [
+        `no\\s+${keyword}`,
+        `not\\s+${keyword}`,
+        `without\\s+${keyword}`,
+        `excluding\\s+${keyword}`,
+        `don't\\s+need\\s+${keyword}`,
+        `doesn't\\s+need\\s+${keyword}`,
+        `not\\s+needed\\s+${keyword}`,
+        `no\\s+need\\s+for\\s+${keyword}`,
+        `out\\s+of\\s+scope`,
+        `${keyword}\\s+not\\s+required`,
+        `${keyword}\\s+not\\s+needed`,
+        `skip\\s+${keyword}`,
+        `except\\s+${keyword}`,
+        `no\\s+online\\s+${keyword}`
+      ];
+      for (const pattern of negationPatterns) {
+        if (new RegExp(pattern, 'i').test(lower)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function applyLocalClassification(text) {
@@ -3159,91 +3218,135 @@
       state.infra.users = "under100";
       state.infra.storage = "5gb";
 
-      const chips = [];
+      const included = [];
+      const excluded = [];
 
-      // PRIORITY CHECK 1: Educational / LMS
-      const isEducational = lower.includes("learn") || lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("class") || lower.includes("tuition") || lower.includes("academy") || lower.includes("institute") || lower.includes("lecture") || lower.includes("education") || lower.includes("training");
+      // 1. Detect Explicit Exclusions First
+      if (isNegatedInText(lower, "payment") || isNegatedInText(lower, "payments") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "checkout") || lower.includes("no payment") || lower.includes("without payment") || lower.includes("no online payment")) {
+        excluded.push("No Online Payment");
+      }
+      if (isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "dashboard") || lower.includes("no admin")) {
+        excluded.push("No Admin Panel");
+      }
+      if (isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile") || isNegatedInText(lower, "app") || lower.includes("web only") || lower.includes("website only")) {
+        excluded.push("Web Only (No Mobile App)");
+      }
+      if (isNegatedInText(lower, "login") || isNegatedInText(lower, "auth") || isNegatedInText(lower, "registration") || lower.includes("no login")) {
+        excluded.push("No User Accounts/Login");
+      }
+      if (isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || lower.includes("no ai")) {
+        excluded.push("No AI / LLM Features");
+      }
 
-      // PRIORITY CHECK 2: Simple Static Portfolio / Photography
-      const isPortfolio = lower.includes("portfolio") || lower.includes("photo") || lower.includes("photographer") || lower.includes("artist") || lower.includes("designer") || lower.includes("showcase") || lower.includes("resume") || lower.includes("work samples");
+      // 2. Identify Core Archetype
+      const isEdu = (lower.includes("learn") || lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("tuition") || lower.includes("academy") || lower.includes("lecture")) && !isNegatedInText(lower, "lms");
+      const isPortfolio = (lower.includes("portfolio") || lower.includes("photographer") || lower.includes("artist") || lower.includes("resume") || lower.includes("showcase")) && !isNegatedInText(lower, "portfolio");
+      const isEcom = (lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("storefront") || lower.includes("shopping") || lower.includes("catalog") || lower.includes("cart") || lower.includes("ordering") || lower.includes("menu")) && !isNegatedInText(lower, "ecommerce");
+      const isAI = (lower.includes("ai") || lower.includes("llm") || lower.includes("gpt") || lower.includes("rag")) && !excluded.includes("No AI / LLM Features");
+      const isMobile = (lower.includes("mobile app") || lower.includes("android") || lower.includes("ios") || lower.includes("flutter")) && !excluded.includes("Web Only (No Mobile App)");
+      const isSaaS = (lower.includes("saas") || lower.includes("subscription software") || lower.includes("b2b platform"));
 
-      if (isEducational) {
+      if (isEdu) {
         state.projectType = "lms";
         state.customProjectTitle = generateSmartTitle(text, "lms");
-        state.estimatedHoursMin = 50;
-        state.estimatedHoursMax = 85;
-        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (EdTech Platform)` });
+        state.estimatedHoursMin = 140;
+        state.estimatedHoursMax = 250;
       } else if (isPortfolio) {
         state.projectType = "portfolio";
         state.customProjectTitle = generateSmartTitle(text, "portfolio");
-        if (lower.includes("simple") || lower.includes("basic") || lower.includes("1 page") || lower.includes("photos") || lower.includes("minimal")) {
-          state.estimatedHoursMin = 8;
-          state.estimatedHoursMax = 14;
-        } else {
-          state.estimatedHoursMin = 20;
-          state.estimatedHoursMax = 35;
-        }
-        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (Creator Portfolio)` });
-      } else if (lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("shopping") || lower.includes("storefront") || lower.includes("retail cart")) {
+        state.estimatedHoursMin = 18;
+        state.estimatedHoursMax = 32;
+      } else if (isEcom) {
         state.projectType = "ecommerce";
         state.customProjectTitle = generateSmartTitle(text, "ecommerce");
-        state.estimatedHoursMin = 55;
-        state.estimatedHoursMax = 95;
-        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (E-Commerce)` });
-      } else if (lower.includes("ai") || lower.includes("chatbot") || lower.includes("llm")) {
+        state.estimatedHoursMin = 80;
+        state.estimatedHoursMax = 150;
+      } else if (isAI) {
         state.projectType = "ai_app";
         state.customProjectTitle = generateSmartTitle(text, "ai_app");
-        state.estimatedHoursMin = 65;
-        state.estimatedHoursMax = 100;
-        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (AI Application)` });
+        state.estimatedHoursMin = 150;
+        state.estimatedHoursMax = 270;
+      } else if (isMobile) {
+        state.projectType = "mobile_app";
+        state.customProjectTitle = generateSmartTitle(text, "mobile_app");
+        state.estimatedHoursMin = 150;
+        state.estimatedHoursMax = 280;
+      } else if (isSaaS) {
+        state.projectType = "saas_product";
+        state.customProjectTitle = generateSmartTitle(text, "saas_product");
+        state.estimatedHoursMin = 160;
+        state.estimatedHoursMax = 290;
       } else {
         state.projectType = "biz_website";
         state.customProjectTitle = generateSmartTitle(text, "biz_website");
-        state.estimatedHoursMin = 18;
-        state.estimatedHoursMax = 32;
-        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (Web Presence)` });
+        state.estimatedHoursMin = 35;
+        state.estimatedHoursMax = 65;
       }
 
-      // Feature: Authentication
-      if (lower.includes("student") || lower.includes("register") || lower.includes("login") || lower.includes("account") || lower.includes("user accounts")) {
+      // 3. Feature Detections (HONORING EXCLUSIONS)
+      if (!excluded.includes("No User Accounts/Login") && (lower.includes("student") || lower.includes("register") || lower.includes("login") || lower.includes("account") || lower.includes("profile"))) {
         state.selectedFeatures.push("feat_auth");
-        chips.push({ title: "🔐 User & Accounts", desc: "User Authentication & Protected Accounts" });
+        included.push("User Authentication & Accounts");
       }
 
-      // Feature: Document Storage
-      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document") || lower.includes("materials")) {
+      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document")) {
         state.selectedFeatures.push("feat_storage");
-        chips.push({ title: "📂 Asset Repository", desc: "Cloud Document Storage for PDFs and notes" });
+        included.push("Document / File Storage");
       }
 
-      // Feature: Payments (ONLY IF EXPLICITLY MENTIONED!)
-      const mentionsMoney = lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("money") || lower.includes("checkout") || lower.includes("price") || lower.includes("pricing") || lower.includes("charge");
-      if (mentionsMoney) {
+      if (lower.includes("whatsapp") || lower.includes("sms")) {
+        state.selectedFeatures.push("feat_wa_sms");
+        included.push("WhatsApp / SMS Integration");
+      }
+
+      // Online payment check: ONLY IF MENTIONED AND NOT EXCLUDED
+      const mentionsPayment = (lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("razorpay") || lower.includes("stripe") || lower.includes("checkout")) && !excluded.includes("No Online Payment");
+      if (mentionsPayment) {
         state.selectedFeatures.push("feat_payments");
-        chips.push({ title: "💳 Transaction Engine", desc: "Online Payment Gateway & Automated Receipts" });
+        included.push("Online Payment Gateway");
       }
 
-      chips.push({
-        title: "⏱️ Engineering Effort",
-        desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Developer Hours (Sized dynamically without hardcoded buckets)`
-      });
+      if (!excluded.includes("No AI / LLM Features") && (lower.includes("ai") || lower.includes("chat") || lower.includes("bot"))) {
+        state.selectedFeatures.push("feat_ai_bot");
+        included.push("AI Assistant Module");
+      }
 
-      chips.push({
-        title: "🏗️ Cloud Footprint",
-        desc: "Fixed ₹1,000/mo flat operations (domain, backups & maintenance)"
-      });
+      // Deduct hours for explicit exclusions
+      if (excluded.includes("No Online Payment")) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
+        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 25);
+      }
+      if (excluded.includes("No Admin Panel")) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 20);
+        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 30);
+      }
+      if (excluded.includes("Web Only (No Mobile App)")) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 40);
+        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 60);
+      }
+
+      state.includedList = included;
+      state.excludedList = excluded;
+
+      const chips = [
+        { title: "🎯 Scoped Project", desc: `${state.customProjectTitle}` },
+        { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
+        { title: "✅ Inclusions", desc: included.length ? included.join(', ') : "Standard Core Features" },
+        { title: "🚫 Scope Exclusions", desc: excluded.length ? excluded.join(', ') : "Standard scope (No unrequested add-ons)" },
+        { title: "💡 Architect's Note", desc: "Scope tuned precisely to your requirements. Exclusions actively subtracted from pricing." }
+      ];
 
       state.analysisBreakdown = chips;
-      document.getElementById("ai-engine-badge").innerText = "Local Semantic Engine";
+      document.getElementById("ai-engine-badge").innerText = "Local Scoping Engine";
     }
 
     function generateSmartTitle(text, type) {
       const lower = text.toLowerCase();
-      if (lower.includes("photo") || lower.includes("photography")) return "Photography Portfolio Showcase";
-      if (lower.includes("artist") || lower.includes("artwork")) return "Creative Artist Portfolio";
+      if (lower.includes("restaurant")) return "Restaurant Ordering & Menu Web Platform";
       if (lower.includes("coaching")) return "Coaching Centre Learning Platform";
       if (lower.includes("tuition")) return "Tuition Portal & Student System";
-      if (lower.includes("yoga") || lower.includes("fitness")) return "Studio Member & Class Booking App";
+      if (lower.includes("photo") || lower.includes("photography")) return "Photography Portfolio Showcase";
+      if (lower.includes("yoga") || lower.includes("fitness")) return "Studio Class Booking Web App";
       if (type === "portfolio") return "Personal Creator Portfolio";
       if (type === "lms") return "Online Learning Platform";
       if (type === "ecommerce") return "Digital Storefront & Order Portal";
