@@ -1482,7 +1482,7 @@
               <div>
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Interactive Form / Workflow Scale</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-                  Includes inquiries, registration flows, multi-step checkouts, file uploads, and onboarding wizards.
+                  Includes inquiries, student registration, multi-step checkouts, file uploads, and onboarding wizards.
                 </p>
                 <div class="pill-selector" id="form-count-options">
                   <button class="pill-btn selected" data-forms="none" onclick="selectFormCount('none')">Simple / None</button>
@@ -2860,6 +2860,7 @@
         if (lower.includes(`${prefix} ${cleanKw}`) || 
             lower.includes(`${prefix} online ${cleanKw}`) || 
             lower.includes(`${prefix} customer ${cleanKw}`) || 
+            lower.includes(`${prefix} patient ${cleanKw}`) || 
             lower.includes(`${prefix} user ${cleanKw}`) || 
             lower.includes(`${prefix} shopping ${cleanKw}`)) {
           return true;
@@ -2879,7 +2880,7 @@
       return false;
     }
 
-    // Local Domain-Driven Classification & Extraction
+    // Local Domain-Driven Classification & Feature Extraction
     function applyLocalClassification(text) {
       const lower = (text || "").toLowerCase();
       state.fromIdeaMode = true;
@@ -2896,39 +2897,82 @@
 
       // 1. Identify Explicit Exclusions
       const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "fees") || lower.includes("no online payment") || lower.includes("without payment") || lower.includes("no payment");
-      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup") || lower.includes("no customer login") || lower.includes("no user login") || lower.includes("no login");
-      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard") || lower.includes("no admin");
-      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout") || lower.includes("no shopping cart") || lower.includes("no cart") || lower.includes("no checkout");
+      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "patient login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "customer account") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup") || lower.includes("no customer login") || lower.includes("no patient login") || lower.includes("no user login") || lower.includes("no customer account");
+      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard") || lower.includes("no admin dashboard") || lower.includes("no admin panel") || lower.includes("no admin");
+      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || lower.includes("no shopping cart") || lower.includes("no cart");
+      const isCheckoutExcluded = isNegatedInText(lower, "checkout") || lower.includes("no checkout") || lower.includes("without checkout");
       const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || isNegatedInText(lower, "mobile") || lower.includes("web only") || lower.includes("website only") || lower.includes("no mobile app");
       const isAIExcluded = isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || isNegatedInText(lower, "llm") || lower.includes("no ai") || lower.includes("no chatbot");
-      const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "orders");
-      const isDatabaseExcluded = isNegatedInText(lower, "database") || isNegatedInText(lower, "db");
-      const isAPIExcluded = isNegatedInText(lower, "api") || isNegatedInText(lower, "integrations");
+      const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "order placement") || isNegatedInText(lower, "order") || lower.includes("no ordering");
+      const isDatabaseExcluded = isNegatedInText(lower, "database") || isNegatedInText(lower, "db") || lower.includes("no database");
+      const isCMSExcluded = isNegatedInText(lower, "cms") || lower.includes("no cms");
+      const isAPIExcluded = isNegatedInText(lower, "api") || isNegatedInText(lower, "api integration") || isNegatedInText(lower, "integrations") || lower.includes("no api");
 
       if (isOnlinePaymentExcluded) excluded.push("Online Payment Gateway");
       if (isCustomerAuthExcluded) excluded.push("Customer Login & Accounts");
-      if (isAdminExcluded) excluded.push("Admin Dashboard & Panel");
-      if (isCartExcluded) excluded.push("Shopping Cart & Checkout");
+      if (isAdminExcluded) excluded.push("Admin Dashboard");
+      if (isCartExcluded) excluded.push("Shopping Cart");
+      if (isCheckoutExcluded) excluded.push("Checkout Workflow");
       if (isMobileExcluded) excluded.push("Mobile Application (Web Only)");
-      if (isAIExcluded) excluded.push("AI / Chatbot Features");
+      if (isAIExcluded) excluded.push("AI / LLM Features");
       if (isOrderingExcluded) excluded.push("Order Placement Workflow");
       if (isDatabaseExcluded) excluded.push("Database Storage");
+      if (isCMSExcluded) excluded.push("Content Management System (CMS)");
       if (isAPIExcluded) excluded.push("Third-Party API Integrations");
 
       // 2. Strict Domain Detection (Word Boundaries to prevent false positives)
-      const isRestaurant = /\b(restaurant|cafe|bakery|diner|bistro|food|eatery)\b/i.test(lower);
-      const isClinic = /\b(clinic|doctor|patient|hospital|dental|dentist|healthcare|medical)\b/i.test(lower);
-      const isDocManagement = /\b(document\s*management|pdf\s*management|document\s*portal|document\s*repository|dms)\b/i.test(lower) ||
-                              (/\b(document|pdf|file)\b/i.test(lower) && /\b(organize|upload|download|repository)\b/i.test(lower) && !/\b(course|school)\b/i.test(lower));
-      const isLMS = /\b(lms|course|courses|student|students|teacher|teachers|instructor|tuition|coaching|academy|lecture|lectures|elearning)\b/i.test(lower);
-      const isServiceBooking = /\b(service\s*booking|salon|spa|mechanic|cleaning|consultation\s*booking|slot\s*booking)\b/i.test(lower) && !isClinic;
+      const isLMS = /\b(lms|course|courses|student|students|teacher|teachers|instructor|tuition|coaching|lecture|lectures|elearning)\b/i.test(lower);
+      const isClinic = /\b(clinic|doctor|patient|hospital|dental|dentist|healthcare|medical)\b/i.test(lower) && /\b(appointment|appointments|slots?|doctor\s*profiles?)\b/i.test(lower);
+      const isRestaurant = /\b(restaurant|cafe|bakery|diner|bistro|food|eatery|takeout)\b/i.test(lower);
+      const isDocManagement = (/\b(document\s*management|pdf\s*management|document\s*portal|document\s*repository|dms)\b/i.test(lower) ||
+                              (/\b(document|pdf|file)\b/i.test(lower) && /\b(folders?|upload|download|repository|organize)\b/i.test(lower))) && !isLMS;
+      const isSaaSTask = /\b(task\s*management|workspaces?|projects?|tasks?|task\s*assignments?|kanban|board)\b/i.test(lower) && !isClinic && !isRestaurant && !isLMS;
+      const isServiceMarketplace = /\b(marketplace|multi-vendor|multiple\s*service\s*providers|provider\s*listings?|service\s*providers)\b/i.test(lower);
+      const isServiceBooking = /\b(service\s*booking|salon|spa|mechanic|cleaning|consultation\s*booking|slot\s*booking)\b/i.test(lower) && !isClinic && !isServiceMarketplace;
       const isPortfolio = /\b(portfolio|photographer|photography|artist|designer\s*portfolio|resume\s*website|showcase)\b/i.test(lower) && !isLMS;
-      const isEcom = /\b(ecommerce|e-commerce|catalog|storefront|shop|store|wishlist)\b/i.test(lower) && !isRestaurant && !isLMS;
-      const isTrueAI = /\b(ai\s*app|ai\s*platform|llm|chatgpt|gpt-?4|gpt-?3|claude|gemini|rag|vector\s*search|generative\s*ai|ai\s*chatbot)\b/i.test(lower) && !isAIExcluded;
+      const isEcom = /\b(ecommerce|e-commerce|catalog|storefront|shop|store|wishlist)\b/i.test(lower) && !isRestaurant && !isLMS && !isServiceMarketplace;
+      const isTrueAI = /\b(ai\s*app|ai\s*web|ai\s*platform|llm|chatgpt|gpt-?4|gpt-?3|claude|gemini|rag|vector\s*search|generative\s*ai|ai\s*chatbot|ai-generated)\b/i.test(lower) && !isAIExcluded;
       const isTrueMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter\s*app|react\s*native\s*app)\b/i.test(lower) && !isMobileExcluded;
-      const isSaaS = /\b(saas|subscription\s*software|multi-tenant|b2b\s*platform)\b/i.test(lower);
+      const isSaaSGeneric = /\b(saas|subscription\s*software|multi-tenant|b2b\s*platform)\b/i.test(lower);
 
-      if (isRestaurant) {
+      // Domain Routing & Naming
+      if (isLMS) {
+        state.projectType = "lms";
+        state.customProjectTitle = lower.includes("coaching") ? "Coaching Centre Learning Platform" : "Online Learning Platform";
+        state.estimatedHoursMin = 130;
+        state.estimatedHoursMax = 240;
+        included.push("Course Browsing");
+        included.push("Course Details");
+        included.push("Video Lectures");
+        included.push("PDF Resources");
+        if (!isCustomerAuthExcluded && (lower.includes("login") || lower.includes("register") || lower.includes("enroll") || lower.includes("student account"))) {
+          included.push("Student Login");
+          state.selectedFeatures.push("feat_auth");
+        }
+        if (lower.includes("enroll")) included.push("Course Enrollment");
+        if (lower.includes("progress") || lower.includes("tracking")) included.push("Progress Tracking");
+        if (!isAdminExcluded && (lower.includes("admin") || lower.includes("upload") || lower.includes("manage"))) {
+          included.push("Admin Course Upload & Management");
+          state.hasAdminPanel = true;
+        }
+      } else if (isClinic) {
+        state.projectType = "web_app";
+        state.customProjectTitle = "Clinic Appointment Booking Platform";
+        state.estimatedHoursMin = 85;
+        state.estimatedHoursMax = 150;
+        if (!isCustomerAuthExcluded && (lower.includes("patient") || lower.includes("register") || lower.includes("login"))) {
+          included.push("Patient Registration & Login");
+          state.selectedFeatures.push("feat_auth");
+        }
+        included.push("Doctor Profiles");
+        included.push("Available Time Slots");
+        included.push("Appointment Booking");
+        if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage") || lower.includes("receptionist"))) {
+          included.push("Admin Dashboard");
+          included.push("Appointment Management");
+          state.hasAdminPanel = true;
+        }
+      } else if (isRestaurant) {
         const hasOrdering = (lower.includes("order") || lower.includes("ordering") || lower.includes("cart") || lower.includes("takeout")) && !isOrderingExcluded;
         if (hasOrdering) {
           state.projectType = "ecommerce";
@@ -2937,66 +2981,92 @@
           state.estimatedHoursMax = 120;
           included.push("Restaurant Menu & Food Categories");
           if (!isCartExcluded) included.push("Shopping Cart");
-          included.push("Order Placement Workflow");
-          if (!isAdminExcluded) { included.push("Admin Order Management"); state.hasAdminPanel = true; }
+          if (!isOrderingExcluded) included.push("Order Placement Workflow");
+          if (lower.includes("history") || lower.includes("past orders")) included.push("Order History");
+          if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
+            included.push("Admin Order Management");
+            state.hasAdminPanel = true;
+          }
         } else {
           state.projectType = "biz_website";
           state.customProjectTitle = "Informational Restaurant Website";
           state.estimatedHoursMin = 25;
           state.estimatedHoursMax = 45;
           included.push("Restaurant Menu & Food Showcase");
-          included.push("Location, Hours & Contact Details");
+          included.push("Location, Hours & Contact Info");
           if (lower.includes("reservation") || lower.includes("table")) included.push("Table Reservation Inquiry");
         }
-      } else if (isClinic) {
+      } else if (isSaaSTask) {
+        state.projectType = "saas_product";
+        state.customProjectTitle = "SaaS Task Management Platform";
+        state.estimatedHoursMin = 140;
+        state.estimatedHoursMax = 240;
+        if (!isCustomerAuthExcluded) {
+          included.push("User Registration & Login");
+          state.selectedFeatures.push("feat_auth");
+        }
+        included.push("Workspaces");
+        included.push("Projects");
+        included.push("Tasks");
+        included.push("Task Assignment");
+        if (lower.includes("notification")) included.push("Notifications");
+        if (!isAdminExcluded) {
+          included.push("Admin Dashboard");
+          state.hasAdminPanel = true;
+        }
+      } else if (isServiceMarketplace) {
         state.projectType = "web_app";
-        state.customProjectTitle = "Clinic Appointment Booking Platform";
-        state.estimatedHoursMin = 85;
-        state.estimatedHoursMax = 150;
-        if (!isCustomerAuthExcluded) { included.push("Patient Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("Doctor Profiles & Specialties");
-        included.push("Available Time Slots Management");
-        included.push("Appointment Booking Workflow");
-        if (!isAdminExcluded) { included.push("Admin & Receptionist Dashboard"); state.hasAdminPanel = true; }
+        state.customProjectTitle = "Service Marketplace Platform";
+        state.estimatedHoursMin = 180;
+        state.estimatedHoursMax = 320;
+        included.push("Service Provider Listings");
+        included.push("Service Search & Categorization");
+        included.push("Booking & Request System");
+        if (lower.includes("provider dashboard")) included.push("Provider Dashboard");
+        if (!isAdminExcluded) {
+          included.push("Marketplace Administration Panel");
+          state.hasAdminPanel = true;
+        }
       } else if (isDocManagement) {
         state.projectType = "web_app";
         state.customProjectTitle = "Document Management Web Application";
         state.estimatedHoursMin = 90;
         state.estimatedHoursMax = 160;
         included.push("PDF & Document Upload");
-        included.push("Document Organization & Categories");
-        included.push("Document Search & Filtering");
-        included.push("File Download & Cloud Storage");
+        included.push("Folder/Document Organization");
+        included.push("Document Search");
+        included.push("File Download");
+        included.push("Cloud/File Storage");
         state.selectedFeatures.push("feat_storage");
-        if (!isCustomerAuthExcluded) { included.push("User Login & Profile Accounts"); state.selectedFeatures.push("feat_auth"); }
-        if (!isAdminExcluded) { included.push("Admin Management Panel"); state.hasAdminPanel = true; }
-      } else if (isLMS) {
-        state.projectType = "lms";
-        state.customProjectTitle = lower.includes("coaching") ? "Coaching Centre Learning Platform" : "Online Learning Platform";
-        state.estimatedHoursMin = 130;
-        state.estimatedHoursMax = 240;
-        included.push("Course Browsing & Details");
-        included.push("Video Lectures & Player");
-        included.push("PDF Notes & Resources");
-        if (!isCustomerAuthExcluded) { included.push("Student Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        if (!isAdminExcluded) { included.push("Admin Course Upload & Management"); state.hasAdminPanel = true; }
-        if (lower.includes("quiz") || lower.includes("test")) { included.push("Timed Quizzes & Evaluation"); state.dynamicScope.push("lms_quizzes"); }
+        if (!isCustomerAuthExcluded && (lower.includes("login") || lower.includes("account") || lower.includes("user"))) {
+          included.push("User Login");
+          included.push("User Dashboard");
+          state.selectedFeatures.push("feat_auth");
+        }
+        if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
+          included.push("Admin Panel");
+          state.hasAdminPanel = true;
+        }
       } else if (isServiceBooking) {
         state.projectType = "web_app";
         state.customProjectTitle = "Service Booking Platform";
         state.estimatedHoursMin = 65;
         state.estimatedHoursMax = 110;
-        included.push("Service Catalog & Options");
+        included.push("Service Catalog");
         included.push("Booking Request Submission");
-        if (!isCustomerAuthExcluded) { included.push("Customer Accounts"); state.selectedFeatures.push("feat_auth"); }
-        if (!isAdminExcluded) { included.push("Admin Booking Management"); state.hasAdminPanel = true; }
+        if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
+          included.push("Admin Login");
+          included.push("Booking Request Management");
+          if (lower.includes("status")) included.push("Booking Status Management");
+          state.hasAdminPanel = true;
+        }
       } else if (isPortfolio) {
         state.projectType = "portfolio";
         state.customProjectTitle = "Personal Creator Portfolio";
         state.estimatedHoursMin = 18;
         state.estimatedHoursMax = 32;
-        included.push("Project Gallery & Showcase");
-        included.push("About & Contact Section");
+        included.push("Gallery & Portfolio Showcase");
+        included.push("About & Contact Pages");
       } else if (isEcom) {
         const hasCart = (lower.includes("cart") || lower.includes("checkout") || lower.includes("order")) && !isCartExcluded;
         if (hasCart) {
@@ -3005,24 +3075,35 @@
           state.estimatedHoursMin = 90;
           state.estimatedHoursMax = 160;
           included.push("Product Catalog & Categories");
-          included.push("Shopping Cart & Checkout");
-          if (!isAdminExcluded) { included.push("Admin Product & Inventory Management"); state.hasAdminPanel = true; }
+          if (!isCartExcluded) included.push("Shopping Cart");
+          if (!isCheckoutExcluded) included.push("Checkout");
+          if (!isAdminExcluded) {
+            included.push("Admin Product Management");
+            state.hasAdminPanel = true;
+          }
         } else {
           state.projectType = "ecommerce";
           state.customProjectTitle = "E-Commerce Product Catalog Platform";
           state.estimatedHoursMin = 50;
           state.estimatedHoursMax = 85;
-          included.push("Product Catalog & Browsing");
-          if (lower.includes("wishlist")) included.push("Product Wishlist");
-          if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) { included.push("Admin Product Management"); state.hasAdminPanel = true; }
+          included.push("Product Catalog");
+          included.push("Product Browsing");
+          if (lower.includes("wishlist")) included.push("Wishlist");
+          if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
+            included.push("Admin Product Management");
+            state.hasAdminPanel = true;
+          }
         }
       } else if (isTrueAI) {
         state.projectType = "ai_app";
-        state.customProjectTitle = "AI Workflow & Assistant Platform";
-        state.estimatedHoursMin = 150;
-        state.estimatedHoursMax = 270;
-        included.push("AI Processing Pipeline");
-        included.push("Streaming Chat / Intelligence UI");
+        state.customProjectTitle = "AI Web Application";
+        state.estimatedHoursMin = 140;
+        state.estimatedHoursMax = 250;
+        if (lower.includes("upload") || lower.includes("input") || lower.includes("text")) included.push("Text Upload");
+        included.push("AI-Generated Summaries");
+        if (!isCustomerAuthExcluded && lower.includes("login")) { included.push("User Login"); state.selectedFeatures.push("feat_auth"); }
+        if (lower.includes("history")) included.push("Summary History");
+        if (!isAdminExcluded && lower.includes("admin")) { included.push("Admin Dashboard"); state.hasAdminPanel = true; }
         state.selectedFeatures.push("feat_ai_bot");
       } else if (isTrueMobile) {
         state.projectType = "mobile_app";
@@ -3031,14 +3112,13 @@
         state.estimatedHoursMax = 280;
         included.push("Cross-Platform Mobile App (iOS & Android)");
         state.platformScope = "mobile_app_only";
-      } else if (isSaaS) {
+      } else if (isSaaSGeneric) {
         state.projectType = "saas_product";
-        state.customProjectTitle = "Multi-Tenant SaaS Platform";
+        state.customProjectTitle = "SaaS Platform";
         state.estimatedHoursMin = 160;
         state.estimatedHoursMax = 290;
         included.push("Multi-Tenant Core Architecture");
-        included.push("User Account Management");
-        state.selectedFeatures.push("feat_auth");
+        if (!isCustomerAuthExcluded) { included.push("User Registration & Login"); state.selectedFeatures.push("feat_auth"); }
       } else {
         state.projectType = "biz_website";
         state.customProjectTitle = "Business Website";
@@ -3048,11 +3128,12 @@
         included.push("Contact Form & Business Overview");
       }
 
-      // WhatsApp mapping: Distinguish simple button vs. API
+      // Feature Enhancements:
+      // WhatsApp: Strict separation of Button vs Business API
       if (lower.includes("whatsapp") && !isNegatedInText(lower, "whatsapp")) {
-        const isTrueAPI = /\b(whatsapp\s*api|sms\s*gateway|automated\s*notifications?|otp|text\s*alerts?)\b/i.test(lower);
+        const isTrueAPI = /\b(whatsapp\s*business\s*api|automated\s*whatsapp|template\s*messages?|whatsapp\s*api|sms\s*gateway|otp)\b/i.test(lower);
         if (isTrueAPI) {
-          included.push("WhatsApp & SMS API Gateway");
+          included.push("WhatsApp Business API Integration");
           state.selectedFeatures.push("feat_wa_sms");
         } else {
           included.push("WhatsApp Contact Button");
@@ -3061,12 +3142,12 @@
 
       // Search & Filters
       if ((lower.includes("search") || lower.includes("filter")) && !included.some(i => i.includes("Search"))) {
-        included.push("Search & Dynamic Filtering");
+        included.push("Search & Filtering");
         state.selectedFeatures.push("feat_search");
       }
 
       // Online Payment: ONLY IF EXPLICITLY REQUESTED AND NOT EXCLUDED
-      const mentionsOnlinePay = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isOnlinePaymentExcluded;
+      const mentionsOnlinePay = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*online)\b/i.test(lower) && !isOnlinePaymentExcluded;
       if (mentionsOnlinePay && !included.some(i => i.includes("Payment"))) {
         included.push("Online Payment Gateway");
         state.selectedFeatures.push("feat_payments");
@@ -3075,7 +3156,7 @@
       state.includedList = included;
       state.excludedList = excluded;
 
-      // Final internal validation before state is locked
+      // Run strict pre-display validation
       validateAndSanitizeScope(state, text);
 
       const chips = [
@@ -3093,17 +3174,23 @@
 
     // ==========================================================================
     // PRE-DISPLAY VALIDATION & SANITIZATION GATE
+    // Guarantees: Exclusion > Inclusion > Inference
     // ==========================================================================
     function validateAndSanitizeScope(st, text) {
       const lower = (text || "").toLowerCase();
 
-      const hasExplicitAI = /\b(ai\s*app|ai\s*platform|llm|chatbot|claude|gemini|rag|vector\s*db)\b/i.test(lower) && !isNegatedInText(lower, "ai");
+      const hasExplicitAI = /\b(ai\s*app|ai\s*web|ai\s*platform|llm|chatbot|claude|gemini|rag|vector\s*db|ai-generated)\b/i.test(lower) && !isNegatedInText(lower, "ai");
       const hasExplicitMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter|react\s*native)\b/i.test(lower) && !isNegatedInText(lower, "mobile app");
-      const hasExplicitPayment = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isNegatedInText(lower, "online payment") && !isNegatedInText(lower, "payment");
+      const hasExplicitPayment = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*online)\b/i.test(lower) && !isNegatedInText(lower, "online payment") && !isNegatedInText(lower, "payment");
+      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "patient login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "customer account") || isNegatedInText(lower, "registration") || st.excludedList.some(e => /customer login|login|patient login|account/i.test(e));
+      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard") || st.excludedList.some(e => /admin/i.test(e));
+      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || st.excludedList.some(e => /cart/i.test(e));
+      const isCheckoutExcluded = isNegatedInText(lower, "checkout") || st.excludedList.some(e => /checkout/i.test(e));
+      const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "order placement") || st.excludedList.some(e => /ordering/i.test(e));
 
       // 1. Purge Unrequested or Excluded AI
       if (!hasExplicitAI || st.excludedList.some(e => /ai|chatbot/i.test(e))) {
-        st.includedList = (st.includedList || []).filter(item => !/\b(ai|llm|chatbot|assistant\s*module)\b/i.test(item));
+        st.includedList = (st.includedList || []).filter(item => !/\b(ai|llm|chatbot|assistant|ai-generated)\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_ai_bot");
         if (st.projectType === "ai_app") {
           st.projectType = "web_app";
@@ -3125,44 +3212,55 @@
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
       }
 
-      // 4. Purge Excluded Customer Login
-      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || st.excludedList.some(e => /customer login|login/i.test(e));
+      // 4. Purge Excluded Customer Login / Patient Login / Registration
       if (isCustomerAuthExcluded) {
-        st.includedList = (st.includedList || []).filter(item => !/\bcustomer\s*login|user\s*login|patient\s*registration|student\s*registration|user\s*accounts\b/i.test(item));
+        st.includedList = (st.includedList || []).filter(item => !/\bcustomer\s*login|user\s*login|patient\s*registration|patient\s*login|student\s*registration|student\s*login|user\s*accounts\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_auth");
-        if (!st.excludedList.some(e => /customer login/i.test(e))) {
+        if (!st.excludedList.some(e => /customer login|login|patient login/i.test(e))) {
           st.excludedList.push("Customer Login & Accounts");
         }
       }
 
       // 5. Purge Excluded Admin
-      const isAdminExcluded = isNegatedInText(lower, "admin") || st.excludedList.some(e => /admin/i.test(e));
       if (isAdminExcluded) {
         st.includedList = (st.includedList || []).filter(item => !/\badmin\b/i.test(item));
         st.hasAdminPanel = false;
         if (!st.excludedList.some(e => /admin/i.test(e))) {
-          st.excludedList.push("Admin Dashboard & Panel");
+          st.excludedList.push("Admin Dashboard");
         }
       }
 
-      // 6. Purge WhatsApp API if Only a Button
-      const hasWhatsAppOnlyButton = /\b(whatsapp\s*button|whatsapp\s*link|contact\s*via\s*whatsapp)\b/i.test(lower) && !/\b(api|sms\s*gateway|otp)\b/i.test(lower);
+      // 6. Purge Excluded Cart & Checkout
+      if (isCartExcluded) {
+        st.includedList = (st.includedList || []).filter(item => !/\bcart\b/i.test(item));
+      }
+      if (isCheckoutExcluded) {
+        st.includedList = (st.includedList || []).filter(item => !/\bcheckout\b/i.test(item));
+      }
+      if (isOrderingExcluded) {
+        st.includedList = (st.includedList || []).filter(item => !/\border\s*placement\b/i.test(item));
+      }
+
+      // 7. Purge WhatsApp API if Only a Button
+      const hasWhatsAppOnlyButton = /\b(whatsapp\s*button|whatsapp\s*link|contact\s*via\s*whatsapp|click-to-chat|whatsapp\s*chat)\b/i.test(lower) && !/\b(business\s*api|sms\s*gateway|otp|automated\s*whatsapp|template\s*message)\b/i.test(lower);
       if (hasWhatsAppOnlyButton) {
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_wa_sms");
-        st.includedList = (st.includedList || []).filter(item => !/whatsapp\s*&\s*sms\s*api/i.test(item));
+        st.includedList = (st.includedList || []).filter(item => !/whatsapp\s*(business|\&)/i.test(item));
         if (!st.includedList.includes("WhatsApp Contact Button")) {
           st.includedList.push("WhatsApp Contact Button");
         }
       }
 
-      // 7. Title Validation
+      // 8. Title Validation Matching Verified Domain
       st.customProjectTitle = generateSmartTitle(text, st.projectType);
     }
 
     function generateSmartTitle(text, type) {
       const lower = (text || "").toLowerCase();
-      if (/\b(clinic|doctor|patient|hospital|dental)\b/i.test(lower)) return "Clinic Appointment Booking Platform";
-      if (/\b(document\s*management|pdf\s*management|dms)\b/i.test(lower) || (/\b(document|pdf)\b/i.test(lower) && /\b(upload|download|repository)\b/i.test(lower))) return "Document Management Web Application";
+      if (/\b(clinic|doctor|patient|hospital|dental)\b/i.test(lower) && /\b(appointment|appointments|slots?)\b/i.test(lower)) return "Clinic Appointment Booking Platform";
+      if (/\b(document\s*management|pdf\s*management|dms)\b/i.test(lower) || (/\b(document|pdf)\b/i.test(lower) && /\b(upload|download|repository|folders?)\b/i.test(lower) && !/\b(course|student)\b/i.test(lower))) return "Document Management Web Application";
+      if (/\b(task\s*management|workspaces?|tasks?|task\s*assignments?)\b/i.test(lower) && !/\b(clinic|restaurant|course)\b/i.test(lower)) return "SaaS Task Management Platform";
+      if (/\b(marketplace|multi-vendor|multiple\s*service\s*providers|provider\s*listings?)\b/i.test(lower)) return "Service Marketplace Platform";
       if (/\b(restaurant|cafe|bakery|diner)\b/i.test(lower)) {
         if (/\b(order|ordering|cart|takeout)\b/i.test(lower) && !isNegatedInText(lower, "ordering")) return "Restaurant Ordering & Menu Web Platform";
         return "Informational Restaurant Website";
@@ -3171,10 +3269,10 @@
       if (/\b(coaching|tuition)\b/i.test(lower)) return "Coaching Centre Learning Platform";
       if (/\b(course|courses|lms|student)\b/i.test(lower)) return "Online Learning Platform";
       if (/\b(catalog|browse\s*products)\b/i.test(lower) && (/\b(no\s*checkout|no\s*cart|no\s*payment)\b/i.test(lower) || isNegatedInText(lower, "cart"))) return "E-Commerce Product Catalog Platform";
-      if (/\b(ecommerce|e-commerce|storefront|shop)\b/i.test(lower)) return "Digital Storefront & Order Portal";
+      if (/\b(ecommerce|e-commerce|storefront|shop)\b/i.test(lower)) return "E-Commerce Ordering Platform";
       if (/\b(photo|photography)\b/i.test(lower)) return "Photography Portfolio Showcase";
       if (type === "portfolio") return "Personal Creator Portfolio";
-      if (type === "ai_app") return "AI Workflow & Assistant Platform";
+      if (type === "ai_app") return "AI Web Application";
       if (type === "mobile_app") return "Cross-Platform Mobile Application";
       return pricingData.projectTypes[type] ? pricingData.projectTypes[type].title : "Business Website";
     }
