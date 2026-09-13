@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CostPilot — Digital Project Cost & Architecture Estimator</title>
-  <meta name="description" content="Estimate what your digital project really costs in Bangalore. Clean benchmarks for Cloud-Optimized Serverless and Dedicated Enterprise architectures.">
+  <meta name="description" content="Estimate what your digital project really costs. Clean benchmarks for Cloud-Optimized Serverless and Dedicated Enterprise architectures.">
   <meta property="og:title" content="CostPilot — Digital Project Cost Estimator">
   <meta property="og:description" content="Build Cost + Launch Cost + Running Cost + Maintenance = Total Cost of Ownership.">
 
@@ -33,6 +33,8 @@
       --success-light: #ecfdf5;
       --warning: #f59e0b;
       --warning-light: #fffbeb;
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
       --purple: #8b5cf6;
       --purple-light: #f5f3ff;
       
@@ -116,6 +118,8 @@
     .badge-primary { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
     .badge-neutral { background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border-color); }
     .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-warning { background: var(--warning-light); color: var(--warning); border: 1px solid #fde68a; }
+    .badge-danger { background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; }
     .badge-purple { background: var(--purple-light); color: var(--purple); border: 1px solid #ddd6fe; }
     .badge-ai { background: linear-gradient(135deg, #eff6ff, #f5f3ff); color: #4338ca; border: 1px solid #c7d2fe; }
 
@@ -657,7 +661,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       gap: 1.75rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
     .package-card {
       background: #ffffff;
@@ -766,6 +770,185 @@
       display: flex;
       align-items: flex-start;
       gap: 0.5rem;
+    }
+
+    /* ==========================================================================
+       COUNTER-OFFER AUDITOR CARD & WORST-CASE SCRUTINY
+       ========================================================================== */
+    .audit-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      transition: var(--transition);
+    }
+    .audit-card:hover {
+      border-color: var(--primary);
+    }
+    .audit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .audit-input-group {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 1rem;
+      align-items: flex-end;
+      margin: 1.25rem 0;
+    }
+    @media (max-width: 768px) {
+      .audit-input-group {
+        grid-template-columns: 1fr;
+      }
+    }
+    .audit-input-box label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 0.35rem;
+    }
+    .audit-input-box input, .audit-input-box select {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      background: #ffffff;
+    }
+
+    /* Verdict Display */
+    .audit-verdict-box {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      animation: fadeIn 0.3s ease;
+    }
+    .audit-verdict-box.active {
+      display: block;
+    }
+    .audit-verdict-green {
+      background: var(--success-light);
+      border: 1.5px solid #86efac;
+    }
+    .audit-verdict-yellow {
+      background: var(--warning-light);
+      border: 1.5px solid #fde047;
+    }
+    .audit-verdict-red {
+      background: var(--danger-light);
+      border: 1.5px solid #fca5a5;
+    }
+    .verdict-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .verdict-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+    .verdict-desc {
+      font-size: 0.925rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    /* Worst-Case Financial Scrutiny Callout */
+    .worst-case-callout {
+      background: #ffffff;
+      border: 1px solid #fecaca;
+      border-left: 4px solid var(--danger);
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      margin: 1rem 0;
+      font-size: 0.85rem;
+    }
+    .worst-case-callout strong {
+      color: var(--danger);
+      display: block;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .scope-match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 640px) {
+      .scope-match-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .scope-match-col {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+    }
+    .scope-match-col h5 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .scope-match-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+    }
+
+    /* ==========================================================================
+       NEW: DELIVERABLE & SCOPE PARITY MATRIX TABLE
+       ========================================================================== */
+    .parity-section {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      overflow-x: auto;
+    }
+    .parity-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+      margin-top: 1.25rem;
+      font-size: 0.875rem;
+    }
+    .parity-table th, .parity-table td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .parity-table th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+      color: var(--secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .parity-table th.highlight, .parity-table td.highlight {
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+    .parity-table tr:hover td {
+      background: #fdfefe;
     }
 
     /* Cumulative TCO Visualizer */
@@ -1033,7 +1216,7 @@
     @media print {
       .site-header, .market-banner, .site-footer, .results-actions,
       .mode-card, .hero, .lead-box, #estimator-section, .toast-container,
-      .package-card button {
+      .package-card button, .audit-card {
         display: none !important;
       }
       #results-section {
@@ -1050,7 +1233,7 @@
 
   <!-- Top Announcement -->
   <aside class="market-banner">
-    📍 <strong>Bangalore Market Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: AI-Assisted Precision Matrix) — Accurate, deterministic cost modeling.
+    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: AI-Assisted Precision Matrix) — Accurate, deterministic cost modeling.
   </aside>
 
   <!-- Navigation -->
@@ -1089,7 +1272,7 @@
           <span class="badge badge-primary">✨ Digital Project TCO Intelligence</span>
           <h1>Know What Your Digital Project <span>Really Costs</span>.</h1>
           <p class="hero-subtitle">
-            Get an authoritative, Bangalore market-based estimate for building, launching, and maintaining your digital product across modern <strong>Cloud-Optimized</strong> and <strong>Dedicated Enterprise</strong> architectures.
+            Get an authoritative, market-based estimate for building, launching, and maintaining your digital product across modern <strong>Cloud-Optimized</strong> and <strong>Dedicated Enterprise</strong> architectures.
           </p>
 
           <div class="hero-formula">
@@ -1131,7 +1314,7 @@
                   Analyze & Value Project →
                 </button>
                 <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
-                  🔒 Zero math hallucinations: AI classifies requirements, your deterministic Bangalore engine calculates prices.
+                  🔒 Zero math hallucinations: AI classifies requirements, your deterministic commercial engine calculates prices.
                 </span>
               </div>
             </div>
@@ -1147,7 +1330,7 @@
               
               <ul style="list-style: none; margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
                 <li>✓ Dual Architecture Models (Cloud-Optimized vs Dedicated)</li>
-                <li>✓ Realistic Bangalore startup & studio benchmarks</li>
+                <li>✓ Realistic startup & studio benchmarks</li>
                 <li>✓ Form volume & custom UI/UX design tiers</li>
                 <li>✓ Predictable ₹1,000/mo managed cloud operations</li>
                 <li>✓ 1, 3, and 5-Year TCO financial projections</li>
@@ -1326,7 +1509,7 @@
             <span class="badge badge-success">Zero Price Hallucination</span>
           </div>
           <p style="font-size: 0.9rem; color: var(--text-muted);">
-            CostPilot classified your concept into structured parameters. Prices were computed deterministically using Bangalore market rate cards:
+            CostPilot classified your concept into structured parameters. Prices were computed deterministically using standard commercial rate cards:
           </p>
           <div class="analysis-prompt-quote" id="analysis-prompt-text"></div>
           <div class="analysis-interpretations-grid" id="analysis-chips-grid"></div>
@@ -1337,7 +1520,7 @@
           <div>
             <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom: 0.5rem;">
               <span class="badge badge-primary" id="res-estimate-id" style="font-family: var(--font-mono);">CP-2026-00000</span>
-              <span class="badge badge-success">Bangalore Benchmark</span>
+              <span class="badge badge-success">Verified Benchmark</span>
             </div>
             <h2 id="res-project-name" style="font-size: 1.85rem; font-weight: 800; color: var(--secondary);">Project Specification</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem;">
@@ -1456,6 +1639,108 @@
             </button>
           </div>
 
+        </div>
+
+        <!-- ==========================================================================
+             COUNTER-OFFER EVALUATOR & WORST-CASE SCRUTINY MODULE
+             ========================================================================== -->
+        <div class="audit-card">
+          <div class="audit-header">
+            <div>
+              <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.25rem;">
+                <span class="badge badge-warning">🛡️ Quote Reality Check</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--secondary);">Vendor Quote & Counter-Offer Audit</span>
+              </div>
+              <h3 style="font-size:1.3rem; font-weight:800; color:var(--secondary);">
+                Have a Lower Quote from Another Vendor?
+              </h3>
+              <p style="font-size:0.875rem; color:var(--text-muted);">
+                Test the feasibility of a rival proposal against hard engineering costs, third-party API outlays, and worst-case failure scenarios.
+              </p>
+            </div>
+          </div>
+
+          <div class="audit-input-group">
+            <div class="audit-input-box">
+              <label for="audit-quote-amount">Other Vendor Quoted Amount (₹)</label>
+              <input type="number" id="audit-quote-amount" placeholder="e.g. 28000" min="1000">
+            </div>
+            <div class="audit-input-box">
+              <label for="audit-vendor-type">Quoted By</label>
+              <select id="audit-vendor-type">
+                <option value="freelancer">Solo Freelancer</option>
+                <option value="local_agency" selected>Local Web Agency</option>
+                <option value="offshore_firm">Offshore Development Team</option>
+                <option value="inhouse">Informal / Acquaintance</option>
+              </select>
+            </div>
+            <div>
+              <button class="btn btn-primary" onclick="runQuoteAudit()">Run Worst-Case Audit →</button>
+            </div>
+          </div>
+
+          <!-- Diagnostic Results Box -->
+          <div class="audit-verdict-box" id="audit-verdict-box">
+            <div class="verdict-badge-row">
+              <span class="badge" id="verdict-status-badge">Status</span>
+              <span style="font-size:0.8rem; color:var(--text-muted); font-weight:600;" id="verdict-math-summary">Financial Audit Summary</span>
+            </div>
+            <h4 class="verdict-title" id="verdict-title-text">Evaluation Title</h4>
+            <p class="verdict-desc" id="verdict-desc-text">Evaluation Details</p>
+
+            <!-- Worst-Case Risk Analysis Callout -->
+            <div class="worst-case-callout" id="worst-case-callout-box">
+              <strong>Worst-Case Scenario Risk Exposure:</strong>
+              <span id="worst-case-risk-text"></span>
+            </div>
+
+            <!-- Scope Matching Breakdown -->
+            <div class="scope-match-grid" id="scope-match-grid-box">
+              <div class="scope-match-col">
+                <h5 style="color:var(--success);">🟢 Included in Ezrah Matched Build:</h5>
+                <ul id="match-included-list"></ul>
+              </div>
+              <div class="scope-match-col">
+                <h5 style="color:var(--warning);">⏳ Deferred to Phase 2 (To Hit Budget):</h5>
+                <ul id="match-deferred-list"></ul>
+              </div>
+            </div>
+
+            <ul class="verdict-checklist" id="verdict-checklist-box" style="margin-top:1rem;"></ul>
+
+            <div style="margin-top:1.25rem; display:flex; gap:0.75rem; justify-content:flex-end;">
+              <button class="btn btn-secondary btn-sm" onclick="openContactModal()">Discuss Offer with Ezrah →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================================================
+             NEW: APPLES-TO-APPLES DELIVERABLE & SCOPE PARITY MATRIX
+             ========================================================================== -->
+        <div class="parity-section">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+              <span class="badge badge-primary" style="margin-bottom:0.25rem;">🔍 Complete Transparency</span>
+              <h3 style="font-size:1.25rem; font-weight:800; color:var(--secondary);">Apples-to-Apples Scope & Deliverable Matrix</h3>
+              <p style="font-size:0.85rem; color:var(--text-muted);">
+                Cross-examine competitor proposals against Ezrah Innovations' verified production standards.
+              </p>
+            </div>
+          </div>
+
+          <table class="parity-table">
+            <thead>
+              <tr>
+                <th style="width:34%;">Scope / Architecture Dimension</th>
+                <th class="highlight" style="width:22%;">Ezrah Full Specification</th>
+                <th style="width:22%;">Ezrah Matched MVP</th>
+                <th style="width:22%; color:var(--danger);">Typical Cheap Competitor</th>
+              </tr>
+            </thead>
+            <tbody id="parity-table-body">
+              <!-- Dynamically Populated by JavaScript -->
+            </tbody>
+          </table>
         </div>
 
         <!-- TCO VISUALIZATION -->
@@ -1605,14 +1890,14 @@
           <h5 style="font-size: 0.95rem; font-weight: 700; color: var(--secondary); margin-bottom: 1rem;">Ezrah Innovations</h5>
           <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem; font-size:0.875rem;">
             <li><a onclick="openContactModal()">Book Consultation</a></li>
-            <li><a onclick="openDisclaimerModal()">Bangalore Benchmarks</a></li>
+            <li><a onclick="openDisclaimerModal()">Industry Benchmarks</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Indicative Bangalore Market Benchmarks • Production v3.2 AI-Hybrid</div>
+        <div>Commercial Software Standards • Production v4.0 Scrutiny Engine</div>
       </div>
     </div>
   </footer>
@@ -1623,7 +1908,7 @@
       <button class="modal-close" onclick="closeModals()">✕</button>
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--secondary);">Our Estimation Methodology</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-        CostPilot pairs <strong>semantic requirement analysis</strong> with a <strong>deterministic Bangalore pricing matrix</strong>:
+        CostPilot pairs <strong>semantic requirement analysis</strong> with a <strong>deterministic commercial pricing matrix</strong>:
       </p>
       <div style="margin-bottom: 1rem;">
         <strong style="color:var(--primary);">Package A: Cloud-Optimized Architecture</strong>
@@ -1648,7 +1933,7 @@
       <button class="modal-close" onclick="closeModals()">✕</button>
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Consult with Ezrah Innovations</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
-        Get an architectural review of your estimate with the Ezrah engineering team.
+        Get an architectural review of your estimate or counter-offer with the Ezrah engineering team.
       </p>
       <form class="modal-form" onsubmit="handleConsultationSubmit(event)">
         <div>
@@ -1660,8 +1945,8 @@
           <input type="email" id="lead-email" required placeholder="alex@company.com">
         </div>
         <div>
-          <label>Project Notes (Optional)</label>
-          <textarea id="lead-notes" rows="3" placeholder="Tell us about your target timeline or key features..."></textarea>
+          <label>Project Notes / Counter-Offer Context (Optional)</label>
+          <textarea id="lead-notes" rows="3" placeholder="Tell us about your target timeline or competing quote details..."></textarea>
         </div>
         <button type="submit" class="btn btn-primary" style="width: 100%;">Schedule Architecture Review</button>
       </form>
@@ -1688,6 +1973,9 @@
       <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
         CostPilot provides indicative market-based estimates for planning purposes. Actual project costs vary based on vendors, technologies, scope, requirements, team seniority, and usage.
       </p>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        All figures reflect verified commercial engineering standards across both lean serverless models and enterprise agency frameworks.
+      </p>
       <div style="margin-top: 1.5rem; text-align: right;">
         <button class="btn btn-primary btn-sm" onclick="closeModals()">I Understand</button>
       </div>
@@ -1700,13 +1988,12 @@
   <script>
     /**
      * SECURE AI PROXY CONFIGURATION
-     * Paste your free Cloudflare Worker URL here after completing Part 1.
-     * Leave as "" to use the built-in local smart analyzer.
+     * Automatically routes to your Vercel serverless function at /api/classify
      */
     const AI_WORKER_URL = "/api/classify";
 
     const pricingData = {
-      market: "Bangalore, India",
+      market: "Commercial Software Standards",
       currency: "INR",
       currencySymbol: "₹",
       lastUpdated: "February 2026",
@@ -1719,6 +2006,7 @@
           desc: "Corporate brand presence, conversion pages, and CMS.",
           serverlessBuild: { low: 18000, typ: 26000, high: 36000 },
           enterpriseBuild: { low: 55000, typ: 80000, high: 110000 },
+          laborFloor: 12000,
           dynamicQuestions: [
             { id: "pages_large", label: "Expanded Content (15–30+ pages)", costA: 5000, costB: 15000 },
             { id: "cms_blog", label: "Self-Managed Headless CMS", costA: 6000, costB: 16000 },
@@ -1732,6 +2020,7 @@
           desc: "Interactive showcase for creators, agencies, and studios.",
           serverlessBuild: { low: 15000, typ: 22000, high: 32000 },
           enterpriseBuild: { low: 45000, typ: 65000, high: 95000 },
+          laborFloor: 10000,
           dynamicQuestions: [
             { id: "port_anim", label: "Interactive Micro-Interactions", costA: 4000, costB: 12000 },
             { id: "port_booking", label: "Client Inquiry & Booking Flow", costA: 3500, costB: 9000 }
@@ -1744,6 +2033,7 @@
           desc: "Storefront with cart, checkout, payments, and order portal.",
           serverlessBuild: { low: 36000, typ: 52000, high: 75000 },
           enterpriseBuild: { low: 110000, typ: 165000, high: 240000 },
+          laborFloor: 24000,
           dynamicQuestions: [
             { id: "ecom_shipping", label: "Logistics & Courier API Integration", costA: 6000, costB: 16000 },
             { id: "ecom_inventory", label: "Multi-Warehouse Inventory Tracking", costA: 8000, costB: 24000 }
@@ -1756,6 +2046,7 @@
           desc: "Client dashboards, SaaS platforms, or internal portals.",
           serverlessBuild: { low: 32000, typ: 46000, high: 68000 },
           enterpriseBuild: { low: 105000, typ: 155000, high: 225000 },
+          laborFloor: 22000,
           dynamicQuestions: [
             { id: "app_roles_multi", label: "Multi-Tenant RBAC Permissions", costA: 7000, costB: 20000 },
             { id: "app_analytics", label: "Interactive Analytics & CSV/PDF Export", costA: 6000, costB: 18000 },
@@ -1769,6 +2060,7 @@
           desc: "Cross-platform iOS and Android mobile app (Flutter/React Native).",
           serverlessBuild: { low: 48000, typ: 68000, high: 98000 },
           enterpriseBuild: { low: 135000, typ: 195000, high: 290000 },
+          laborFloor: 32000,
           dynamicQuestions: [
             { id: "mob_push", label: "Push Notifications (FCM/APNS)", costA: 5000, costB: 14000 },
             { id: "mob_offline", label: "Offline-First Local Sync", costA: 10000, costB: 28000 }
@@ -1781,6 +2073,7 @@
           desc: "Multi-tier subscription platform with billing & accounts.",
           serverlessBuild: { low: 42000, typ: 58000, high: 86000 },
           enterpriseBuild: { low: 125000, typ: 185000, high: 280000 },
+          laborFloor: 28000,
           dynamicQuestions: [
             { id: "saas_billing", label: "Subscription Billing & Tax Invoices", costA: 8000, costB: 22000 },
             { id: "saas_teams", label: "Team Workspaces & Member Seats", costA: 7000, costB: 18000 }
@@ -1793,6 +2086,7 @@
           desc: "EdTech platform for students, video lectures, and quizzes.",
           serverlessBuild: { low: 36000, typ: 50000, high: 72000 },
           enterpriseBuild: { low: 115000, typ: 170000, high: 250000 },
+          laborFloor: 24000,
           dynamicQuestions: [
             { id: "lms_quizzes", label: "Timed Quizzes & Automated Scoring", costA: 6000, costB: 16000 },
             { id: "lms_certs", label: "Dynamic PDF Certificate Generation", costA: 4000, costB: 10000 }
@@ -1805,6 +2099,7 @@
           desc: "RAG knowledge base, AI customer agent, or workflow tool.",
           serverlessBuild: { low: 45000, typ: 64000, high: 95000 },
           enterpriseBuild: { low: 140000, typ: 210000, high: 320000 },
+          laborFloor: 28000,
           dynamicQuestions: [
             { id: "ai_rag_docs", label: "Custom Document Vector Store (RAG)", costA: 10000, costB: 32000 },
             { id: "ai_chat_widget", label: "Streaming Chat UI with Token Quotas", costA: 7000, costB: 18000 }
@@ -1845,13 +2140,13 @@
       },
 
       features: {
-        "feat_auth": { label: "User Authentication & Profiles", costA: 3500, costB: 9000 },
-        "feat_social": { label: "Social Single Sign-on (Google/Apple)", costA: 3000, costB: 8000 },
-        "feat_search": { label: "Search & Dynamic Filtering", costA: 3500, costB: 10000 },
-        "feat_payments": { label: "Payment Gateway Integration", costA: 6000, costB: 15000 },
-        "feat_wa_sms": { label: "WhatsApp & SMS Gateway", costA: 4500, costB: 12000 },
-        "feat_ai_bot": { label: "Embedded AI Chat Assistant", costA: 8000, costB: 24000 },
-        "feat_storage": { label: "Direct Cloud Object Storage", costA: 3000, costB: 9000 }
+        "feat_auth": { label: "User Authentication & Profiles", costA: 3500, costB: 9000, devFloor: 2000 },
+        "feat_social": { label: "Social Single Sign-on (Google/Apple)", costA: 3000, costB: 8000, devFloor: 1500 },
+        "feat_search": { label: "Search & Dynamic Filtering", costA: 3500, costB: 10000, devFloor: 2000 },
+        "feat_payments": { label: "Payment Gateway Integration", costA: 6000, costB: 15000, devFloor: 3000 },
+        "feat_wa_sms": { label: "WhatsApp & SMS Gateway", costA: 4500, costB: 12000, devFloor: 2500, annualHardOutlay: 3500 },
+        "feat_ai_bot": { label: "Embedded AI Chat Assistant", costA: 8000, costB: 24000, devFloor: 4000, annualHardOutlay: 12000 },
+        "feat_storage": { label: "Direct Cloud Object Storage", costA: 3000, costB: 9000, devFloor: 1500 }
       }
     };
 
@@ -1895,7 +2190,7 @@
       let buildB_low = p.enterpriseBuild.low;
       let buildB_high = p.enterpriseBuild.high;
 
-      // Micro-Scale Adjuster (if prompt identified micro scale)
+      // Micro-Scale Adjuster
       if (cfg.projectScale === "micro_local") {
         buildA_typ = Math.round(buildA_typ * 0.8);
         buildA_low = Math.round(buildA_low * 0.8);
@@ -2024,6 +2319,215 @@
       return reasons;
     }
 
+    // ==========================================================================
+    // COUNTER-OFFER AUDIT & WORST-CASE SCRUTINY ENGINE
+    // ==========================================================================
+    function runQuoteAudit() {
+      const amountInput = document.getElementById("audit-quote-amount");
+      const vendorType = document.getElementById("audit-vendor-type").value;
+      const counterAmount = parseFloat(amountInput.value);
+
+      if (!counterAmount || isNaN(counterAmount) || counterAmount < 1000) {
+        showToast("Please enter a valid quoted amount to audit.");
+        return;
+      }
+
+      if (!state.computedResult) {
+        state.computedResult = calculateCostModels(state);
+      }
+
+      const p = pricingData.projectTypes[state.projectType];
+      const packageABuild = state.computedResult.packageA.buildTyp;
+
+      // 1. Calculate Ezrah Direct Labor Floor (Minimum Subsistence)
+      let laborFloor = p.laborFloor || 20000;
+      state.selectedFeatures.forEach(fid => {
+        const feat = pricingData.features[fid];
+        if (feat && feat.devFloor) laborFloor += feat.devFloor;
+      });
+
+      // 2. Calculate Hard Out-of-Pocket Cloud & API Outlay Gate
+      let annualHardOutlays = 1200; // Baseline domain only on zero-idle stack
+      let isFreeTierOperational = true;
+      let worstCaseExposure = 0;
+
+      if (state.projectType === "ai_app" || state.selectedFeatures.includes("feat_ai_bot")) {
+        annualHardOutlays += 12000;
+        worstCaseExposure += 18000; // Risk of token quota exhaustion & surge bills
+        isFreeTierOperational = false;
+      }
+      if (state.selectedFeatures.includes("feat_wa_sms")) {
+        annualHardOutlays += 3000;
+        worstCaseExposure += 6000; // OTP spam or SMS gateway pack exhaustion
+        isFreeTierOperational = false;
+      }
+      if (state.infra.storage === "100gb") {
+        annualHardOutlays += 6000;
+        worstCaseExposure += 15000; // AWS S3 outbound bandwidth egress spikes
+        isFreeTierOperational = false;
+      }
+      if (isFreeTierOperational) {
+        worstCaseExposure = 8000; // Rework costs if cheap vendor delivers non-functional code
+      }
+
+      const absoluteMinimumBuildFloor = laborFloor;
+
+      // Render Verdict
+      const verdictBox = document.getElementById("audit-verdict-box");
+      const statusBadge = document.getElementById("verdict-status-badge");
+      const summaryText = document.getElementById("verdict-math-summary");
+      const titleText = document.getElementById("verdict-title-text");
+      const descText = document.getElementById("verdict-desc-text");
+      const worstCaseText = document.getElementById("worst-case-risk-text");
+      const includedList = document.getElementById("match-included-list");
+      const deferredList = document.getElementById("match-deferred-list");
+      const checklist = document.getElementById("verdict-checklist-box");
+
+      verdictBox.className = "audit-verdict-box active";
+      checklist.innerHTML = "";
+      includedList.innerHTML = "";
+      deferredList.innerHTML = "";
+
+      // SCENARIO 1: RED FLAG ZONE (Loss or Extreme Lowball)
+      if (counterAmount < absoluteMinimumBuildFloor * 0.75 || (!isFreeTierOperational && counterAmount < absoluteMinimumBuildFloor)) {
+        verdictBox.classList.add("audit-verdict-red");
+        statusBadge.className = "badge badge-danger";
+        statusBadge.innerText = "🛑 Economically Infeasible";
+        summaryText.innerText = `Rival Quote: ₹${counterAmount.toLocaleString('en-IN')} vs Minimum Engineering Floor: ₹${absoluteMinimumBuildFloor.toLocaleString('en-IN')}`;
+        titleText.innerText = "High Risk: Suspected Lowball / Hidden Surcharge Trap";
+        
+        descText.innerText = isFreeTierOperational
+          ? `A quote of ₹${counterAmount.toLocaleString('en-IN')} reflects under ₹150/hour of engineering effort. At this rate, vendors routinely cut critical database security or abandon projects halfway through.`
+          : `This specification involves real third-party API or cloud storage bills (~₹${annualHardOutlays.toLocaleString('en-IN')}/yr in hard outlays). A vendor quoting ₹${counterAmount.toLocaleString('en-IN')} will either hit you with surprise hosting invoices post-launch or shut down when their trial credits expire.`;
+
+        worstCaseText.innerHTML = `Potential Hidden Post-Launch Cost: <strong>₹${worstCaseExposure.toLocaleString('en-IN')} to ₹${(worstCaseExposure * 1.8).toLocaleString('en-IN')}</strong> in emergency bug repairs, unbudgeted bandwidth, or rebuilding from scratch.`;
+
+        document.getElementById("scope-match-grid-box").style.display = "none";
+
+        checklist.innerHTML = `
+          <li><strong>⚠️ 5 Questions to Ask Before Paying an Advance to That Vendor:</strong></li>
+          <li>1. "Do I get full 100% intellectual property and GitHub source code ownership on day one?"</li>
+          <li>2. "Are API tokens, cloud storage, and domain renewals included in this price, or billed separately?"</li>
+          <li>3. "Is there a written 30-day bug-fix warranty signed in a formal Statement of Work?"</li>
+          <li>4. "Will you charge extra for mobile tablet responsiveness and cross-browser testing?"</li>
+          <li>5. "Are you using clean custom code or an unlicensed/pirated template that risks security?"</li>
+        `;
+      } 
+      // SCENARIO 2: YELLOW ZONE (Conditional Match via Scope-Stripping)
+      else if (counterAmount < packageABuild * 0.85) {
+        verdictBox.classList.add("audit-verdict-yellow");
+        statusBadge.className = "badge badge-warning";
+        statusBadge.innerText = "🟡 Conditional Match Feasible";
+        summaryText.innerText = `Safe to match with scope-to-budget optimization`;
+        titleText.innerText = `Ezrah Innovations Can Match ₹${counterAmount.toLocaleString('en-IN')} by Streamlining into a Lean MVP`;
+        descText.innerText = `We can deliver this build for your ₹${counterAmount.toLocaleString('en-IN')} budget without taking a loss by adjusting non-essential modules into a Phase 2 rollout:`;
+
+        worstCaseText.innerHTML = `Risk Mitigation: By using verified component libraries, you avoid the <strong>₹${worstCaseExposure.toLocaleString('en-IN')}</strong> hidden rework risk common with cheap freelance prototypes.`;
+
+        document.getElementById("scope-match-grid-box").style.display = "grid";
+
+        // Scope partitioning
+        includedList.innerHTML = `
+          <li>✓ Core ${p.title} Architecture & Workflows</li>
+          <li>✓ Primary Authentication & Role Access</li>
+          <li>✓ Zero-Idle Cloud Deployment & SSL</li>
+          <li>✓ 1 Year Domain & Weekly Backups</li>
+          <li>✓ Full GitHub Source Code Ownership</li>
+        `;
+
+        deferredList.innerHTML = `
+          <li>⏳ Advanced Micro-Animations (Using clean component styling)</li>
+          <li>⏳ Complex Secondary Analytics & PDF Exports (Moved to Phase 2)</li>
+          <li>⏳ High-Volume WhatsApp/SMS Packs (Using standard email alerts)</li>
+        `;
+
+        checklist.innerHTML = `
+          <li>✓ Full 30-day post-launch warranty included at this matched rate.</li>
+          <li>✓ Zero code quality compromises—clean, maintainable architecture.</li>
+        `;
+      } 
+      // SCENARIO 3: GREEN ZONE (Direct Safe Match Approved)
+      else {
+        verdictBox.classList.add("audit-verdict-green");
+        statusBadge.className = "badge badge-success";
+        statusBadge.innerText = "🟢 Match Approved";
+        summaryText.innerText = `Verified viable commercial quote`;
+        titleText.innerText = `Ezrah Innovations Can Safely Match ₹${counterAmount.toLocaleString('en-IN')}`;
+        descText.innerText = `Because your system is optimized for zero-idle cloud architecture with no wasted hosting overhead, this counter-offer is healthy. We can match ₹${counterAmount.toLocaleString('en-IN')} with 100% feature parity, written warranty, and dedicated support.`;
+
+        worstCaseText.innerHTML = `Zero Risk: Full commercial specification parity, complete source code handover, and guaranteed ₹1,000/mo operating baseline.`;
+
+        document.getElementById("scope-match-grid-box").style.display = "grid";
+        includedList.innerHTML = `
+          <li>✓ All Selected Functional Capabilities</li>
+          <li>✓ Custom UI/UX Styling & Animations</li>
+          <li>✓ Payment Gateway, Invoicing & Webhooks</li>
+          <li>✓ 100% IP & GitHub Repository Handover</li>
+        `;
+        deferredList.innerHTML = `
+          <li>✓ None (Full scope preserved at matched price)</li>
+        `;
+      }
+
+      // Re-populate parity table
+      renderScopeParityTable(counterAmount);
+      showToast("Quote audited against technical and infrastructure cost floors.");
+    }
+
+    // ==========================================================================
+    // NEW: RENDER SCOPE PARITY MATRIX
+    // ==========================================================================
+    function renderScopeParityTable(counterAmount) {
+      const tbody = document.getElementById("parity-table-body");
+      const matchedPriceText = counterAmount ? `₹${counterAmount.toLocaleString('en-IN')} (Ezrah MVP)` : "Budget-Matched MVP";
+      const p = pricingData.projectTypes[state.projectType];
+
+      tbody.innerHTML = `
+        <tr>
+          <td><strong>Core Workflow & Engineering</strong></td>
+          <td class="highlight">Full bespoke architecture tailored to your business</td>
+          <td>Clean production component architecture</td>
+          <td style="color:var(--danger);">Often modified templates with messy spaghetti code</td>
+        </tr>
+        <tr>
+          <td><strong>Hosting & Bandwidth Architecture</strong></td>
+          <td class="highlight">Zero-Idle serverless compute (₹1,000/mo flat baseline)</td>
+          <td>Zero-Idle serverless compute (₹1,000/mo flat baseline)</td>
+          <td style="color:var(--danger);">Heavy VMs or raw S3 uploads (Risk: ₹5,000–₹15,000/mo surge invoices)</td>
+        </tr>
+        <tr>
+          <td><strong>Intellectual Property & Code</strong></td>
+          <td class="highlight">100% full GitHub source code ownership on day one</td>
+          <td>100% full GitHub source code ownership on day one</td>
+          <td style="color:var(--danger);">Repository often withheld or locked inside proprietary systems</td>
+        </tr>
+        <tr>
+          <td><strong>Disaster Recovery & Redundancy</strong></td>
+          <td class="highlight">Automated weekly offsite database snapshots</td>
+          <td>Automated weekly offsite database snapshots</td>
+          <td style="color:var(--danger);">❌ Zero automated backups (Data lost if server crashes)</td>
+        </tr>
+        <tr>
+          <td><strong>Mobile & Tablet Responsiveness</strong></td>
+          <td class="highlight">Rigorous multi-device QA across 5 viewports</td>
+          <td>Responsive standard component library QA</td>
+          <td style="color:var(--danger);">❌ Tested only on developer's laptop (Breaks on iPads & Safari)</td>
+        </tr>
+        <tr>
+          <td><strong>Post-Launch Warranty & Support</strong></td>
+          <td class="highlight">Written 30-day bug-fix warranty in legal SOW</td>
+          <td>Written 30-day bug-fix warranty in legal SOW</td>
+          <td style="color:var(--danger);">❌ Zero written warranty (Developer disappears after final payment)</td>
+        </tr>
+        <tr>
+          <td><strong>Feature Scope Staging</strong></td>
+          <td class="highlight">All selected modules delivered in single sprint</td>
+          <td>Core MVP launched first; non-essentials staged to Phase 2</td>
+          <td style="color:var(--danger);">Promises everything upfront, then cuts corners to stay profitable</td>
+        </tr>
+      `;
+    }
+
     // UI Controllers
     function showLanding() {
       document.getElementById("landing-section").style.display = "block";
@@ -2048,6 +2552,7 @@
       document.getElementById("estimator-section").style.display = "none";
       document.getElementById("results-section").style.display = "block";
       renderResults();
+      renderScopeParityTable(null);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -2244,12 +2749,17 @@
     function renderStep5() {
       const container = document.getElementById("maint-support-options");
       container.innerHTML = "";
-      Object.entries(pricingData.maintenance).forEach(([k, tier]) => {
-        const isSel = state.maintenanceTier === k;
+      const maintOptions = [
+        { id: "basic", title: "Managed Cloud & Uptime Continuity", desc: "Domain renewal, weekly automated backups, and 1hr minor updates/month." },
+        { id: "standard", title: "Active Monthly Sprints", desc: "Includes 4 hours of active monthly feature development and SLA guarantee." }
+      ];
+
+      maintOptions.forEach(tier => {
+        const isSel = state.maintenanceTier === tier.id;
         const card = document.createElement("div");
         card.className = `selectable-card ${isSel ? 'selected' : ''}`;
         card.onclick = () => {
-          state.maintenanceTier = k;
+          state.maintenanceTier = tier.id;
           renderStep5();
         };
         card.innerHTML = `
@@ -2393,8 +2903,8 @@
       btnEl.disabled = true;
       btnEl.innerText = "Analyzing Idea with AI...";
 
-      // Attempt AI Cloudflare Worker Call
-      if (AI_WORKER_URL && !AI_WORKER_URL.includes("YOUR_CLOUDFLARE_WORKER_URL")) {
+      // Attempt AI Proxy Call (/api/classify)
+      if (AI_WORKER_URL) {
         try {
           const response = await fetch(AI_WORKER_URL, {
             method: "POST",
@@ -2412,7 +2922,7 @@
             return;
           }
         } catch (err) {
-          console.warn("AI worker proxy unavailable, switching to local analyzer.", err);
+          console.warn("AI proxy unavailable, switching to local semantic analyzer.", err);
         }
       }
 
