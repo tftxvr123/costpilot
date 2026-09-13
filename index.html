@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CostPilot — Digital Project Cost & Architecture Estimator</title>
-  <meta name="description" content="Estimate what your digital project really costs. Clean benchmarks for Cloud-Optimized Serverless and Dedicated Enterprise architectures.">
+  <meta name="description" content="Estimate what your digital project really costs. Transparent technical costs, commercial quotes, and startup pricing across modern cloud architectures.">
   <meta property="og:title" content="CostPilot — Digital Project Cost Estimator">
   <meta property="og:description" content="Build Cost + Launch Cost + Running Cost + Maintenance = Total Cost of Ownership.">
 
@@ -170,6 +170,15 @@
     .btn-ghost:hover {
       background: var(--bg-subtle);
       color: var(--text-main);
+    }
+    .btn-danger-outline {
+      background: #ffffff;
+      border-color: #fca5a5;
+      color: #dc2626;
+    }
+    .btn-danger-outline:hover {
+      background: #fef2f2;
+      border-color: #ef4444;
     }
     .btn-lg {
       padding: 0.85rem 1.75rem;
@@ -585,7 +594,7 @@
     }
 
     /* ==========================================================================
-       RESULTS DASHBOARD & DUAL PACKAGES
+       RESULTS DASHBOARD
        ========================================================================== */
     #results-section {
       display: none;
@@ -654,6 +663,97 @@
       text-transform: uppercase;
       letter-spacing: 0.03em;
       margin-bottom: 0.15rem;
+    }
+
+    /* ==========================================================================
+       THREE-TIER VALUATION HEADLINE CARDS
+       ========================================================================== */
+    .pricing-tiers-headline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .tier-headline-card {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .tier-headline-card.featured-tier {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
+      box-shadow: var(--shadow-md);
+    }
+    .tier-headline-card.commercial-tier {
+      border-color: #cbd5e1;
+    }
+    .tier-headline-card.technical-tier {
+      background: #fbfcfe;
+      border-style: dashed;
+    }
+    .tier-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .tier-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .tier-price-main {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--secondary);
+      line-height: 1.15;
+      margin: 0.35rem 0;
+    }
+    .tier-price-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .tier-explainer {
+      font-size: 0.825rem;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Architecture Recommendation Callout */
+    .arch-recommendation-box {
+      background: #ffffff;
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .arch-rec-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .arch-rec-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .arch-rec-body {
+      font-size: 0.925rem;
+      color: var(--text-main);
+      line-height: 1.6;
     }
 
     /* Dual Package Comparison Grid */
@@ -770,6 +870,43 @@
       display: flex;
       align-items: flex-start;
       gap: 0.5rem;
+    }
+
+    /* ==========================================================================
+       FREE-TIER POLICY TRANSPARENCY CARD
+       ========================================================================== */
+    .free-tier-policy-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .free-tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .free-tier-item {
+      background: var(--bg-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      border-left: 3px solid var(--success);
+    }
+    .free-tier-item.paid-item {
+      border-left-color: var(--warning);
+    }
+    .free-tier-item strong {
+      display: block;
+      color: var(--secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    .free-tier-item p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
 
     /* ==========================================================================
@@ -1266,7 +1403,7 @@
     @media print {
       .site-header, .market-banner, .site-footer, .results-actions,
       .mode-card, .hero, .lead-box, #estimator-section, .toast-container,
-      .package-card button, .audit-card {
+      .package-card button, .audit-card, .btn-danger-outline {
         display: none !important;
       }
       #results-section {
@@ -1283,7 +1420,7 @@
 
   <!-- Top Announcement -->
   <aside class="market-banner">
-    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Effort-Driven Dynamic Sizing Engine) — Accurate, deterministic cost modeling.
+    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Dynamic Effort & Three-Tier Pricing Engine) — Accurate, deterministic cost modeling.
   </aside>
 
   <!-- Navigation -->
@@ -1304,7 +1441,8 @@
             <li><a class="nav-link" onclick="openContactModal()">Consultation</a></li>
           </ul>
         </nav>
-        <div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn btn-outline btn-sm" onclick="clearCurrentProjectSession()" title="Reset the current project search">Clear / Reset</button>
           <button class="btn btn-primary btn-sm" onclick="startWizardMode()">Estimate My Project</button>
         </div>
       </div>
@@ -1322,17 +1460,15 @@
           <span class="badge badge-primary">✨ Digital Project TCO Intelligence</span>
           <h1>Know What Your Digital Project <span>Really Costs</span>.</h1>
           <p class="hero-subtitle">
-            Get an authoritative, market-based estimate for building, launching, and maintaining your digital product across modern <strong>Cloud-Optimized</strong> and <strong>Dedicated Enterprise</strong> architectures.
+            Get an authoritative, market-based estimate for building, launching, and maintaining your digital product. Transparent separation of <strong>Technical Costs</strong>, <strong>Commercial Market Quotes</strong>, and <strong>Startup Concessions</strong>.
           </p>
 
           <div class="hero-formula">
-            <span>Build Cost</span>
+            <span>Direct Technical Cost</span>
             <span>+</span>
-            <span>Launch Overhead</span>
+            <span>Commercial Margin</span>
             <span>+</span>
             <span>Managed Cloud</span>
-            <span>+</span>
-            <span>Maintenance</span>
             <span>=</span>
             <span class="eq-highlight">Total Cost of Ownership (TCO)</span>
           </div>
@@ -1360,9 +1496,12 @@
                   class="idea-textarea" 
                   placeholder="e.g. I want to build an online learning platform for a coaching centre. Students should be able to register, watch recorded classes, and download PDFs."
                 ></textarea>
-                <button class="btn btn-secondary" id="btn-analyze-idea" style="width:100%;" onclick="processIdeaMode()">
-                  Analyze & Value Project →
-                </button>
+                <div style="display:flex; gap:0.5rem;">
+                  <button class="btn btn-secondary" id="btn-analyze-idea" style="flex:1;" onclick="processIdeaMode()">
+                    Analyze & Value Project →
+                  </button>
+                  <button class="btn btn-outline btn-sm" onclick="clearIdeaInput()" title="Clear text">Clear</button>
+                </div>
                 <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
                   🔒 Zero math hallucinations: AI measures developer effort-hours; our engine calculates precise costs.
                 </span>
@@ -1379,7 +1518,7 @@
               <p>Step-by-step manual configuration for founders, product managers, and startups needing exact modular controls.</p>
               
               <ul style="list-style: none; margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
-                <li>✓ Dual Architecture Models (Cloud-Optimized vs Dedicated)</li>
+                <li>✓ Separated Technical, Commercial & Startup pricing</li>
                 <li>✓ Dynamic effort-hours evaluation</li>
                 <li>✓ Form volume & custom UI/UX design tiers</li>
                 <li>✓ Tailored cloud hosting scaling</li>
@@ -1406,7 +1545,7 @@
                 Project Specification Wizard
               </span>
               <div style="display:flex; gap:0.5rem;">
-                <button class="btn btn-ghost btn-sm" onclick="resetEstimator()">Reset</button>
+                <button class="btn btn-danger-outline btn-sm" onclick="clearCurrentProjectSession()">Clear All / Reset</button>
                 <button class="btn btn-outline btn-sm" onclick="showLanding()">Cancel</button>
               </div>
             </div>
@@ -1545,7 +1684,7 @@
       </div>
     </section>
 
-    <!-- RESULTS DASHBOARD (DUAL PACKAGE COMPARISON) -->
+    <!-- RESULTS DASHBOARD -->
     <section id="results-section">
       <div class="container">
 
@@ -1579,17 +1718,91 @@
           </div>
 
           <div class="results-actions" style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <button class="btn btn-danger-outline btn-sm" onclick="clearCurrentProjectSession()" title="Reset and start a fresh project">Clear All / New Project</button>
             <button class="btn btn-outline btn-sm" onclick="editEstimate()">✏️ Fine-Tune in Configurator</button>
             <button class="btn btn-outline btn-sm" onclick="saveCurrentEstimate()">💾 Save in Browser</button>
             <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Download / Print Report</button>
           </div>
         </div>
 
-        <!-- TWO ARCHITECTURAL PACKAGES -->
-        <div style="margin-bottom: 1rem;">
-          <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--secondary);">Choose Architecture Model</h3>
+        <!-- ==========================================================================
+             ENHANCEMENT 1 & 5: THREE-TIER PRICING SEPARATION
+             (Technical Cost vs Commercial Price vs Startup Price)
+             ========================================================================== -->
+        <div style="margin-bottom: 1.25rem;">
+          <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--secondary);">Three-Tier Project Valuation</h3>
           <p style="color: var(--text-muted); font-size: 0.9rem;">
-            Both packages deliver complete, production-ready code with responsive UI and verified backend security.
+            Transparent financial separation between internal technical delivery costs, fair commercial market value, and Ezrah Innovations' startup concession pricing.
+          </p>
+        </div>
+
+        <div class="pricing-tiers-headline-grid">
+          
+          <!-- TIER 1: ESTIMATED TECHNICAL COST -->
+          <div class="tier-headline-card technical-tier">
+            <div class="tier-top-row">
+              <span class="badge badge-neutral">Direct Delivery</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Break-Even Base</span>
+            </div>
+            <h4 class="tier-title">Estimated Technical Cost</h4>
+            <div class="tier-price-main" id="res-tech-cost-display">₹0</div>
+            <div class="tier-price-sub">Direct developer effort + QA + deployment + 10% contingency</div>
+            <div class="tier-explainer">
+              <strong>What it actually costs to build:</strong> Pure internal engineering labor and operational overhead required to deliver the solution with zero business markup.
+            </div>
+          </div>
+
+          <!-- TIER 2: RECOMMENDED COMMERCIAL PRICE -->
+          <div class="tier-headline-card commercial-tier">
+            <div class="tier-top-row">
+              <span class="badge badge-purple">Commercial Quote</span>
+              <span style="font-size: 0.75rem; color: var(--purple); font-weight: 600;">Standard Agency Rate</span>
+            </div>
+            <h4 class="tier-title">Recommended Commercial Price</h4>
+            <div class="tier-price-main" style="color: var(--secondary);" id="res-commercial-price-display">₹0</div>
+            <div class="tier-price-sub">Standard fair market value with ~25% agency margin</div>
+            <div class="tier-explainer">
+              <strong>What you should normally charge:</strong> Represents the fair market price reflecting engineering risk, design fidelity, testing, and a sustainable business margin.
+            </div>
+          </div>
+
+          <!-- TIER 3: STARTUP / EARLY-CLIENT PRICE (EZRAH) -->
+          <div class="tier-headline-card featured-tier">
+            <div class="tier-top-row">
+              <span class="badge badge-success">Startup Concession</span>
+              <span class="badge badge-primary" style="font-size: 0.65rem;">Recommended</span>
+            </div>
+            <h4 class="tier-title">Startup / Early-Client Price</h4>
+            <div class="tier-price-main" style="color: var(--primary);" id="res-startup-price-display">₹0</div>
+            <div class="tier-price-sub" id="res-startup-concession-note">Includes startup subsidy • 100% full dev effort preserved</div>
+            <div class="tier-explainer" style="background: #ffffff;">
+              <strong>Special Early-Stage Pricing:</strong> Ezrah Innovations absorbs initial setup overhead and leverages zero-cost edge tiers. <em>Development effort is NOT cut.</em>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==========================================================================
+             ENHANCEMENT 4: DYNAMIC ARCHITECTURE RECOMMENDATION CALLOUT
+             ========================================================================== -->
+        <div class="arch-recommendation-box" id="arch-recommendation-box">
+          <div class="arch-rec-header">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span class="badge badge-primary" id="arch-rec-badge">Architecture Advice</span>
+              <h4 class="arch-rec-title" id="arch-rec-title-text">Recommended: Cloud-Optimized Architecture</h4>
+            </div>
+            <span class="badge badge-neutral" id="arch-overengineering-badge" style="display:none;">Enterprise Overkill Warning</span>
+          </div>
+          <p class="arch-rec-body" id="arch-rec-explanation-text">
+            Evaluating recommendation...
+          </p>
+        </div>
+
+        <!-- TWO ARCHITECTURAL PACKAGES (SEPARATED DEVELOPMENT VS INFRASTRUCTURE) -->
+        <div style="margin-bottom: 1rem;">
+          <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--secondary);">Detailed Architecture Comparison</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Development costs remain driven by scope and complexity. Infrastructure and DevOps scale only where justified.
           </p>
         </div>
 
@@ -1609,7 +1822,7 @@
 
               <div class="package-cost-block">
                 <div class="cost-row-item">
-                  <span class="cost-label">Estimated Build Cost:</span>
+                  <span class="cost-label">Software Development Cost:</span>
                   <span class="cost-num" id="pkg-serverless-build">₹0</span>
                 </div>
                 <div class="cost-row-item">
@@ -1630,7 +1843,7 @@
               </div>
 
               <ul class="package-features-list" id="pkg-a-features-list">
-                <li><span>✓</span> <strong>Lead Full-Stack Architect</strong> delivery</li>
+                <li><span>✓</span> <strong>Scope-driven engineering</strong> with zero artificial inflation</li>
                 <li><span>✓</span> Auto-scaling edge runtime with zero idle waste</li>
                 <li><span>✓</span> 100% full GitHub source code ownership</li>
                 <li><span>✓</span> Delivery turnaround: <strong>1 – 4 weeks</strong></li>
@@ -1647,20 +1860,20 @@
             <div>
               <div class="package-badge-row">
                 <span class="badge badge-purple">Package B</span>
-                <span class="badge badge-neutral">High Availability</span>
+                <span class="badge badge-neutral" id="pkg-b-status-badge">High Availability</span>
               </div>
               <h4 class="package-title">Dedicated Enterprise Cluster</h4>
               <div class="package-infra-tag">
-                🏢 Isolated VPC, Clustered HA DB & Continuous SLA
+                🏢 Isolated VPC, Clustered HA DB & Dedicated DevOps
               </div>
 
               <div class="package-cost-block">
                 <div class="cost-row-item">
-                  <span class="cost-label">Estimated Build Cost:</span>
+                  <span class="cost-label">Software Development Cost:</span>
                   <span class="cost-num" id="pkg-enterprise-build">₹0</span>
                 </div>
                 <div class="cost-row-item">
-                  <span class="cost-label">Monthly Cloud & Operations:</span>
+                  <span class="cost-label">Enterprise DevOps & Cloud (Monthly):</span>
                   <span class="cost-num-sm" id="pkg-enterprise-monthly">₹3,000 – ₹8,500 / mo</span>
                 </div>
                 <div class="cost-row-item">
@@ -1689,6 +1902,26 @@
             </button>
           </div>
 
+        </div>
+
+        <!-- ==========================================================================
+             ENHANCEMENT 2: FREE-TIER POLICY TRANSPARENCY CARD
+             ========================================================================== -->
+        <div class="free-tier-policy-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.5rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span class="badge badge-success">Infrastructure Policy</span>
+              <h4 style="font-size:1.15rem; font-weight:800; color:var(--secondary);">Free-Tier Allocations & Upgrade Thresholds</h4>
+            </div>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Development effort is never reduced by free tiers</span>
+          </div>
+          <p style="font-size:0.875rem; color:var(--text-muted); line-height:1.6;">
+            Where eligible, initial infrastructure utilizes verified zero-cost allowances to keep initial client overhead minimal. Below is your current allocation, capacity limits, and expected future costs if traffic scales:
+          </p>
+
+          <div class="free-tier-grid" id="free-tier-grid-container">
+            <!-- Dynamically populated via JS based on selected scope -->
+          </div>
         </div>
 
         <!-- ==========================================================================
@@ -1873,11 +2106,13 @@
           <div class="why-chips" id="why-chips-container"></div>
         </div>
 
-        <!-- Expandable Details -->
+        <!-- ==========================================================================
+             ENHANCEMENT 5: COMPLETE ITEMISED COST BREAKDOWN TABLES
+             ========================================================================== -->
         <div class="breakdown-card">
           <div class="breakdown-header" onclick="toggleAccordion('dev-breakdown')">
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--secondary);">
-              🛠️ 1. Engineering & Development Breakdown (<span id="dev-active-pkg-label">Package A</span>)
+              🛠️ 1. Detailed Technical Engineering Breakdown (<span id="dev-active-pkg-label">Package A</span>)
             </h3>
             <span id="dev-breakdown-icon">▼</span>
           </div>
@@ -1885,9 +2120,9 @@
             <table class="cost-table">
               <thead>
                 <tr>
-                  <th>Phase / Milestone</th>
-                  <th>Deliverable</th>
-                  <th class="text-right">Estimate (₹)</th>
+                  <th>Phase / Component</th>
+                  <th>Deliverable & Scope</th>
+                  <th class="text-right">Technical Cost (₹)</th>
                 </tr>
               </thead>
               <tbody id="table-dev-rows"></tbody>
@@ -1898,7 +2133,7 @@
         <div class="breakdown-card">
           <div class="breakdown-header" onclick="toggleAccordion('infra-breakdown')">
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--secondary);">
-              ☁️ 2. Cloud Infrastructure & Operations (<span id="infra-active-pkg-label">Package A</span>)
+              ☁️ 2. Recurring Monthly Cloud & Operations Breakdown (<span id="infra-active-pkg-label">Package A</span>)
             </h3>
             <span id="infra-breakdown-icon">▼</span>
           </div>
@@ -1907,8 +2142,8 @@
               <thead>
                 <tr>
                   <th>Component</th>
-                  <th>Architecture Specification</th>
-                  <th class="text-right">Monthly (₹)</th>
+                  <th>Architecture Sizing</th>
+                  <th class="text-right">Monthly Recurring (₹)</th>
                 </tr>
               </thead>
               <tbody id="table-infra-rows"></tbody>
@@ -1950,6 +2185,7 @@
             <li><a onclick="startWizardMode()">Estimator Wizard</a></li>
             <li><a onclick="openHowItWorksModal()">Architecture Models</a></li>
             <li><a onclick="showSavedEstimates()">Saved Browser Quotes</a></li>
+            <li><a onclick="clearCurrentProjectSession()" style="color:#ef4444;">Clear Current Project</a></li>
           </ul>
         </div>
         <div>
@@ -1963,7 +2199,7 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Commercial Software Standards • Production v6.0 Dynamic Effort Engine</div>
+        <div>Commercial Software Standards • Production v7.0 Three-Tier Pricing Release</div>
       </div>
     </div>
   </footer>
@@ -1974,18 +2210,24 @@
       <button class="modal-close" onclick="closeModals()">✕</button>
       <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--secondary);">Our Estimation Methodology</h3>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
-        CostPilot evaluates real engineering effort-hours and pairs it with deterministic commercial benchmarks:
+        CostPilot evaluates real engineering effort-hours and pairs it with deterministic commercial benchmarks across three transparent tiers:
       </p>
       <div style="margin-bottom: 1rem;">
-        <strong style="color:var(--primary);">Package A: Cloud-Optimized Architecture</strong>
+        <strong style="color:var(--secondary);">1. Estimated Technical Cost</strong>
         <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">
-          Pure static sites run at ₹0/mo hosting overhead. Live database applications run at a predictable ₹1,000/mo operating cost with domain management, weekly backups, SSL, and minor updates.
+          The pure direct engineering cost required to build the solution (Development, UI/UX, Backend, DB, QA, Deployment, and 10% contingency).
+        </p>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <strong style="color:var(--purple);">2. Recommended Commercial Price</strong>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">
+          The normal agency quote reflecting engineering risk, design fidelity, and a sustainable business margin (~25%).
         </p>
       </div>
       <div style="margin-bottom: 1.25rem;">
-        <strong style="color:var(--purple);">Package B: Dedicated Enterprise Cluster</strong>
+        <strong style="color:var(--primary);">3. Startup / Early-Client Price</strong>
         <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">
-          Deploys isolated cloud instances (AWS/GCP), multi-AZ clustered databases, dedicated QA regression suites, and continuous SLAs for high-concurrency corporate systems.
+          A subsidized introductory quote by Ezrah Innovations leveraging zero-cost edge tiers and startup concessions. <em>Development effort is never reduced.</em>
         </p>
       </div>
       <div style="text-align:right;">
@@ -2039,6 +2281,9 @@
       <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
         CostPilot provides indicative market-based estimates for planning purposes. Actual project costs vary based on vendors, technologies, scope, requirements, team seniority, and usage.
       </p>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        All figures reflect verified commercial engineering standards across both lean serverless models and enterprise agency frameworks.
+      </p>
       <div style="margin-top: 1.5rem; text-align: right;">
         <button class="btn btn-primary btn-sm" onclick="closeModals()">I Understand</button>
       </div>
@@ -2062,8 +2307,8 @@
       lastUpdated: "February 2026",
 
       // Hourly base rates for effort math
-      hourlyRateLean: 450, // ₹450/hr for lean single architect delivery
-      hourlyRateEnterprise: 1100, // ₹1,100/hr for dedicated studio squad
+      hourlyRateTechnical: 400,   // ₹400/hr actual direct engineering labor cost
+      hourlyRateCommercial: 520,  // ₹520/hr standard commercial agency billing rate (~30% margin)
 
       projectTypes: {
         "portfolio": {
@@ -2266,7 +2511,8 @@
     };
 
     // ==========================================================================
-    // EFFORT-DRIVEN CALCULATION ENGINE (Single Source of Truth)
+    // THREE-TIER VALUATION & CALCULATION ENGINE
+    // (Technical Cost vs Commercial Price vs Startup Price)
     // ==========================================================================
     function calculateCostModels(cfg) {
       const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["lms"];
@@ -2278,54 +2524,51 @@
       const hoursMax = cfg.estimatedHoursMax || p.defaultHoursMax || 50;
       const avgHours = (hoursMin + hoursMax) / 2;
 
-      // 2. Package A: Effort-Driven Build Cost
-      let buildA_low = Math.round(hoursMin * pricingData.hourlyRateLean * 0.95);
-      let buildA_typ = Math.round(avgHours * pricingData.hourlyRateLean);
-      let buildA_high = Math.round(hoursMax * pricingData.hourlyRateLean * 1.1);
-
-      // Add Scope Additions (forms, dynamic questions, features)
-      buildA_typ += ui.costA;
-      buildA_low += Math.round(ui.costA * 0.85);
-      buildA_high += Math.round(ui.costA * 1.15);
-
-      buildA_typ += fScale.costA;
-      buildA_low += Math.round(fScale.costA * 0.85);
-      buildA_high += Math.round(fScale.costA * 1.15);
+      // 2. Direct Technical Engineering Base
+      let directLaborCost = Math.round(avgHours * pricingData.hourlyRateTechnical);
+      let scopeAddons = ui.costA + fScale.costA;
 
       cfg.dynamicScope.forEach(id => {
         const item = (p.dynamicQuestions || []).find(q => q.id === id);
-        if (item) {
-          buildA_typ += item.costA;
-          buildA_low += Math.round(item.costA * 0.85);
-          buildA_high += Math.round(item.costA * 1.15);
-        }
+        if (item) scopeAddons += item.costA;
       });
 
       cfg.selectedFeatures.forEach(fid => {
         const feat = pricingData.features[fid];
-        if (feat) {
-          buildA_typ += feat.costA;
-          buildA_low += Math.round(feat.costA * 0.85);
-          buildA_high += Math.round(feat.costA * 1.15);
-        }
+        if (feat) scopeAddons += feat.costA;
       });
 
-      // 3. Package B: Dedicated Studio Squad Build Cost
-      let buildB_low = Math.round(hoursMin * pricingData.hourlyRateEnterprise * 0.9);
-      let buildB_typ = Math.round(avgHours * pricingData.hourlyRateEnterprise);
-      let buildB_high = Math.round(hoursMax * pricingData.hourlyRateEnterprise * 1.15);
+      // Technical Contingency (10%)
+      const technicalSubtotal = directLaborCost + scopeAddons;
+      const technicalContingency = Math.round(technicalSubtotal * 0.10);
+      const totalTechnicalCost = technicalSubtotal + technicalContingency;
 
-      buildB_typ += ui.costB + fScale.costB;
-      buildB_low += Math.round((ui.costB + fScale.costB) * 0.85);
-      buildB_high += Math.round((ui.costB + fScale.costB) * 1.2);
+      // 3. Recommended Commercial Price (Standard ~25% agency margin + risk buffer)
+      const commercialMargin = Math.round(totalTechnicalCost * 0.28);
+      const recommendedCommercialPrice = totalTechnicalCost + commercialMargin;
 
-      // 4. MONTHLY INFRASTRUCTURE LOGIC (Static Sites = ₹0/mo)
+      // 4. Startup / Early-Client Price (Ezrah Innovations Subsidized Concession)
+      // Free tiers absorb initial infra; startup discount applied without cutting dev effort
+      const startupConcessionDiscount = Math.round(recommendedCommercialPrice * 0.18);
+      const startupEarlyClientPrice = Math.max(totalTechnicalCost, recommendedCommercialPrice - startupConcessionDiscount);
+
+      // 5. Package A & B Build Ranges
+      let buildA_typ = startupEarlyClientPrice;
+      let buildA_low = Math.round(buildA_typ * 0.88);
+      let buildA_high = Math.round(buildA_typ * 1.15);
+
+      // Enterprise Package B: Includes Enterprise DevOps, HA audit, and multi-tenant setup
+      let buildB_typ = Math.round(recommendedCommercialPrice * 1.65);
+      let buildB_low = Math.round(buildB_typ * 0.88);
+      let buildB_high = Math.round(buildB_typ * 1.15);
+
+      // 6. MONTHLY INFRASTRUCTURE & RECURRING LOGIC
       let monthlyA = 1000;
       let monthlyB = 5000;
 
       const infraDemand = cfg.monthlyInfraDemand || p.defaultInfra || "managed_cloud_app";
       if (infraDemand === "zero_infra" || p.defaultArchitecture === "static_content") {
-        monthlyA = 0; // ZERO server cost on modern edge hosting
+        monthlyA = 0; // Pure static edge delivery
         monthlyB = 2500;
       } else if (infraDemand === "light_gateway") {
         monthlyA = 300;
@@ -2335,7 +2578,22 @@
         monthlyB = (cfg.infra.users === "10k+") ? 8500 : 5000;
       }
 
-      // 5. TCO Projections
+      // 7. Dynamic Architecture Recommendation Logic
+      const isHighScale = cfg.infra.users === "10k+" || cfg.projectScale === "enterprise_scale";
+      let recommendedArch = "Cloud-Optimized Architecture";
+      let archExplanation = "";
+      let isEnterpriseOverkill = false;
+
+      if (isHighScale) {
+        recommendedArch = "Dedicated Enterprise Cluster";
+        archExplanation = "Recommended because your projected scale (>10,000 active users) and high concurrent data throughput require multi-AZ database clustering, isolated container environments, and active APM telemetry.";
+      } else {
+        recommendedArch = "Cloud-Optimized Architecture";
+        isEnterpriseOverkill = true;
+        archExplanation = "Recommended because modern serverless edge runtimes handle your projected workload with zero idle server waste. Enterprise infrastructure is not justified for the current requirements and would be over-engineering.";
+      }
+
+      // 8. TCO Projections
       const year1A = buildA_typ + (monthlyA * 12);
       const year3A = buildA_typ + (monthlyA * 36);
       const year5A = buildA_typ + (monthlyA * 60);
@@ -2352,6 +2610,14 @@
         hoursMin: hoursMin,
         hoursMax: hoursMax,
         infraDemand: infraDemand,
+        totalTechnicalCost: totalTechnicalCost,
+        recommendedCommercialPrice: recommendedCommercialPrice,
+        startupEarlyClientPrice: startupEarlyClientPrice,
+        startupConcessionDiscount: startupConcessionDiscount,
+        technicalContingency: technicalContingency,
+        recommendedArch: recommendedArch,
+        archExplanation: archExplanation,
+        isEnterpriseOverkill: isEnterpriseOverkill,
         packageA: {
           name: "Cloud-Optimized Architecture",
           tagline: infraDemand === "zero_infra" ? "Edge-Delivered Static Architecture (Zero Server Overhead)" : "Zero-Idle Serverless & Edge Compute",
@@ -2363,15 +2629,16 @@
           year3: year3A,
           year5: year5A,
           breakdown: [
-            { phase: "Requirements & Architecture Plan", desc: "Technical layout, components, and workflow mapping", cost: Math.round(buildA_typ * 0.15) },
-            { phase: "UI/UX Layout Implementation", desc: ui.title, cost: Math.round(ui.costA + (buildA_typ * 0.30)) },
-            { phase: "Core Engineering & Workflows", desc: "Interactive frontend components, styling, and data plumbing", cost: Math.round(buildA_typ * 0.35) },
-            { phase: "QA, Mobile Testing & Edge Launch", desc: "Browser testing, mobile viewport verification, and domain SSL launch", cost: Math.round(buildA_typ * 0.20) }
+            { phase: "Requirements & Architecture Plan", desc: "Technical layout, components, and workflow mapping", cost: Math.round(totalTechnicalCost * 0.12) },
+            { phase: "UI/UX Design & Prototyping", desc: ui.title, cost: Math.round(ui.costA + (totalTechnicalCost * 0.22)) },
+            { phase: "Backend & API Engineering", desc: "Data schemas, business endpoints, and logic flows", cost: Math.round(totalTechnicalCost * 0.32) },
+            { phase: "Frontend Client Implementation", desc: "Interactive components, forms, and mobile responsive views", cost: Math.round(totalTechnicalCost * 0.20) },
+            { phase: "QA, Security Testing & Edge Deployment", desc: "Cross-device regression testing, domain SSL, and monitoring setup", cost: Math.round(totalTechnicalCost * 0.14) }
           ],
           infraItems: [
-            { item: "Edge Hosting Compute", spec: infraDemand === "zero_infra" ? "Static Edge Delivery (Unlimited Requests)" : "Zero-idle auto-scaling edge compute", cost: "Included / ₹0" },
-            { item: "Domain & SSL Encryption", spec: "Custom domain DNS & automated SSL renewals", cost: infraDemand === "zero_infra" ? "Included / ₹0" : "Included" },
-            { item: "Ongoing System Maintenance", spec: infraDemand === "zero_infra" ? "Zero Server Maintenance Needed" : "Automated weekly offsite snapshots & up to 1hr tweaks/mo", cost: monthlyA === 0 ? "₹0 / mo" : `₹${monthlyA.toLocaleString('en-IN')} / mo` }
+            { item: "Hosting & Compute", spec: infraDemand === "zero_infra" ? "Static Edge Network (Vercel/Cloudflare Pages)" : "Zero-idle auto-scaling edge compute", cost: "Included / ₹0" },
+            { item: "Database & Storage", spec: infraDemand === "zero_infra" ? "Static assets / Object storage" : "Managed Cloud Database (Supabase/Neon)", cost: "Included / ₹0" },
+            { item: "Domain, SSL & Backups", spec: "Automated SSL renewals, DNS routing & offsite recovery", cost: monthlyA === 0 ? "₹0 / mo" : `₹${monthlyA.toLocaleString('en-IN')} / mo` }
           ]
         },
         packageB: {
@@ -2391,7 +2658,7 @@
             { phase: "Penetration QA & Staging Verification", desc: "Cross-device regression testing & automated deployment", cost: Math.round(buildB_typ * 0.22) }
           ],
           infraItems: [
-            { item: "Dedicated Cloud Instances", spec: "Isolated production environment", cost: "₹2,000 / mo" },
+            { item: "Dedicated Cloud Instances", spec: "Isolated production environment (AWS/GCP)", cost: "₹2,000 / mo" },
             { item: "Priority SLA & Telemetry", spec: "24/7 uptime monitoring & rapid ticket resolution", cost: `₹${monthlyB - 2000} / mo` }
           ]
         },
@@ -2408,6 +2675,49 @@
       if (cfg.selectedFeatures.includes("feat_payments")) reasons.push("Payment gateway webhooks & automated tax receipt generation");
       if (cfg.selectedFeatures.includes("feat_ai_bot")) reasons.push("AI LLM streaming token integration & vector search pipeline");
       return reasons;
+    }
+
+    // ==========================================================================
+    // SESSION RESET / CLEAR ALL CONTROLS (Enhancement 6)
+    // ==========================================================================
+    function clearCurrentProjectSession() {
+      // Clear inputs
+      document.getElementById("idea-input").value = "";
+      document.getElementById("audit-quote-amount").value = "";
+
+      // Reset state
+      state.currentStep = 1;
+      state.fromIdeaMode = false;
+      state.rawIdeaText = "";
+      state.customProjectTitle = null;
+      state.analysisBreakdown = [];
+      state.estimatedHoursMin = null;
+      state.estimatedHoursMax = null;
+      state.architectureType = null;
+      state.monthlyInfraDemand = null;
+      state.projectType = "lms";
+      state.dynamicScope = [];
+      state.uiuxTier = "custom";
+      state.formScale = "1-3";
+      state.selectedFeatures = ["feat_auth"];
+      state.infra.users = "under100";
+      state.infra.storage = "5gb";
+      state.computedResult = null;
+
+      // Hide results & estimator; return to landing
+      document.getElementById("results-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "none";
+      document.getElementById("landing-section").style.display = "block";
+      document.getElementById("parity-section").style.display = "none";
+      document.getElementById("audit-verdict-box").className = "audit-verdict-box";
+
+      showToast("Current project session cleared. Ready for a new estimate!");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function clearIdeaInput() {
+      document.getElementById("idea-input").value = "";
+      showToast("Idea text cleared.");
     }
 
     // ==========================================================================
@@ -2432,7 +2742,7 @@
 
       // 1. Calculate Ezrah Direct Labor Floor (Hours * Survival Rate)
       const hoursMin = state.computedResult.hoursMin;
-      let laborFloor = Math.round(hoursMin * 300); // Bare subsistence dev rate: ₹300/hr
+      let laborFloor = Math.round(hoursMin * 300);
 
       state.selectedFeatures.forEach(fid => {
         const feat = pricingData.features[fid];
@@ -2719,6 +3029,76 @@
       `;
     }
 
+    // ==========================================================================
+    // RENDER FREE-TIER POLICY TRANSPARENCY CARDS
+    // ==========================================================================
+    function renderFreeTierPolicyCards(res) {
+      const container = document.getElementById("free-tier-grid-container");
+      container.innerHTML = "";
+
+      const items = [
+        {
+          name: "Global Edge Hosting & CDN",
+          provider: "Cloudflare Pages / Vercel Edge",
+          status: "Free Tier Included",
+          isFree: true,
+          limit: "100 GB monthly bandwidth & unlimited requests",
+          scalingCost: "Exceeding 100GB costs ~₹1,500/mo."
+        },
+        {
+          name: "Relational Database",
+          provider: res.infraDemand === "zero_infra" ? "Not Required (Static)" : "Supabase / Neon Postgres",
+          status: res.infraDemand === "zero_infra" ? "Zero Server Overhead" : "Free Tier Allocated",
+          isFree: true,
+          limit: res.infraDemand === "zero_infra" ? "Zero database queries needed" : "Up to 500 MB data & 50,000 active sessions",
+          scalingCost: "Scales to managed tier (~₹2,000/mo) if data exceeds 500MB."
+        },
+        {
+          name: "Transactional Emails & Notifications",
+          provider: "Resend / Brevo Gateway",
+          status: "Free Tier Included",
+          isFree: true,
+          limit: "Up to 3,000 emails / month (100 emails / day)",
+          scalingCost: "Paid volume packs cost ~₹800/mo for 40,000 emails."
+        },
+        {
+          name: "Disaster Recovery & Vault Storage",
+          provider: "Cloudflare R2 Storage",
+          status: "Free Tier Included",
+          isFree: true,
+          limit: "10 GB storage with 0 egress bandwidth fees",
+          scalingCost: "Scales at ₹1.2 per additional GB/month."
+        }
+      ];
+
+      // Add paid AI or SMS items if applicable
+      if (state.selectedFeatures.includes("feat_ai_bot") || state.projectType === "ai_app") {
+        items.push({
+          name: "AI LLM Token API",
+          provider: "Google Gemini / OpenAI Platform",
+          status: "Usage-Based Paid API",
+          isFree: false,
+          limit: "Free evaluation tier up to 1,500 requests/day",
+          scalingCost: "Commercial scaling bills ~₹1,200 to ₹3,500/mo based on token usage."
+        });
+      }
+
+      items.forEach(it => {
+        const div = document.createElement("div");
+        div.className = `free-tier-item ${it.isFree ? '' : 'paid-item'}`;
+        div.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+            <strong>${it.name}</strong>
+            <span class="badge ${it.isFree ? 'badge-success' : 'badge-warning'}" style="font-size:0.65rem;">${it.status}</span>
+          </div>
+          <p style="margin-bottom:0.35rem;"><strong>Platform:</strong> ${it.provider}</p>
+          <p style="margin-bottom:0.35rem;"><strong>Workload Limit:</strong> ${it.limit}</p>
+          <p style="color:var(--text-light); font-size:0.75rem;"><strong>When Scaling Up:</strong> ${it.scalingCost}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
     // UI Controllers
     function showLanding() {
       document.getElementById("landing-section").style.display = "block";
@@ -2759,20 +3139,7 @@
 
     function resetEstimator() {
       if (confirm("Reset current configuration to default benchmarks?")) {
-        state.currentStep = 1;
-        state.fromIdeaMode = false;
-        state.customProjectTitle = null;
-        state.estimatedHoursMin = null;
-        state.estimatedHoursMax = null;
-        state.architectureType = null;
-        state.monthlyInfraDemand = null;
-        state.projectType = "lms";
-        state.dynamicScope = [];
-        state.uiuxTier = "custom";
-        state.formScale = "1-3";
-        state.selectedFeatures = ["feat_auth"];
-        renderWizardStep(1);
-        showToast("Estimator reset.");
+        clearCurrentProjectSession();
       }
     }
 
@@ -2992,7 +3359,18 @@
         hoursBadge.innerText = `${res.hoursMin}–${res.hoursMax} Dev Hours`;
       }
 
-      // Smart Analysis Callout
+      // 1. Three-Tier Valuation Display
+      document.getElementById("res-tech-cost-display").innerText = formatINR(res.totalTechnicalCost);
+      document.getElementById("res-commercial-price-display").innerText = formatINR(res.recommendedCommercialPrice);
+      document.getElementById("res-startup-price-display").innerText = formatINR(res.startupEarlyClientPrice);
+      document.getElementById("res-startup-concession-note").innerText = `Includes ₹${res.startupConcessionDiscount.toLocaleString('en-IN')} startup concession • 100% full dev effort preserved`;
+
+      // 2. Architecture Recommendation Box
+      document.getElementById("arch-rec-title-text").innerText = `Recommended: ${res.recommendedArch}`;
+      document.getElementById("arch-rec-explanation-text").innerText = res.archExplanation;
+      document.getElementById("arch-overengineering-badge").style.display = res.isEnterpriseOverkill ? "inline-flex" : "none";
+
+      // 3. Smart Analysis Callout
       const banner = document.getElementById("smart-analysis-banner");
       if (state.fromIdeaMode) {
         banner.classList.add("active");
@@ -3010,7 +3388,7 @@
         banner.classList.remove("active");
       }
 
-      // Top Cards Figures
+      // 4. Top Cards Figures
       document.getElementById("pkg-serverless-build").innerText = formatINRRange(res.packageA.buildLow, res.packageA.buildHigh);
       document.getElementById("pkg-serverless-monthly").innerText = res.packageA.monthly === 0 ? "₹0 / mo (Zero Server Cost)" : `₹${res.packageA.monthly.toLocaleString('en-IN')} / mo`;
       document.getElementById("pkg-serverless-year1").innerText = formatINR(res.packageA.year1);
@@ -3029,6 +3407,9 @@
         document.getElementById("pkg-a-infra-tag").innerText = "⚡ Zero-Idle Serverless & Auto-Scaling Edge DB";
         document.getElementById("pkg-a-best-for-desc").innerText = "Startups, coaching centers, and MVPs scaling up to 10,000 monthly sessions with predictable cloud costs.";
       }
+
+      // 5. Render Free-Tier Policy Cards
+      renderFreeTierPolicyCards(res);
 
       updateSelectedPackageDisplay();
 
@@ -3207,7 +3588,6 @@
       } else if (isPortfolio) {
         state.projectType = "portfolio";
         state.customProjectTitle = generateSmartTitle(text, "portfolio");
-        // DYNAMIC EFFORT CHECK FOR PORTFOLIO:
         if (lower.includes("simple") || lower.includes("basic") || lower.includes("1 page") || lower.includes("photos") || lower.includes("minimal")) {
           state.estimatedHoursMin = 8;
           state.estimatedHoursMax = 14;
