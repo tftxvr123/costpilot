@@ -1,0 +1,3274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CostPilot — Digital Project Cost Estimator</title>
+  <meta name="description" content="Estimate the real cost of building, launching, and maintaining websites, apps, AI solutions, and software using Bangalore market benchmarks.">
+  <meta property="og:title" content="CostPilot — Digital Project Cost Estimator">
+  <meta property="og:description" content="Know what your digital project really costs. Build Cost + Launch Cost + Running Cost + Maintenance Cost = Total Cost of Ownership.">
+  <meta property="og:type" content="website">
+
+  <!-- Inter Font from Google Fonts for clean SaaS typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       CSS SYSTEM & DESIGN TOKENS
+       ========================================================================== */
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      
+      --secondary: #0f172a;
+      --secondary-light: #1e293b;
+      
+      --accent: #06b6d4;
+      --accent-soft: #ecfeff;
+      
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fffbeb;
+      --danger: #ef4444;
+      
+      --bg-body: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-card: #ffffff;
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      --border-color: #e2e8f0;
+      --border-focus: #93c5fd;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --container-max: 1200px;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    a:hover {
+      color: var(--primary-hover);
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    /* Badge & Micro UI */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+    }
+    .badge-primary { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
+    .badge-neutral { background: var(--bg-subtle); color: var(--text-muted); border: 1px solid var(--border-color); }
+    .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-warning { background: var(--warning-light); color: var(--warning); }
+
+    /* Button System */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+    }
+    .btn-secondary {
+      background: var(--secondary);
+      color: #ffffff;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--secondary-light);
+    }
+    .btn-outline {
+      background: #ffffff;
+      border-color: var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background: var(--bg-subtle);
+      border-color: var(--text-muted);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg-subtle);
+      color: var(--text-main);
+    }
+    .btn-lg {
+      padding: 0.85rem 1.75rem;
+      font-size: 1.05rem;
+      border-radius: var(--radius-lg);
+    }
+    .btn-sm {
+      padding: 0.4rem 0.75rem;
+      font-size: 0.825rem;
+    }
+
+    /* Top Navigation */
+    .site-header {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--secondary);
+      line-height: 1.1;
+    }
+    .brand-by {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .brand-by strong {
+      color: var(--secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    .nav-link {
+      font-weight: 500;
+      font-size: 0.925rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    /* Disclaimer Ribbon */
+    .market-banner {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.45rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .market-banner strong {
+      color: var(--secondary);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4.5rem 0 3rem;
+      text-align: center;
+      position: relative;
+    }
+    .hero-pretitle {
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--secondary);
+      max-width: 900px;
+      margin: 0 auto 1.25rem;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      font-weight: 400;
+    }
+    .hero-formula {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #ffffff;
+      padding: 0.6rem 1.25rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 2.25rem;
+    }
+    .hero-formula .eq-highlight {
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-full);
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Mode Selection Cards */
+    .mode-selection {
+      padding: 3rem 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .mode-card {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .mode-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .mode-badge {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+    }
+    .mode-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-lg);
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .mode-card h3 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+    .mode-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    /* Idea Mode Interactive Box */
+    .idea-box {
+      margin-top: 1rem;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+    }
+    .idea-textarea {
+      width: 100%;
+      min-height: 110px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      font-size: 0.925rem;
+      resize: vertical;
+      margin-bottom: 0.75rem;
+      transition: var(--transition);
+    }
+    .idea-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    .idea-footnote {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 0.5rem;
+    }
+
+    /* Value Proposition Pillars */
+    .value-props {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .vp-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .vp-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .vp-card h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: var(--secondary);
+    }
+    .vp-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       WIZARD ESTIMATOR COMPONENT
+       ========================================================================== */
+    #estimator-section {
+      display: none;
+      padding: 2.5rem 0 5rem;
+    }
+    .wizard-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    
+    /* Stepper Bar */
+    .wizard-header {
+      padding: 1.75rem 2rem;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .wizard-top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: var(--border-color);
+      z-index: 1;
+    }
+    .step-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+    .step-item.active .step-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 0 0 4px var(--primary-light);
+    }
+    .step-item.completed .step-circle {
+      border-color: var(--success);
+      background: var(--success);
+      color: #ffffff;
+    }
+    .step-label {
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .step-item.active .step-label {
+      color: var(--primary);
+    }
+
+    /* Wizard Content Area */
+    .wizard-body {
+      padding: 2.25rem;
+      min-height: 480px;
+    }
+    .step-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .step-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 0.35rem;
+    }
+    .step-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Card Selection Grids */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .selectable-card {
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: var(--transition);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+    }
+    .selectable-card:hover {
+      border-color: var(--primary-border);
+      background: var(--bg-body);
+    }
+    .selectable-card.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+    .card-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.6rem;
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 0.975rem;
+      color: var(--secondary);
+      margin-bottom: 0.25rem;
+    }
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+    .card-check {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: transparent;
+    }
+    .selectable-card.selected .card-check {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Dynamic Questions Sections */
+    .form-group-section {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .form-group-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .form-subhead {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 0.85rem;
+    }
+
+    .pill-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+    .pill-btn {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--border-color);
+      background: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .pill-btn:hover {
+      border-color: var(--text-muted);
+    }
+    .pill-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Category Checkbox Grid */
+    .feature-category {
+      margin-bottom: 1.75rem;
+    }
+    .feature-category-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 0.75rem;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--bg-body);
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      font-size: 0.875rem;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition);
+    }
+    .feature-item:hover {
+      background: #ffffff;
+      border-color: var(--primary-border);
+    }
+    .feature-item input {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* Wizard Bottom Navigation */
+    .wizard-footer {
+      padding: 1.25rem 2rem;
+      background: var(--bg-subtle);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ==========================================================================
+       RESULTS DASHBOARD
+       ========================================================================== */
+    #results-section {
+      display: none;
+      padding: 2.5rem 0 5rem;
+    }
+    .results-header {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .estimate-meta-tag {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+    }
+    .results-title-group h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--secondary);
+      letter-spacing: -0.02em;
+    }
+    .results-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* Big Metric Headline Cards */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .metric-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .metric-card.hero-metric {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #ffffff 0%, var(--primary-light) 100%);
+    }
+    .metric-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .metric-value {
+      font-size: 1.95rem;
+      font-weight: 800;
+      color: var(--secondary);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .metric-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Visual TCO Timeline Graph */
+    .tco-dashboard {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .tco-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .tco-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .tco-bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .tco-bar-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .tco-bar-track {
+      height: 24px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      display: flex;
+    }
+    .bar-seg-dev { background: var(--primary); }
+    .bar-seg-infra { background: var(--accent); }
+    .bar-seg-maint { background: #8b5cf6; }
+
+    .tco-legend {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Accordion Breakdown Sections */
+    .breakdown-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .breakdown-header {
+      padding: 1.25rem 1.5rem;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition);
+    }
+    .breakdown-header:hover {
+      background: var(--bg-body);
+    }
+    .breakdown-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .breakdown-body {
+      padding: 0 1.5rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: block;
+    }
+    .breakdown-body.collapsed {
+      display: none;
+    }
+
+    /* Cost Table */
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+    .cost-table th, .cost-table td {
+      padding: 0.75rem 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .cost-table th {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    .cost-table td.text-right, .cost-table th.text-right {
+      text-align: right;
+    }
+    .cost-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Reason Why Section */
+    .why-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .why-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+    .why-chip {
+      background: var(--bg-body);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* MVP vs Full Scope Section */
+    .scope-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .scope-card {
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      background: #ffffff;
+    }
+    .scope-card.recommended {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .scope-badge {
+      margin-bottom: 0.75rem;
+    }
+    .scope-price {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin: 0.5rem 0 1rem;
+    }
+
+    /* Timeline & Gantt Representation */
+    .timeline-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .phases-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .phase-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 100px;
+      align-items: center;
+      gap: 1rem;
+    }
+    .phase-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .phase-bar-track {
+      background: var(--bg-subtle);
+      height: 12px;
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .phase-bar-fill {
+      background: var(--primary);
+      height: 100%;
+      border-radius: var(--radius-full);
+    }
+    .phase-duration {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* Comparison Table (Basic / Standard / Advanced) */
+    .tiers-section {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      overflow-x: auto;
+    }
+    .tiers-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      margin-top: 1.25rem;
+    }
+    .tiers-table th, .tiers-table td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .tiers-table th {
+      background: var(--bg-subtle);
+      font-weight: 700;
+    }
+    .tiers-table th.highlight, .tiers-table td.highlight {
+      background: var(--primary-light);
+      font-weight: 700;
+    }
+
+    /* Lead Generation Ezrah Section */
+    .lead-box {
+      background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: var(--radius-xl);
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .lead-box h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+    .lead-box p {
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-size: 1.05rem;
+    }
+
+    /* Modal Styling */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+    .modal-window {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      max-width: 580px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      padding: 2.25rem;
+      position: relative;
+      animation: modalSlide 0.25s ease;
+    }
+    @keyframes modalSlide {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .modal-form label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 0.35rem;
+      color: var(--secondary);
+    }
+    .modal-form input, .modal-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--secondary);
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      font-size: 0.9rem;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      animation: toastIn 0.2s ease;
+    }
+    @keyframes toastIn {
+      from { transform: translateY(10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Footer */
+    .site-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      padding: 3.5rem 0 2rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      max-width: 320px;
+      margin-top: 0.75rem;
+    }
+    .footer-col h5 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .footer-col a {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-inner { height: 60px; }
+      .nav-links { display: none; }
+      .wizard-body { padding: 1.5rem; }
+      .phase-row { grid-template-columns: 1fr; gap: 0.35rem; }
+      .phase-duration { text-align: left; }
+      .footer-top { grid-template-columns: 1fr; }
+      .stepper .step-label { display: none; }
+      .hero { padding: 3rem 0 2rem; }
+    }
+
+    /* ==========================================================================
+       PRINT / PDF VIEWPORT OPTIMIZATION
+       ========================================================================== */
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+        font-size: 11pt;
+      }
+      .site-header, .market-banner, .site-footer, .results-actions,
+      .mode-selection, .hero, .lead-box, #estimator-section, .toast-container {
+        display: none !important;
+      }
+      #results-section {
+        display: block !important;
+        padding: 0;
+      }
+      .breakdown-body {
+        display: block !important;
+      }
+      .results-header, .metric-card, .tco-dashboard, .breakdown-card, .why-section, .timeline-card, .tiers-section {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+        margin-bottom: 1.5rem !important;
+      }
+      .print-header-brand {
+        display: block !important;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #000;
+        padding-bottom: 0.5rem;
+      }
+    }
+    .print-header-brand {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement / Market Benchmark Notice -->
+  <aside class="market-banner" role="complementary" aria-label="Market Data Disclaimer">
+    📍 <strong>Bangalore Market Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Confidence: <span class="badge badge-success" style="font-size:0.65rem; padding:1px 6px;">High</span>) — CostPilot provides indicative market-based benchmarks for planning purposes.
+  </aside>
+
+  <!-- Navigation -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="#" class="brand-group" onclick="showLanding(); return false;" aria-label="CostPilot Home">
+          <div class="logo-mark">CP</div>
+          <div class="logo-text">
+            <span class="brand-title">CostPilot</span>
+            <span class="brand-by">Built by <strong>Ezrah Innovations</strong></span>
+          </div>
+        </a>
+        <nav aria-label="Main Navigation">
+          <ul class="nav-links">
+            <li><a class="nav-link" onclick="openHowItWorksModal()">How It Works</a></li>
+            <li><a class="nav-link" onclick="showSavedEstimates()">Saved Estimates</a></li>
+            <li><a class="nav-link" onclick="openContactModal()">Consultation</a></li>
+          </ul>
+        </nav>
+        <div>
+          <button class="btn btn-primary btn-sm" onclick="startWizardMode()">Estimate My Project</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT WRAPPER -->
+  <main id="app-root">
+
+    <!-- LANDING VIEW -->
+    <section id="landing-section">
+      <div class="container">
+        
+        <!-- Hero -->
+        <div class="hero">
+          <div class="hero-pretitle">
+            <span class="badge badge-primary">✨ Digital Project TCO Intelligence</span>
+          </div>
+          <h1>Know What Your Digital Project <span>Really Costs</span>.</h1>
+          <p class="hero-subtitle">
+            Get an authoritative, market-based estimate for building, launching, and maintaining your digital product using real Bangalore software benchmarks.
+          </p>
+
+          <div class="hero-formula">
+            <span>Build Cost</span>
+            <span>+</span>
+            <span>Launch Cost</span>
+            <span>+</span>
+            <span>Running Cost</span>
+            <span>+</span>
+            <span>Maintenance</span>
+            <span>=</span>
+            <span class="eq-highlight">Total Cost of Ownership (TCO)</span>
+          </div>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="startWizardMode()">Estimate My Project</button>
+            <button class="btn btn-outline btn-lg" onclick="openHowItWorksModal()">Explore How It Works</button>
+          </div>
+        </div>
+
+        <!-- Mode Selection Options -->
+        <div class="mode-selection">
+          <div class="section-header">
+            <h2 class="section-title">Two Ways to Estimate</h2>
+            <p class="section-desc">Choose between natural language concept breakdown or our comprehensive architectural configuration wizard.</p>
+          </div>
+
+          <div class="modes-grid">
+            
+            <!-- Mode 1: Idea Natural Language -->
+            <div class="mode-card">
+              <span class="badge badge-primary mode-badge">Smart Analysis</span>
+              <div>
+                <div class="mode-icon">💡</div>
+                <h3>I Have an Idea</h3>
+                <p>Tell CostPilot what you want to build in your own words. We will break down requirements, phases, and estimated costs automatically.</p>
+                
+                <div class="idea-box">
+                  <textarea 
+                    id="idea-input" 
+                    class="idea-textarea" 
+                    placeholder="e.g. I want to build an online learning platform for a coaching centre. Students should be able to register, watch recorded classes, download PDFs, attend live classes and pay monthly fees."
+                    aria-label="Describe your idea"
+                  ></textarea>
+                  <button class="btn btn-secondary" style="width:100%;" onclick="processIdeaMode()">
+                    <span>⚡ Analyze My Idea</span>
+                  </button>
+                  <span class="idea-footnote">
+                    🔒 Phase 1 uses local client-side requirement analysis. AI-powered continuous analysis can be connected in future versions.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode 2: Multi-Step Configurator -->
+            <div class="mode-card">
+              <span class="badge badge-neutral mode-badge">Precision Mode</span>
+              <div>
+                <div class="mode-icon">⚙️</div>
+                <h3>I Know What I Need</h3>
+                <p>Configure project scope, specific technical integrations, scale, hosting infrastructure, and support tiers step-by-step.</p>
+                
+                <ul style="list-style: none; margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
+                  <li>✓ 11 Specific Software Archetypes</li>
+                  <li>✓ Dynamic Scope & Form Scale</li>
+                  <li>✓ 30+ Core Technical Capabilities</li>
+                  <li>✓ Cloud Infrastructure & Bandwidth Sizing</li>
+                  <li>✓ 1, 3, & 5-Year Maintenance Planning</li>
+                </ul>
+              </div>
+              <button class="btn btn-primary" onclick="startWizardMode()">Start Estimator Wizard →</button>
+            </div>
+
+          </div>
+
+          <!-- Value Propositions -->
+          <div class="value-props">
+            <div class="vp-card">
+              <div class="vp-icon">📊</div>
+              <h4>Market-Based</h4>
+              <p>Estimates based on configurable Bangalore development benchmarks rather than arbitrary vendor quotes.</p>
+            </div>
+            <div class="vp-card">
+              <div class="vp-icon">🧩</div>
+              <h4>Complete Cost Breakdown</h4>
+              <p>See development, infrastructure, testing, deployment, and maintenance separated transparently.</p>
+            </div>
+            <div class="vp-card">
+              <div class="vp-icon">⏳</div>
+              <h4>Total Cost of Ownership</h4>
+              <p>Avoid post-launch surprises. Understand what your system actually costs over 1, 3, and 5 years.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MULTI-STEP WIZARD VIEW -->
+    <section id="estimator-section">
+      <div class="container">
+        
+        <div class="wizard-wrapper">
+          
+          <!-- Wizard Stepper Nav -->
+          <div class="wizard-header">
+            <div class="wizard-top-actions">
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                Estimate Configurator
+              </div>
+              <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-ghost btn-sm" onclick="resetEstimator()">Reset</button>
+                <button class="btn btn-outline btn-sm" onclick="showLanding()">Cancel</button>
+              </div>
+            </div>
+
+            <div class="stepper" id="stepper-indicator">
+              <div class="step-item active" data-step="1" onclick="jumpToStep(1)">
+                <div class="step-circle">1</div>
+                <span class="step-label">Project</span>
+              </div>
+              <div class="step-item" data-step="2" onclick="jumpToStep(2)">
+                <div class="step-circle">2</div>
+                <span class="step-label">Scope</span>
+              </div>
+              <div class="step-item" data-step="3" onclick="jumpToStep(3)">
+                <div class="step-circle">3</div>
+                <span class="step-label">Features</span>
+              </div>
+              <div class="step-item" data-step="4" onclick="jumpToStep(4)">
+                <div class="step-circle">4</div>
+                <span class="step-label">Infra</span>
+              </div>
+              <div class="step-item" data-step="5" onclick="jumpToStep(5)">
+                <div class="step-circle">5</div>
+                <span class="step-label">Maintenance</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wizard Body Panels -->
+          <div class="wizard-body">
+
+            <!-- STEP 1: PROJECT TYPE -->
+            <div class="step-pane active" id="wizard-step-1">
+              <h2 class="step-title">What are you building?</h2>
+              <p class="step-desc">Select the primary architecture that best matches your target product.</p>
+              
+              <div class="cards-grid" id="project-types-container">
+                <!-- Injected dynamically via JS from pricingData -->
+              </div>
+            </div>
+
+            <!-- STEP 2: DYNAMIC SCOPE, UI/UX & FORMS -->
+            <div class="step-pane" id="wizard-step-2">
+              <h2 class="step-title">Project Scope & Experience</h2>
+              <p class="step-desc">Specify user scale, interface fidelity, and dynamic specifications for your chosen archetype.</p>
+
+              <!-- Dynamic Project Specific Questions -->
+              <div class="form-group-section">
+                <h3 class="form-subhead" id="scope-dynamic-title">Project Specifics</h3>
+                <div class="pill-selector" id="scope-dynamic-options">
+                  <!-- Dynamic questions populate here based on Step 1 selection -->
+                </div>
+              </div>
+
+              <!-- UI/UX Level -->
+              <div class="form-group-section">
+                <h3 class="form-subhead">What level of UI/UX design do you need?</h3>
+                <div class="cards-grid" id="uiux-options-container" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Form Volume -->
+              <div class="form-group-section">
+                <h3 class="form-subhead">How many interactive forms/workflows do you need?</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                  Examples: Contact forms, user registration, onboarding questionnaires, checkout flows, custom reports.
+                </p>
+                <div class="pill-selector" id="form-count-options">
+                  <button class="pill-btn selected" data-forms="none" onclick="selectFormCount('none')">None / Simple</button>
+                  <button class="pill-btn" data-forms="1-3" onclick="selectFormCount('1-3')">1 – 3 Forms</button>
+                  <button class="pill-btn" data-forms="4-8" onclick="selectFormCount('4-8')">4 – 8 Forms</button>
+                  <button class="pill-btn" data-forms="9-15" onclick="selectFormCount('9-15')">9 – 15 Forms</button>
+                  <button class="pill-btn" data-forms="15+" onclick="selectFormCount('15+')">15+ Complex Workflows</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- STEP 3: FEATURES SELECTION -->
+            <div class="step-pane" id="wizard-step-3">
+              <h2 class="step-title">Feature Capabilities</h2>
+              <p class="step-desc">Pick the technical capabilities required for your digital platform.</p>
+              
+              <div id="features-categorized-container">
+                <!-- Grouped categories will be dynamically rendered here -->
+              </div>
+            </div>
+
+            <!-- STEP 4: INFRASTRUCTURE & SCALING -->
+            <div class="step-pane" id="wizard-step-4">
+              <h2 class="step-title">Infrastructure, Scale & Services</h2>
+              <p class="step-desc">Development is only the beginning. Define your production capacity and server operations.</p>
+              
+              <div class="form-group-section">
+                <h3 class="form-subhead">Expected Concurrent Users / Scale</h3>
+                <div class="pill-selector" id="infra-users-selector">
+                  <button class="pill-btn selected" data-val="under100" onclick="setInfraParam('users', 'under100')">Under 100</button>
+                  <button class="pill-btn" data-val="100-500" onclick="setInfraParam('users', '100-500')">100 – 500</button>
+                  <button class="pill-btn" data-val="500-1000" onclick="setInfraParam('users', '500-1000')">500 – 1,000</button>
+                  <button class="pill-btn" data-val="1k-10k" onclick="setInfraParam('users', '1k-10k')">1,000 – 10,000</button>
+                  <button class="pill-btn" data-val="10k+" onclick="setInfraParam('users', '10k+')">10,000+ High Scale</button>
+                </div>
+              </div>
+
+              <div class="form-group-section">
+                <h3 class="form-subhead">Monthly Storage Requirements</h3>
+                <div class="pill-selector" id="infra-storage-selector">
+                  <button class="pill-btn selected" data-val="5gb" onclick="setInfraParam('storage', '5gb')">Under 5 GB</button>
+                  <button class="pill-btn" data-val="20gb" onclick="setInfraParam('storage', '20gb')">5 – 20 GB</button>
+                  <button class="pill-btn" data-val="100gb" onclick="setInfraParam('storage', '100gb')">20 – 100 GB</button>
+                  <button class="pill-btn" data-val="500gb" onclick="setInfraParam('storage', '500gb')">100 – 500 GB</button>
+                  <button class="pill-btn" data-val="500gb+" onclick="setInfraParam('storage', '500gb+')">500 GB+ Media Heavy</button>
+                </div>
+              </div>
+
+              <div class="form-group-section">
+                <h3 class="form-subhead">Database Tier & Redundancy</h3>
+                <div class="pill-selector" id="infra-db-selector">
+                  <button class="pill-btn selected" data-val="basic" onclick="setInfraParam('database', 'basic')">Basic (Single Instance)</button>
+                  <button class="pill-btn" data-val="standard" onclick="setInfraParam('database', 'standard')">Standard (Managed Cloud DB with Backups)</button>
+                  <button class="pill-btn" data-val="advanced" onclick="setInfraParam('database', 'advanced')">Advanced (Multi-AZ HA Cluster)</button>
+                </div>
+              </div>
+
+              <div class="form-group-section">
+                <h3 class="form-subhead">Managed Cloud Services Required</h3>
+                <div class="feature-grid" id="infra-services-selector">
+                  <!-- Injected from pricing data -->
+                </div>
+              </div>
+
+            </div>
+
+            <!-- STEP 5: MAINTENANCE & LONGEVITY -->
+            <div class="step-pane" id="wizard-step-5">
+              <h2 class="step-title">Maintenance & Ongoing Support</h2>
+              <p class="step-desc">Software requires updates, security patching, and dependency maintenance to remain operational.</p>
+              
+              <div class="form-group-section">
+                <h3 class="form-subhead">Support & Patching Level</h3>
+                <div class="cards-grid" id="maint-support-options" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <div class="form-group-section">
+                <h3 class="form-subhead">Frequency of Ongoing Feature Enhancements</h3>
+                <div class="pill-selector" id="maint-freq-selector">
+                  <button class="pill-btn selected" data-val="rarely" onclick="setMaintFreq('rarely')">Rarely (Critical fixes only)</button>
+                  <button class="pill-btn" data-val="quarterly" onclick="setMaintFreq('quarterly')">Quarterly Updates</button>
+                  <button class="pill-btn" data-val="monthly" onclick="setMaintFreq('monthly')">Monthly Continuous Sprints</button>
+                  <button class="pill-btn" data-val="continuous" onclick="setMaintFreq('continuous')">Continuous Dedicated Development</button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Wizard Footer Controls -->
+          <div class="wizard-footer">
+            <button class="btn btn-outline" id="wizard-prev-btn" onclick="wizardPrev()">← Back</button>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              Step <span id="current-step-display">1</span> of 5
+            </div>
+            <button class="btn btn-primary" id="wizard-next-btn" onclick="wizardNext()">Continue →</button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RESULTS DASHBOARD VIEW -->
+    <section id="results-section">
+      <div class="container">
+        
+        <!-- Print Header Only Seen in PDFs -->
+        <div class="print-header-brand">
+          <h1>CostPilot — Project Valuation Report</h1>
+          <p>Market Benchmark: Bangalore, India • Built by Ezrah Innovations</p>
+        </div>
+
+        <!-- Dashboard Header -->
+        <div class="results-header">
+          <div class="results-title-group">
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom: 0.5rem;">
+              <span class="estimate-meta-tag" id="res-estimate-id">CP-2026-00000</span>
+              <span class="badge badge-success">Bangalore Benchmark</span>
+            </div>
+            <h2 id="res-project-name">Digital Web Application</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.25rem;">
+              Estimated Complexity: <strong id="res-complexity">Standard</strong> • Confidence: <strong>Medium-High</strong>
+            </p>
+          </div>
+
+          <div class="results-actions">
+            <button class="btn btn-outline btn-sm" onclick="editEstimate()">✏️ Edit Requirements</button>
+            <button class="btn btn-outline btn-sm" onclick="saveCurrentEstimate()">💾 Save in Browser</button>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Download / Print PDF</button>
+          </div>
+        </div>
+
+        <!-- 3 Big Metric Cards -->
+        <div class="metrics-row">
+          
+          <div class="metric-card hero-metric">
+            <div class="metric-label">Estimated Build Cost</div>
+            <div class="metric-value" id="res-build-range">₹0 – ₹0</div>
+            <div class="metric-sub">One-time design, engineering & deployment</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Monthly Operating Cost</div>
+            <div class="metric-value" id="res-monthly-range">₹0 – ₹0</div>
+            <div class="metric-sub">Hosting, APIs, databases & maintenance</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-label">Year 1 Total Investment</div>
+            <div class="metric-value" id="res-year1-range">₹0 – ₹0</div>
+            <div class="metric-sub">Build cost + 12 months running & support</div>
+          </div>
+
+        </div>
+
+        <!-- Total Cost of Ownership (TCO) Visualization -->
+        <div class="tco-dashboard">
+          <div class="tco-header">
+            <div>
+              <h3 style="font-size: 1.3rem; font-weight: 700; color: var(--secondary);">Total Cost of Ownership (TCO)</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">Projected cumulative spend over realistic operating horizons</p>
+            </div>
+            <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 0.25rem 0.75rem; border-radius: var(--radius-full);">
+              1, 3 & 5-Year Horizon
+            </div>
+          </div>
+
+          <!-- Interactive Bar Comparisons -->
+          <div class="tco-bars">
+            <div class="tco-bar-item">
+              <div class="tco-bar-info">
+                <span>1 Year Total Horizon</span>
+                <span id="tco-val-1yr">₹0</span>
+              </div>
+              <div class="tco-bar-track">
+                <div class="bar-seg-dev" id="tco-bar-1-dev" style="width: 70%;"></div>
+                <div class="bar-seg-infra" id="tco-bar-1-infra" style="width: 15%;"></div>
+                <div class="bar-seg-maint" id="tco-bar-1-maint" style="width: 15%;"></div>
+              </div>
+            </div>
+
+            <div class="tco-bar-item">
+              <div class="tco-bar-info">
+                <span>3 Year Cumulative Spend</span>
+                <span id="tco-val-3yr">₹0</span>
+              </div>
+              <div class="tco-bar-track">
+                <div class="bar-seg-dev" id="tco-bar-3-dev" style="width: 40%;"></div>
+                <div class="bar-seg-infra" id="tco-bar-3-infra" style="width: 30%;"></div>
+                <div class="bar-seg-maint" id="tco-bar-3-maint" style="width: 30%;"></div>
+              </div>
+            </div>
+
+            <div class="tco-bar-item">
+              <div class="tco-bar-info">
+                <span>5 Year Long-Term Lifecycle</span>
+                <span id="tco-val-5yr">₹0</span>
+              </div>
+              <div class="tco-bar-track">
+                <div class="bar-seg-dev" id="tco-bar-5-dev" style="width: 25%;"></div>
+                <div class="bar-seg-infra" id="tco-bar-5-infra" style="width: 35%;"></div>
+                <div class="bar-seg-maint" id="tco-bar-5-maint" style="width: 40%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tco-legend">
+            <div class="legend-item"><span class="legend-dot bar-seg-dev"></span> Initial Engineering</div>
+            <div class="legend-item"><span class="legend-dot bar-seg-infra"></span> Cloud Infrastructure & APIs</div>
+            <div class="legend-item"><span class="legend-dot bar-seg-maint"></span> Software Maintenance & Support</div>
+          </div>
+        </div>
+
+        <!-- MVP vs Full Scope Comparison -->
+        <div class="scope-comparison">
+          <div class="scope-card">
+            <span class="badge badge-neutral scope-badge">Lean Approach</span>
+            <h4>Minimum Viable Product (MVP)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Core features only to test product-market fit fast with lower capital risk.</p>
+            <div class="scope-price" id="res-mvp-cost">₹0 – ₹0</div>
+            <ul style="font-size: 0.85rem; color: var(--text-muted); list-style: none; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li>✓ Core essential workflows only</li>
+              <li>✓ Template-guided customized UI</li>
+              <li>✓ Managed base infrastructure</li>
+              <li>✓ Typical build time: 4–7 weeks</li>
+            </ul>
+          </div>
+
+          <div class="scope-card recommended">
+            <span class="badge badge-primary scope-badge">Full Specification</span>
+            <h4>Full-Featured Release</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">All selected capabilities, high polish, full admin controls, and complete integrations.</p>
+            <div class="scope-price" id="res-full-cost">₹0 – ₹0</div>
+            <ul style="font-size: 0.85rem; color: var(--text-muted); list-style: none; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li>✓ All selected functional features</li>
+              <li>✓ Custom tailored UI/UX design</li>
+              <li>✓ Redundant high-scale cloud sizing</li>
+              <li>✓ Typical build time: 8–14 weeks</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- "Why Does It Cost This Much?" Dynamic Explanations -->
+        <div class="why-section">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">Why is your estimate in this range?</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem;" id="why-summary-text">
+            Based on your scope, the primary cost drivers include:
+          </p>
+          <div class="why-chips" id="why-chips-container">
+            <!-- Injected chips based on selections -->
+          </div>
+        </div>
+
+        <!-- Detailed Breakdown (Accordions) -->
+        <div class="breakdown-card">
+          <div class="breakdown-header" onclick="toggleAccordion('dev-breakdown')">
+            <h3><span>🛠️</span> 1. Development & Engineering Breakdown</h3>
+            <span id="dev-breakdown-icon">▼</span>
+          </div>
+          <div class="breakdown-body" id="dev-breakdown">
+            <table class="cost-table">
+              <thead>
+                <tr>
+                  <th>Phase / Component</th>
+                  <th>Description</th>
+                  <th class="text-right">Low (₹)</th>
+                  <th class="text-right">Typical (₹)</th>
+                  <th class="text-right">High (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="table-dev-rows">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="breakdown-card">
+          <div class="breakdown-header" onclick="toggleAccordion('infra-breakdown')">
+            <h3><span>☁️</span> 2. Cloud Infrastructure & Running Costs (Monthly)</h3>
+            <span id="infra-breakdown-icon">▼</span>
+          </div>
+          <div class="breakdown-body" id="infra-breakdown">
+            <table class="cost-table">
+              <thead>
+                <tr>
+                  <th>Resource Item</th>
+                  <th>Capacity / Sizing</th>
+                  <th class="text-right">Monthly Low (₹)</th>
+                  <th class="text-right">Monthly Typical (₹)</th>
+                  <th class="text-right">Annual Impact (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="table-infra-rows">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="breakdown-card">
+          <div class="breakdown-header" onclick="toggleAccordion('maint-breakdown')">
+            <h3><span>🛡️</span> 3. Maintenance, Support & Patching</h3>
+            <span id="maint-breakdown-icon">▼</span>
+          </div>
+          <div class="breakdown-body" id="maint-breakdown">
+            <table class="cost-table">
+              <thead>
+                <tr>
+                  <th>Coverage Area</th>
+                  <th>Service Details</th>
+                  <th class="text-right">Monthly (₹)</th>
+                  <th class="text-right">Annual (₹)</th>
+                </tr>
+              </thead>
+              <tbody id="table-maint-rows">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Indicative Phases & Timeline -->
+        <div class="timeline-card">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">Indicative Execution Timeline</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">
+            Estimated delivery lifecycle: <strong id="res-total-weeks">6–10 Weeks</strong> (Indicative Bangalore agency benchmark, subject to review cycles)
+          </p>
+
+          <div class="phases-list" id="phases-container">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Architecture & Optimization Recommendations -->
+        <div class="scope-comparison" style="margin-bottom: 2.5rem;">
+          <div class="vp-card">
+            <h4>Recommended Technology Approach</h4>
+            <p id="res-tech-stack-desc" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.6;">
+              Modern decoupled stack with serverless/containerized backend, managed database with automated daily snapshots, and static CDN edge delivery.
+            </p>
+          </div>
+          <div class="vp-card">
+            <h4>Cost Optimization Strategies</h4>
+            <ul style="font-size: 0.875rem; color: var(--text-muted); padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.6;">
+              <li>Launch as a responsive web app prior to compiling native app store builds.</li>
+              <li>Adopt transactional managed APIs (e.g. Supabase, AWS RDS, SendGrid) before bespoke infrastructure.</li>
+              <li>Stage advanced analytics and AI chatbots as post-traction Phase 2 rollouts.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Option Comparison Matrix (Basic vs Standard vs Advanced) -->
+        <div class="tiers-section">
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--secondary);">Tier Comparison Matrix</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Compare alternate implementation approaches for your requirements.</p>
+          <table class="tiers-table">
+            <thead>
+              <tr>
+                <th>Component Dimension</th>
+                <th>Option A — Basic</th>
+                <th class="highlight">Option B — Standard (Selected)</th>
+                <th>Option C — Advanced Enterprise</th>
+              </tr>
+            </thead>
+            <tbody id="tiers-table-body">
+              <!-- Injected via calculation engine -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Ezrah Innovations Consultation CTA -->
+        <div class="lead-box">
+          <h3>Want to turn this estimate into a real project?</h3>
+          <p>
+            Avoid expensive engineering surprises. Get a real architectural consultation, vendor audit, or turnkey build plan with Ezrah Innovations.
+          </p>
+          <button class="btn btn-primary btn-lg" onclick="openContactModal()">Talk to Ezrah Innovations →</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="brand-group">
+            <div class="logo-mark">CP</div>
+            <span class="brand-title">CostPilot</span>
+          </div>
+          <p>
+            Digital Project Cost & Total Cost of Ownership Planning Platform.<br>
+            Designed & Built by <strong>Ezrah Innovations</strong>.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h5>Product</h5>
+          <ul>
+            <li><a onclick="startWizardMode()">Cost Estimator</a></li>
+            <li><a onclick="openHowItWorksModal()">How It Works</a></li>
+            <li><a onclick="showSavedEstimates()">Saved Estimates</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Governance & Support</h5>
+          <ul>
+            <li><a onclick="openDisclaimerModal()">Market Disclaimer</a></li>
+            <li><a onclick="openPrivacyModal()">Data Privacy</a></li>
+            <li><a onclick="openContactModal()">Ezrah Consultation</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© <span id="current-year">2026</span> CostPilot by Ezrah Innovations. All rights reserved.</div>
+        <div>Bangalore Market Indicative Benchmark • Version 1.0 (MVP)</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+
+  <!-- Modal 1: How It Works & Transparency -->
+  <div class="modal-backdrop" id="modal-how-it-works">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeModals()">✕</button>
+      <h3 style="font-size: 1.45rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">How CostPilot Works</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Transparent software estimation grounded in Bangalore's modern technology ecosystem.
+      </p>
+      <ol style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-main); display: flex; flex-direction: column; gap: 0.75rem;">
+        <li><strong>Understand Scope:</strong> We map your target product archetype, pages, forms, and custom workflows.</li>
+        <li><strong>Component Breakdown:</strong> We partition work into UI/UX, Frontend, Backend/API, Database, Integrations, and QA.</li>
+        <li><strong>Apply Market Benchmarks:</strong> Calculations utilize validated Bangalore engineering rates (low, typical, high).</li>
+        <li><strong>Recurring Infrastructure:</strong> Sizing includes compute, data storage, CDN edge delivery, and third-party APIs.</li>
+        <li><strong>Maintenance Estimation:</strong> We isolate ongoing patching and upgrades from hosting to illustrate 1, 3, and 5-year TCO.</li>
+      </ol>
+      <div style="background: var(--bg-subtle); padding: 1rem; border-radius: var(--radius-md); margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted);">
+        <strong>Important Note:</strong> A market estimate is an indicative baseline for budgeting. It is not an unconditional contractor quote.
+      </div>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button class="btn btn-primary btn-sm" onclick="closeModals()">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Ezrah Contact Consultation -->
+  <div class="modal-backdrop" id="modal-contact">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeModals()">✕</button>
+      <h3 style="font-size: 1.45rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Project Consultation</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Consult with Ezrah Innovations to refine your specifications or discuss bespoke implementation.
+      </p>
+      
+      <form class="modal-form" id="consultation-form" onsubmit="handleConsultationSubmit(event)">
+        <div>
+          <label for="lead-name">Your Name</label>
+          <input type="text" id="lead-name" required placeholder="Alex Mercer">
+        </div>
+        <div>
+          <label for="lead-email">Email Address</label>
+          <input type="email" id="lead-email" required placeholder="alex@company.com">
+        </div>
+        <div>
+          <label for="lead-notes">Project Notes (Optional)</label>
+          <textarea id="lead-notes" rows="3" placeholder="Tell us about your timeline, goals or reference apps..."></textarea>
+        </div>
+
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Direct communication: <strong>contact@ezrah.in</strong>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Consultation Request</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Saved Estimates Drawer -->
+  <div class="modal-backdrop" id="modal-saved">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeModals()">✕</button>
+      <h3 style="font-size: 1.45rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Saved Browser Estimates</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;">
+        Estimates saved locally on this machine via browser LocalStorage. No account required.
+      </p>
+      
+      <div id="saved-list-container" style="display:flex; flex-direction:column; gap:0.75rem; max-height: 300px; overflow-y: auto;">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div style="margin-top: 1.5rem; display:flex; justify-content:space-between;">
+        <button class="btn btn-outline btn-sm" onclick="clearAllSavedEstimates()">Clear All</button>
+        <button class="btn btn-secondary btn-sm" onclick="closeModals()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Legal / Disclaimer -->
+  <div class="modal-backdrop" id="modal-disclaimer">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeModals()">✕</button>
+      <h3 style="font-size: 1.45rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Market Benchmark Disclaimer</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+        CostPilot provides indicative market-based estimates for planning purposes. Actual project costs vary based on vendors, technologies, scope, requirements, team seniority and usage.
+      </p>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        All Bangalore market numbers reflect Q1 2026 aggregated development and cloud infrastructure rates in India (INR). Ezrah Innovations makes no guarantee of commercial quotation match without an executed Statement of Work (SOW).
+      </p>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button class="btn btn-primary btn-sm" onclick="closeModals()">I Understand</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Privacy -->
+  <div class="modal-backdrop" id="modal-privacy">
+    <div class="modal-window">
+      <button class="modal-close" onclick="closeModals()">✕</button>
+      <h3 style="font-size: 1.45rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--secondary);">Privacy Policy</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+        CostPilot operates 100% on client-side JavaScript. Your project descriptions, custom requirements, and selected feature configurations are never transmitted to a central database without your explicit consultation submission.
+      </p>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+        Saved estimates use standard browser LocalStorage and stay strictly on your local computer.
+      </p>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button class="btn btn-secondary btn-sm" onclick="closeModals()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Stack -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT PRICING CONFIGURATION, ENGINE & UI LOGIC
+       ========================================================================== -->
+  <script>
+    /**
+     * COSTPILOT - COMPLETE FRONTEND APPLICATION JAVASCRIPT
+     * Modular Architecture:
+     * 1. pricingData: Centralized pricing configuration (Bangalore benchmarks)
+     * 2. state: Reactive wizard state management
+     * 3. calculationEngine: Core financial & TCO algorithms
+     * 4. smartRequirementAnalyzer: Natural language idea keyword engine
+     * 5. uiRenderer: Dynamic DOM rendering & event managers
+     */
+
+    // --------------------------------------------------------------------------
+    // 1. PRICING DATA ENGINE (Bangalore Benchmarks)
+    // --------------------------------------------------------------------------
+    const pricingData = {
+      market: "Bangalore",
+      country: "India",
+      currency: "INR",
+      currencySymbol: "₹",
+      lastUpdated: "February 2026",
+      confidence: "High",
+      contactDetails: {
+        company: "Ezrah Innovations",
+        email: "contact@ezrah.in",
+        phone: "+91 (80) 4120-EZRAH",
+        website: "https://ezrah.in"
+      },
+      
+      // Project Archetypes & Base Development
+      projectTypes: {
+        "biz_website": {
+          id: "biz_website",
+          title: "Business Website",
+          icon: "🏢",
+          desc: "Corporate or brand website with marketing pages, contact forms, and CMS.",
+          baseCost: { low: 30000, typical: 55000, high: 95000 },
+          baseWeeks: 3,
+          category: "website",
+          dynamicQuestions: [
+            { id: "pages_count", label: "Pages: 5–10", low: 0, typ: 0, high: 0 },
+            { id: "pages_large", label: "Pages: 15–30+", low: 15000, typ: 25000, high: 45000 },
+            { id: "cms_blog", label: "Self-hosted CMS / Blog", low: 12000, typ: 20000, high: 35000 },
+            { id: "seo_adv", label: "Advanced SEO & Structured Schema", low: 8000, typ: 15000, high: 25000 },
+            { id: "multi_lang", label: "Multi-Language Support (i18n)", low: 10000, typ: 18000, high: 30000 }
+          ]
+        },
+        "portfolio": {
+          id: "portfolio",
+          title: "Portfolio Website",
+          icon: "🎨",
+          desc: "Showcase for agencies, designers, architects, and creative executives.",
+          baseCost: { low: 25000, typical: 45000, high: 75000 },
+          baseWeeks: 2,
+          category: "website",
+          dynamicQuestions: [
+            { id: "port_gallery", label: "Interactive Case Study Filtering", low: 5000, typ: 10000, high: 18000 },
+            { id: "port_anim", label: "Micro-interactions & 3D/Canvas", low: 12000, typ: 22000, high: 40000 },
+            { id: "port_booking", label: "Client Inquiry & Booking Flow", low: 6000, typ: 12000, high: 20000 }
+          ]
+        },
+        "ecommerce": {
+          id: "ecommerce",
+          title: "E-Commerce Platform",
+          icon: "🛍️",
+          desc: "Full online store with catalog, checkout, payment gateway, and order portal.",
+          baseCost: { low: 75000, typical: 140000, high: 250000 },
+          baseWeeks: 6,
+          category: "commerce",
+          dynamicQuestions: [
+            { id: "ecom_products_500", label: "Catalog: 500+ SKUs with variants", low: 15000, typ: 28000, high: 45000 },
+            { id: "ecom_shipping", label: "Automated Logistics & Courier API", low: 12000, typ: 22000, high: 35000 },
+            { id: "ecom_coupons", label: "Discount Engine & Vouchers", low: 8000, typ: 15000, high: 25000 },
+            { id: "ecom_inventory", label: "Multi-Warehouse Inventory Tracking", low: 20000, typ: 38000, high: 60000 }
+          ]
+        },
+        "web_app": {
+          id: "web_app",
+          title: "Web Application",
+          icon: "💻",
+          desc: "Interactive portal, internal tooling, client dashboards, or dynamic SaaS.",
+          baseCost: { low: 90000, typical: 165000, high: 300000 },
+          baseWeeks: 7,
+          category: "webapp",
+          dynamicQuestions: [
+            { id: "app_roles_multi", label: "Multi-Tenant Role Permissions (RBAC)", low: 15000, typ: 30000, high: 50000 },
+            { id: "app_analytics", label: "Interactive Analytics & PDF Export", low: 14000, typ: 25000, high: 40000 },
+            { id: "app_audit_logs", label: "Security & Audit Event Logging", low: 10000, typ: 18000, high: 30000 },
+            { id: "app_webhooks", label: "External Webhooks & Public REST API", low: 18000, typ: 32000, high: 55000 }
+          ]
+        },
+        "mobile_app": {
+          id: "mobile_app",
+          title: "Mobile Application",
+          icon: "📱",
+          desc: "Cross-platform iOS and Android mobile app built with Flutter or React Native.",
+          baseCost: { low: 120000, typical: 220000, high: 390000 },
+          baseWeeks: 8,
+          category: "mobile",
+          dynamicQuestions: [
+            { id: "mob_push", label: "Targeted Push Notifications (FCM/APNS)", low: 10000, typ: 18000, high: 30000 },
+            { id: "mob_offline", label: "Offline-First Local Sync Architecture", low: 20000, typ: 35000, high: 60000 },
+            { id: "mob_maps", label: "Geolocation, Live GPS & Map Overlays", low: 15000, typ: 28000, high: 45000 },
+            { id: "mob_store_deploy", label: "Google Play & App Store Compliance Prep", low: 12000, typ: 20000, high: 35000 }
+          ]
+        },
+        "saas_product": {
+          id: "saas_product",
+          title: "SaaS Product (B2B / B2C)",
+          icon: "🚀",
+          desc: "Subscription software platform with automated onboarding and billing tiers.",
+          baseCost: { low: 140000, typical: 260000, high: 460000 },
+          baseWeeks: 9,
+          category: "saas",
+          dynamicQuestions: [
+            { id: "saas_billing", label: "Automated Recurring Subscriptions & Invoicing", low: 18000, typ: 32000, high: 50000 },
+            { id: "saas_teams", label: "Organization Teams & Seat Licenses", low: 16000, typ: 28000, high: 45000 },
+            { id: "saas_onboarding", label: "Self-Serve Product Tours & Walkthroughs", low: 9000, typ: 16000, high: 28000 }
+          ]
+        },
+        "lms": {
+          id: "lms",
+          title: "Learning Management (LMS)",
+          icon: "🎓",
+          desc: "EdTech platform for students, teachers, recorded video lessons, and tests.",
+          baseCost: { low: 110000, typical: 195000, high: 340000 },
+          baseWeeks: 8,
+          category: "lms",
+          dynamicQuestions: [
+            { id: "lms_video_drm", label: "Secured Encrypted Video Streaming", low: 20000, typ: 38000, high: 65000 },
+            { id: "lms_quizzes", label: "Automated Quizzes, Timers & Grading", low: 14000, typ: 24000, high: 40000 },
+            { id: "lms_certs", label: "Dynamic PDF Certificate Generation", low: 8000, typ: 15000, high: 24000 },
+            { id: "lms_live", label: "Live Classroom Integration (Zoom/Jitsi)", low: 18000, typ: 32000, high: 52000 }
+          ]
+        },
+        "biz_dashboard": {
+          id: "biz_dashboard",
+          title: "Business Dashboard / BI",
+          icon: "📊",
+          desc: "Executive command center consolidating internal metrics and SQL views.",
+          baseCost: { low: 70000, typical: 130000, high: 220000 },
+          baseWeeks: 5,
+          category: "dashboard",
+          dynamicQuestions: [
+            { id: "dash_connectors", label: "Multi-Source SQL/ERP Data Pipeline", low: 22000, typ: 40000, high: 65000 },
+            { id: "dash_alerts", label: "Automated Email/Slack Metric Alerts", low: 9000, typ: 16000, high: 28000 },
+            { id: "dash_csv_export", label: "Custom Filter Builders & Excel Export", low: 8000, typ: 14000, high: 22000 }
+          ]
+        },
+        "ai_app": {
+          id: "ai_app",
+          title: "AI / LLM Application",
+          icon: "🤖",
+          desc: "RAG knowledge base, AI customer agent, or generative workflow application.",
+          baseCost: { low: 130000, typical: 240000, high: 420000 },
+          baseWeeks: 8,
+          category: "ai",
+          dynamicQuestions: [
+            { id: "ai_rag_docs", label: "Custom Document Vector Store (RAG)", low: 25000, typ: 45000, high: 75000 },
+            { id: "ai_chat_widget", label: "Streaming Chat UI with Token Quotas", low: 15000, typ: 28000, high: 45000 },
+            { id: "ai_fine_tune", label: "Evaluation Benchmarks & Prompt Pipelines", low: 20000, typ: 38000, high: 60000 }
+          ]
+        },
+        "api_backend": {
+          id: "api_backend",
+          title: "API / Microservices Backend",
+          icon: "⚡",
+          desc: "High-performance headless backend services and database orchestration.",
+          baseCost: { low: 65000, typical: 120000, high: 210000 },
+          baseWeeks: 5,
+          category: "backend",
+          dynamicQuestions: [
+            { id: "api_graphql", label: "GraphQL Federation / Apollo Server", low: 15000, typ: 28000, high: 45000 },
+            { id: "api_rate_limit", label: "Redis Throttling & DDoS Protection", low: 10000, typ: 18000, high: 30000 },
+            { id: "api_swagger", label: "Swagger/Postman Auto-Documentation", low: 6000, typ: 12000, high: 20000 }
+          ]
+        },
+        "custom_software": {
+          id: "custom_software",
+          title: "Custom Enterprise Software",
+          icon: "⚙️",
+          desc: "Bespoke operational workflow systems replacing legacy spreadsheets.",
+          baseCost: { low: 150000, typical: 280000, high: 500000 },
+          baseWeeks: 10,
+          category: "custom",
+          dynamicQuestions: [
+            { id: "ent_legacy_migr", label: "Legacy Database Data Migration", low: 25000, typ: 45000, high: 75000 },
+            { id: "ent_sso", label: "Enterprise SAML / Okta SSO", low: 18000, typ: 30000, high: 50000 }
+          ]
+        }
+      },
+
+      // UI/UX Tiers
+      uiuxTiers: {
+        "template": {
+          id: "template",
+          title: "Basic / Template-Guided",
+          desc: "Clean, functional design adapted from verified modern production templates.",
+          cost: { low: 15000, typical: 25000, high: 40000 }
+        },
+        "custom": {
+          id: "custom",
+          title: "Customized Modern UI",
+          desc: "Bespoke component system, brand styling, custom illustrations, and tailored UX.",
+          cost: { low: 35000, typical: 60000, high: 95000 }
+        },
+        "premium": {
+          id: "premium",
+          title: "Premium Custom UI/UX",
+          desc: "Pixel-perfect Figma prototypes, interactive micro-animations, user testing, and high polish.",
+          cost: { low: 65000, typical: 110000, high: 180000 }
+        }
+      },
+
+      // Interactive Forms Complexity Surcharge
+      formScale: {
+        "none": { count: "None / Simple", cost: { low: 0, typical: 0, high: 0 } },
+        "1-3": { count: "1–3 Forms", cost: { low: 5000, typical: 10000, high: 18000 } },
+        "4-8": { count: "4–8 Forms", cost: { low: 12000, typical: 22000, high: 38000 } },
+        "9-15": { count: "9–15 Forms", cost: { low: 22000, typical: 40000, high: 65000 } },
+        "15+": { count: "15+ Workflows", cost: { low: 40000, typical: 75000, high: 120000 } }
+      },
+
+      // Comprehensive Feature Matrix (Checklist)
+      featuresByCategory: {
+        "User Management": [
+          { id: "feat_auth", label: "Email / Password Login & JWT", low: 6000, typ: 12000, high: 20000 },
+          { id: "feat_social_auth", label: "Social Single Sign-on (Google/Apple)", low: 5000, typ: 10000, high: 18000 },
+          { id: "feat_profile", label: "User Profiles & Avatars", low: 5000, typ: 9000, high: 15000 },
+          { id: "feat_roles", label: "Multiple Roles (Admin, Staff, Customer)", low: 10000, typ: 18000, high: 30000 }
+        ],
+        "Business & Workflow": [
+          { id: "feat_search_filter", label: "Faceted Search & Dynamic Filters", low: 8000, typ: 14000, high: 22000 },
+          { id: "feat_reports", label: "Custom PDF & CSV Reporting", low: 9000, typ: 16000, high: 26000 },
+          { id: "feat_notifications", label: "Transactional In-App Notifications", low: 6000, typ: 11000, high: 18000 },
+          { id: "feat_comms_wa", label: "WhatsApp & SMS Gateway Integration", low: 10000, typ: 18000, high: 30000 }
+        ],
+        "Commerce & Transactions": [
+          { id: "feat_payment_gateway", label: "Razorpay / Stripe Gateway Integration", low: 12000, typ: 20000, high: 32000 },
+          { id: "feat_subscriptions", label: "Recurring Subscriptions & Mandates", low: 14000, typ: 25000, high: 40000 },
+          { id: "feat_invoicing", label: "Automated GST Compliant Invoices", low: 9000, typ: 16000, high: 28000 }
+        ],
+        "AI & Intelligence": [
+          { id: "feat_ai_chatbot", label: "Embedded AI Chatbot Support", low: 18000, typ: 32000, high: 55000 },
+          { id: "feat_ai_generation", label: "AI Content & Text Generation Tool", low: 16000, typ: 28000, high: 48000 },
+          { id: "feat_ai_rag", label: "Document Q&A RAG Knowledge Pipeline", low: 25000, typ: 45000, high: 75000 }
+        ],
+        "Technical & Infrastructure": [
+          { id: "feat_cloud_storage", label: "Direct S3/GCS File Uploads & CDN", low: 7000, typ: 12000, high: 20000 },
+          { id: "feat_third_party_api", label: "External REST/GraphQL API Sync", low: 12000, typ: 22000, high: 35000 },
+          { id: "feat_security_audit", label: "OWASP Hardening & Penetration QA", low: 15000, typ: 28000, high: 45000 }
+        ]
+      },
+
+      // Infrastructure Pricing Config (Monthly Benchmarks in INR)
+      infraCosts: {
+        users: {
+          "under100": { low: 800, typ: 1500, high: 2500, label: "< 100 users" },
+          "100-500": { low: 1800, typ: 3200, high: 5000, label: "100–500 users" },
+          "500-1000": { low: 3500, typ: 6000, high: 10000, label: "500–1,000 users" },
+          "1k-10k": { low: 8000, typ: 14000, high: 24000, label: "1k–10k users" },
+          "10k+": { low: 18000, typ: 32000, high: 55000, label: "10,000+ users" }
+        },
+        storage: {
+          "5gb": { low: 200, typ: 400, high: 700, label: "< 5 GB" },
+          "20gb": { low: 600, typ: 1200, high: 2000, label: "5–20 GB" },
+          "100gb": { low: 1800, typ: 3200, high: 5000, label: "20–100 GB" },
+          "500gb": { low: 4500, typ: 7500, high: 12000, label: "100–500 GB" },
+          "500gb+": { low: 10000, typ: 18000, high: 30000, label: "500 GB+ media" }
+        },
+        database: {
+          "basic": { low: 1200, typ: 2200, high: 3500, label: "Single Node Managed DB" },
+          "standard": { low: 3500, typ: 6500, high: 11000, label: "Managed DB with Daily Snapshots" },
+          "advanced": { low: 9000, typ: 16000, high: 28000, label: "Multi-AZ Clustered Replica DB" }
+        },
+        services: [
+          { id: "srv_cdn", label: "Cloudflare / Fastly Edge CDN", low: 0, typ: 1800, high: 3500 },
+          { id: "srv_email", label: "Transactional Email Gateway (SendGrid/SES)", low: 500, typ: 1200, high: 2500 },
+          { id: "srv_sms_wa", label: "SMS & WhatsApp Alerts (Twilio/Gupshup)", low: 1000, typ: 2500, high: 5000 },
+          { id: "srv_monitoring", label: "Sentry / Datadog APM & Logs", low: 800, typ: 2000, high: 4000 },
+          { id: "srv_ai_tokens", label: "OpenAI / Claude API Usage Reserve", low: 2500, typ: 6500, high: 15000 }
+        ]
+      },
+
+      // Maintenance & Support Tiers (Monthly INR)
+      maintenanceTiers: {
+        "basic": {
+          id: "basic",
+          title: "Basic Patching & Security",
+          desc: "Critical operating system & security updates, uptime monitoring, bug patches.",
+          multiplier: 0.08 // 8% of build cost annualized (~0.67% monthly)
+        },
+        "standard": {
+          id: "standard",
+          title: "Standard SLA & Maintenance",
+          desc: "Dependency updates, minor UX tweaks, security patches, 24-hr response time.",
+          multiplier: 0.15 // 15% of build cost annualized (~1.25% monthly)
+        },
+        "premium": {
+          id: "premium",
+          title: "Continuous DevOps & Support",
+          desc: "Priority support, performance tuning, architectural audits, monthly sprint tweaks.",
+          multiplier: 0.24 // 24% of build cost annualized (~2.0% monthly)
+        }
+      },
+
+      updateFrequencyBonus: {
+        "rarely": 0,
+        "quarterly": 5000,
+        "monthly": 15000,
+        "continuous": 35000
+      }
+    };
+
+    // --------------------------------------------------------------------------
+    // 2. STATE MANAGER
+    // --------------------------------------------------------------------------
+    const state = {
+      currentStep: 1,
+      totalSteps: 5,
+      mode: "wizard", // "wizard" or "idea"
+      estimateId: null,
+      
+      // Configuration inputs
+      projectType: "web_app",
+      dynamicScopeSelections: [],
+      uiuxTier: "custom",
+      formScale: "1-3",
+      selectedFeatures: ["feat_auth", "feat_roles", "feat_search_filter"],
+      
+      infra: {
+        users: "under100",
+        storage: "5gb",
+        database: "standard",
+        selectedServices: ["srv_cdn", "srv_email", "srv_monitoring"]
+      },
+      
+      maintenance: {
+        tier: "standard",
+        frequency: "quarterly"
+      },
+
+      // Calculated Cache
+      computedResult: null
+    };
+
+    // --------------------------------------------------------------------------
+    // 3. CALCULATION ENGINE
+    // --------------------------------------------------------------------------
+    function calculateFullEstimate(config) {
+      const pType = pricingData.projectTypes[config.projectType] || pricingData.projectTypes["web_app"];
+      const uiux = pricingData.uiuxTiers[config.uiuxTier] || pricingData.uiuxTiers["custom"];
+      const forms = pricingData.formScale[config.formScale] || pricingData.formScale["1-3"];
+      
+      // A. Initial Build Costs
+      let devLow = pType.baseCost.low;
+      let devTyp = pType.baseCost.typical;
+      let devHigh = pType.baseCost.high;
+      
+      // Dynamic questions in project scope
+      if (config.dynamicScopeSelections && config.dynamicScopeSelections.length > 0) {
+        config.dynamicScopeSelections.forEach(itemId => {
+          const item = (pType.dynamicQuestions || []).find(q => q.id === itemId);
+          if (item) {
+            devLow += item.low;
+            devTyp += item.typ;
+            devHigh += item.high;
+          }
+        });
+      }
+
+      // UI/UX Cost
+      devLow += uiux.cost.low;
+      devTyp += uiux.cost.typical;
+      devHigh += uiux.cost.high;
+
+      // Forms Cost
+      devLow += forms.cost.low;
+      devTyp += forms.cost.typical;
+      devHigh += forms.cost.high;
+
+      // Selected Feature Capabilities
+      const selectedFeatureDetails = [];
+      Object.values(pricingData.featuresByCategory).flat().forEach(feat => {
+        if (config.selectedFeatures.includes(feat.id)) {
+          devLow += feat.low;
+          devTyp += feat.typ;
+          devHigh += feat.high;
+          selectedFeatureDetails.push(feat);
+        }
+      });
+
+      // B. Infrastructure (Monthly)
+      const infraUsers = pricingData.infraCosts.users[config.infra.users] || pricingData.infraCosts.users["under100"];
+      const infraStore = pricingData.infraCosts.storage[config.infra.storage] || pricingData.infraCosts.storage["5gb"];
+      const infraDb = pricingData.infraCosts.database[config.infra.database] || pricingData.infraCosts.database["basic"];
+
+      let monthlyInfraLow = infraUsers.low + infraStore.low + infraDb.low;
+      let monthlyInfraTyp = infraUsers.typ + infraStore.typ + infraDb.typ;
+      let monthlyInfraHigh = infraUsers.high + infraStore.high + infraDb.high;
+
+      const selectedServicesDetails = [];
+      pricingData.infraCosts.services.forEach(srv => {
+        if (config.infra.selectedServices.includes(srv.id)) {
+          monthlyInfraLow += srv.low;
+          monthlyInfraTyp += srv.typ;
+          monthlyInfraHigh += srv.high;
+          selectedServicesDetails.push(srv);
+        }
+      });
+
+      // C. Maintenance (Monthly)
+      const maintTier = pricingData.maintenanceTiers[config.maintenance.tier] || pricingData.maintenanceTiers["standard"];
+      const freqBonus = pricingData.updateFrequencyBonus[config.maintenance.frequency] || 0;
+
+      // Maintenance calculated as percentage of build cost per month + update freq
+      const monthlyMaintLow = Math.round((devLow * maintTier.multiplier) / 12) + Math.round(freqBonus * 0.7);
+      const monthlyMaintTyp = Math.round((devTyp * maintTier.multiplier) / 12) + freqBonus;
+      const monthlyMaintHigh = Math.round((devHigh * maintTier.multiplier) / 12) + Math.round(freqBonus * 1.3);
+
+      // Monthly Total
+      const totalMonthlyLow = monthlyInfraLow + monthlyMaintLow;
+      const totalMonthlyTyp = monthlyInfraTyp + monthlyMaintTyp;
+      const totalMonthlyHigh = monthlyInfraHigh + monthlyMaintHigh;
+
+      // D. Total Cost of Ownership (TCO)
+      const year1Low = devLow + (totalMonthlyLow * 12);
+      const year1Typ = devTyp + (totalMonthlyTyp * 12);
+      const year1High = devHigh + (totalMonthlyHigh * 12);
+
+      const year3Typ = devTyp + (totalMonthlyTyp * 36);
+      const year5Typ = devTyp + (totalMonthlyTyp * 60);
+
+      // E. MVP vs Full Scope calculation
+      // MVP includes base project + template UI + only 2 core features
+      const mvpLow = Math.round(pType.baseCost.low * 0.85 + pricingData.uiuxTiers.template.cost.low);
+      const mvpTyp = Math.round(pType.baseCost.typical * 0.85 + pricingData.uiuxTiers.template.cost.typical + 15000);
+      const mvpHigh = Math.round(pType.baseCost.high * 0.85 + pricingData.uiuxTiers.template.cost.high + 25000);
+
+      // F. Timeline calculation
+      let totalWeeks = pType.baseWeeks;
+      if (config.uiuxTier === "premium") totalWeeks += 2;
+      if (config.selectedFeatures.length > 6) totalWeeks += 2;
+      if (config.selectedFeatures.length > 10) totalWeeks += 2;
+
+      return {
+        estimateId: config.estimateId || generateEstimateId(),
+        projectTitle: pType.title,
+        complexity: determineComplexity(devTyp),
+        buildCost: { low: devLow, typical: devTyp, high: devHigh },
+        monthlyInfra: { low: monthlyInfraLow, typical: monthlyInfraTyp, high: monthlyInfraHigh },
+        monthlyMaint: { low: monthlyMaintLow, typical: monthlyMaintTyp, high: monthlyMaintHigh },
+        monthlyTotal: { low: totalMonthlyLow, typical: totalMonthlyTyp, high: totalMonthlyHigh },
+        tco: {
+          year1: { low: year1Low, typical: year1Typ, high: year1High },
+          year3: year3Typ,
+          year5: year5Typ,
+          breakdown1Year: {
+            devPercent: Math.round((devTyp / year1Typ) * 100),
+            infraPercent: Math.round(((monthlyInfraTyp * 12) / year1Typ) * 100),
+            maintPercent: Math.round(((monthlyMaintTyp * 12) / year1Typ) * 100)
+          }
+        },
+        mvp: { low: mvpLow, typical: mvpTyp, high: mvpHigh },
+        timelineWeeks: { min: totalWeeks, max: totalWeeks + 3 },
+        selectedFeatures: selectedFeatureDetails,
+        selectedServices: selectedServicesDetails,
+        breakdownComponents: buildComponentRows(pType, uiux, forms, devTyp),
+        reasons: generateCostExplanations(config, devTyp)
+      };
+    }
+
+    function determineComplexity(typicalBuild) {
+      if (typicalBuild < 100000) return "Standard / Streamlined";
+      if (typicalBuild < 250000) return "Moderate Enterprise";
+      return "Advanced / High Performance";
+    }
+
+    function generateEstimateId() {
+      const year = new Date().getFullYear();
+      const rand = Math.floor(10000 + Math.random() * 90000);
+      return `CP-${year}-${rand}`;
+    }
+
+    function buildComponentRows(pType, uiux, forms, typicalTotal) {
+      return [
+        { name: "Discovery, Architecture & Specs", desc: "Detailed technical roadmapping and data modeling", low: Math.round(typicalTotal * 0.08), typ: Math.round(typicalTotal * 0.10), high: Math.round(typicalTotal * 0.12) },
+        { name: "UI/UX Interface & Prototyping", desc: uiux.title + " design", low: uiux.cost.low, typ: uiux.cost.typical, high: uiux.cost.high },
+        { name: "Frontend Client Engineering", desc: "Responsive client application & form workflows", low: Math.round(typicalTotal * 0.28), typ: Math.round(typicalTotal * 0.32), high: Math.round(typicalTotal * 0.36) },
+        { name: "Backend / API Layer & Database", desc: "Endpoints, database schemas, security rules", low: Math.round(typicalTotal * 0.25), typ: Math.round(typicalTotal * 0.30), high: Math.round(typicalTotal * 0.34) },
+        { name: "Security, QA & End-to-End Testing", desc: "Automated test suites & vulnerability verification", low: Math.round(typicalTotal * 0.08), typ: Math.round(typicalTotal * 0.10), high: Math.round(typicalTotal * 0.12) },
+        { name: "Cloud Staging & Production Deployment", desc: "CI/CD automated deployment & monitoring setup", low: Math.round(typicalTotal * 0.05), typ: Math.round(typicalTotal * 0.08), high: Math.round(typicalTotal * 0.10) }
+      ];
+    }
+
+    function generateCostExplanations(config, typicalTotal) {
+      const reasons = [];
+      if (config.uiuxTier === "premium") reasons.push("Premium Custom UI/UX prototyping and micro-interactions");
+      if (config.formScale === "9-15" || config.formScale === "15+") reasons.push("High number of multi-step interactive workflows/forms");
+      if (config.selectedFeatures.includes("feat_payment_gateway") || config.selectedFeatures.includes("feat_subscriptions")) reasons.push("Financial gateway compliance & transaction webhooks");
+      if (config.selectedFeatures.includes("feat_ai_chatbot") || config.selectedFeatures.includes("feat_ai_rag")) reasons.push("AI LLM token processing & vector search orchestration");
+      if (config.infra.users === "10k+") reasons.push("High-concurrency cloud scaling (>10,000 users)");
+      if (config.infra.database === "advanced") reasons.push("Multi-AZ clustered database redundancy");
+      if (reasons.length === 0) reasons.push("Clean standard web architecture with minimal third-party friction");
+      return reasons;
+    }
+
+    // --------------------------------------------------------------------------
+    // 4. SMART NATURAL LANGUAGE REQUIREMENT ANALYZER (Client-Side NLP Rules)
+    // --------------------------------------------------------------------------
+    function analyzeIdeaText(text) {
+      if (!text || text.trim().length < 10) {
+        showToast("Please provide a brief description of what you wish to build.");
+        return null;
+      }
+
+      const lower = text.toLowerCase();
+      
+      // Defaults
+      let detectedType = "web_app";
+      let detectedUi = "custom";
+      let detectedFeatures = ["feat_auth", "feat_profile"];
+      let detectedServices = ["srv_email", "srv_monitoring"];
+      let detectedForms = "1-3";
+
+      // Detect Project Type
+      if (lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coaching") || lower.includes("class")) {
+        detectedType = "lms";
+        detectedFeatures.push("feat_roles", "feat_cloud_storage", "feat_payment_gateway");
+        detectedForms = "4-8";
+      } else if (lower.includes("store") || lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("shop") || lower.includes("cart") || lower.includes("product")) {
+        detectedType = "ecommerce";
+        detectedFeatures.push("feat_payment_gateway", "feat_invoicing", "feat_search_filter");
+        detectedForms = "4-8";
+      } else if (lower.includes("mobile") || lower.includes("android") || lower.includes("ios") || lower.includes("flutter")) {
+        detectedType = "mobile_app";
+        detectedFeatures.push("feat_notifications");
+      } else if (lower.includes("ai") || lower.includes("gpt") || lower.includes("chatbot") || lower.includes("llm") || lower.includes("rag")) {
+        detectedType = "ai_app";
+        detectedFeatures.push("feat_ai_chatbot", "feat_ai_generation", "feat_third_party_api");
+        detectedServices.push("srv_ai_tokens");
+      } else if (lower.includes("saas") || lower.includes("subscription") || lower.includes("b2b")) {
+        detectedType = "saas_product";
+        detectedFeatures.push("feat_roles", "feat_subscriptions", "feat_invoicing");
+        detectedForms = "4-8";
+      } else if (lower.includes("portfolio") || lower.includes("creative") || lower.includes("showcase")) {
+        detectedType = "portfolio";
+        detectedUi = "premium";
+        detectedForms = "none";
+      } else if (lower.includes("website") || lower.includes("landing")) {
+        detectedType = "biz_website";
+        detectedForms = "1-3";
+      }
+
+      // Detect extra features from text
+      if (lower.includes("pay") || lower.includes("fee") || lower.includes("subscription")) {
+        if (!detectedFeatures.includes("feat_payment_gateway")) detectedFeatures.push("feat_payment_gateway");
+      }
+      if (lower.includes("chat") || lower.includes("message") || lower.includes("whatsapp")) {
+        if (!detectedFeatures.includes("feat_comms_wa")) detectedFeatures.push("feat_comms_wa");
+      }
+      if (lower.includes("search") || lower.includes("filter")) {
+        if (!detectedFeatures.includes("feat_search_filter")) detectedFeatures.push("feat_search_filter");
+      }
+
+      // Configure state
+      state.projectType = detectedType;
+      state.uiuxTier = detectedUi;
+      state.formScale = detectedForms;
+      state.selectedFeatures = detectedFeatures;
+      state.infra.selectedServices = detectedServices;
+      state.estimateId = generateEstimateId();
+
+      return state;
+    }
+
+    // --------------------------------------------------------------------------
+    // 5. UI CONTROLLERS & EVENT MANAGERS
+    // --------------------------------------------------------------------------
+    
+    // Switch between Landing, Estimator, and Results
+    function showLanding() {
+      document.getElementById("landing-section").style.display = "block";
+      document.getElementById("estimator-section").style.display = "none";
+      document.getElementById("results-section").style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startWizardMode() {
+      state.mode = "wizard";
+      document.getElementById("landing-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "block";
+      document.getElementById("results-section").style.display = "none";
+      renderWizardStep(state.currentStep);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showResultsView() {
+      state.computedResult = calculateFullEstimate(state);
+      document.getElementById("landing-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "none";
+      document.getElementById("results-section").style.display = "block";
+      renderResultsDashboard(state.computedResult);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function editEstimate() {
+      document.getElementById("results-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "block";
+      renderWizardStep(state.currentStep);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function resetEstimator() {
+      if (confirm("Reset current configuration to defaults?")) {
+        state.currentStep = 1;
+        state.projectType = "web_app";
+        state.dynamicScopeSelections = [];
+        state.uiuxTier = "custom";
+        state.formScale = "1-3";
+        state.selectedFeatures = ["feat_auth", "feat_roles", "feat_search_filter"];
+        state.infra = {
+          users: "under100",
+          storage: "5gb",
+          database: "standard",
+          selectedServices: ["srv_cdn", "srv_email", "srv_monitoring"]
+        };
+        state.maintenance = {
+          tier: "standard",
+          frequency: "quarterly"
+        };
+        renderWizardStep(1);
+        showToast("Estimator reset to defaults.");
+      }
+    }
+
+    // Step Navigation
+    function jumpToStep(stepNum) {
+      if (stepNum > 0 && stepNum <= state.totalSteps) {
+        state.currentStep = stepNum;
+        renderWizardStep(stepNum);
+      }
+    }
+
+    function wizardNext() {
+      if (state.currentStep < state.totalSteps) {
+        state.currentStep++;
+        renderWizardStep(state.currentStep);
+      } else {
+        showResultsView();
+      }
+    }
+
+    function wizardPrev() {
+      if (state.currentStep > 1) {
+        state.currentStep--;
+        renderWizardStep(state.currentStep);
+      } else {
+        showLanding();
+      }
+    }
+
+    // Render Wizard Controls
+    function renderWizardStep(step) {
+      // Update Stepper Navigation
+      document.querySelectorAll(".step-item").forEach(item => {
+        const s = parseInt(item.getAttribute("data-step"));
+        item.classList.remove("active", "completed");
+        if (s === step) item.classList.add("active");
+        if (s < step) item.classList.add("completed");
+      });
+
+      // Update Active Pane
+      document.querySelectorAll(".step-pane").forEach(pane => pane.classList.remove("active"));
+      const activePane = document.getElementById(`wizard-step-${step}`);
+      if (activePane) activePane.classList.add("active");
+
+      document.getElementById("current-step-display").innerText = step;
+      document.getElementById("wizard-next-btn").innerText = (step === state.totalSteps) ? "Generate Estimate 🎉" : "Continue →";
+
+      // Re-populate step-specific dynamic options
+      if (step === 1) renderStep1ProjectTypes();
+      if (step === 2) renderStep2Scope();
+      if (step === 3) renderStep3Features();
+      if (step === 4) renderStep4Infrastructure();
+      if (step === 5) renderStep5Maintenance();
+
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    }
+
+    // Step 1 Render
+    function renderStep1ProjectTypes() {
+      const container = document.getElementById("project-types-container");
+      container.innerHTML = "";
+      Object.values(pricingData.projectTypes).forEach(pt => {
+        const isSelected = state.projectType === pt.id;
+        const card = document.createElement("div");
+        card.className = `selectable-card ${isSelected ? 'selected' : ''}`;
+        card.onclick = () => {
+          state.projectType = pt.id;
+          state.dynamicScopeSelections = []; // reset child specifics on archetype change
+          renderStep1ProjectTypes();
+        };
+        card.innerHTML = `
+          <div class="card-check">✓</div>
+          <div class="card-icon">${pt.icon}</div>
+          <div class="card-title">${pt.title}</div>
+          <div class="card-desc">${pt.desc}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Step 2 Render
+    function renderStep2Scope() {
+      const currentPt = pricingData.projectTypes[state.projectType] || pricingData.projectTypes["web_app"];
+      document.getElementById("scope-dynamic-title").innerText = `${currentPt.title} Specific Scope Options`;
+      
+      const dynamicBox = document.getElementById("scope-dynamic-options");
+      dynamicBox.innerHTML = "";
+      
+      if (currentPt.dynamicQuestions && currentPt.dynamicQuestions.length > 0) {
+        currentPt.dynamicQuestions.forEach(q => {
+          const isSelected = state.dynamicScopeSelections.includes(q.id);
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `pill-btn ${isSelected ? 'selected' : ''}`;
+          btn.innerText = (isSelected ? "✓ " : "+ ") + q.label;
+          btn.onclick = () => {
+            if (state.dynamicScopeSelections.includes(q.id)) {
+              state.dynamicScopeSelections = state.dynamicScopeSelections.filter(x => x !== q.id);
+            } else {
+              state.dynamicScopeSelections.push(q.id);
+            }
+            renderStep2Scope();
+          };
+          dynamicBox.appendChild(btn);
+        });
+      } else {
+        dynamicBox.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">Standard scope baseline applied.</span>`;
+      }
+
+      // Render UI/UX options
+      const uiuxContainer = document.getElementById("uiux-options-container");
+      uiuxContainer.innerHTML = "";
+      Object.values(pricingData.uiuxTiers).forEach(tier => {
+        const isSel = state.uiuxTier === tier.id;
+        const card = document.createElement("div");
+        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
+        card.onclick = () => {
+          state.uiuxTier = tier.id;
+          renderStep2Scope();
+        };
+        card.innerHTML = `
+          <div class="card-check">✓</div>
+          <div class="card-title">${tier.title}</div>
+          <div class="card-desc">${tier.desc}</div>
+        `;
+        uiuxContainer.appendChild(card);
+      });
+
+      // Update Forms selection pills
+      document.querySelectorAll("#form-count-options .pill-btn").forEach(btn => {
+        const val = btn.getAttribute("data-forms");
+        btn.classList.toggle("selected", val === state.formScale);
+      });
+    }
+
+    function selectFormCount(scale) {
+      state.formScale = scale;
+      document.querySelectorAll("#form-count-options .pill-btn").forEach(btn => {
+        btn.classList.toggle("selected", btn.getAttribute("data-forms") === scale);
+      });
+    }
+
+    // Step 3 Render
+    function renderStep3Features() {
+      const container = document.getElementById("features-categorized-container");
+      container.innerHTML = "";
+
+      Object.entries(pricingData.featuresByCategory).forEach(([category, features]) => {
+        const catDiv = document.createElement("div");
+        catDiv.className = "feature-category";
+        catDiv.innerHTML = `<div class="feature-category-title">📂 ${category}</div>`;
+        
+        const grid = document.createElement("div");
+        grid.className = "feature-grid";
+
+        features.forEach(feat => {
+          const checked = state.selectedFeatures.includes(feat.id);
+          const label = document.createElement("label");
+          label.className = "feature-item";
+          label.innerHTML = `
+            <input type="checkbox" ${checked ? 'checked' : ''} value="${feat.id}">
+            <span>${feat.label}</span>
+          `;
+          label.querySelector("input").onchange = (e) => {
+            if (e.target.checked) {
+              if (!state.selectedFeatures.includes(feat.id)) state.selectedFeatures.push(feat.id);
+            } else {
+              state.selectedFeatures = state.selectedFeatures.filter(x => x !== feat.id);
+            }
+          };
+          grid.appendChild(label);
+        });
+
+        catDiv.appendChild(grid);
+        container.appendChild(catDiv);
+      });
+    }
+
+    // Step 4 Render
+    function renderStep4Infrastructure() {
+      // Pills states
+      document.querySelectorAll("#infra-users-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.users);
+      });
+      document.querySelectorAll("#infra-storage-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.storage);
+      });
+      document.querySelectorAll("#infra-db-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.database);
+      });
+
+      // Managed Services Checklist
+      const srvGrid = document.getElementById("infra-services-selector");
+      srvGrid.innerHTML = "";
+      pricingData.infraCosts.services.forEach(srv => {
+        const checked = state.infra.selectedServices.includes(srv.id);
+        const label = document.createElement("label");
+        label.className = "feature-item";
+        label.innerHTML = `
+          <input type="checkbox" ${checked ? 'checked' : ''} value="${srv.id}">
+          <span>${srv.label}</span>
+        `;
+        label.querySelector("input").onchange = (e) => {
+          if (e.target.checked) {
+            if (!state.infra.selectedServices.includes(srv.id)) state.infra.selectedServices.push(srv.id);
+          } else {
+            state.infra.selectedServices = state.infra.selectedServices.filter(x => x !== srv.id);
+          }
+        };
+        srvGrid.appendChild(label);
+      });
+    }
+
+    function setInfraParam(param, value) {
+      state.infra[param] = value;
+      renderStep4Infrastructure();
+    }
+
+    // Step 5 Render
+    function renderStep5Maintenance() {
+      const container = document.getElementById("maint-support-options");
+      container.innerHTML = "";
+      Object.values(pricingData.maintenanceTiers).forEach(tier => {
+        const isSel = state.maintenance.tier === tier.id;
+        const card = document.createElement("div");
+        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
+        card.onclick = () => {
+          state.maintenance.tier = tier.id;
+          renderStep5Maintenance();
+        };
+        card.innerHTML = `
+          <div class="card-check">✓</div>
+          <div class="card-title">${tier.title}</div>
+          <div class="card-desc">${tier.desc}</div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.querySelectorAll("#maint-freq-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.maintenance.frequency);
+      });
+    }
+
+    function setMaintFreq(freq) {
+      state.maintenance.frequency = freq;
+      renderStep5Maintenance();
+    }
+
+    // --------------------------------------------------------------------------
+    // 6. RESULTS DASHBOARD RENDERER
+    // --------------------------------------------------------------------------
+    function renderResultsDashboard(res) {
+      // Header Info
+      document.getElementById("res-estimate-id").innerText = res.estimateId;
+      document.getElementById("res-project-name").innerText = `${res.projectTitle} Specification`;
+      document.getElementById("res-complexity").innerText = res.complexity;
+
+      // 3 Top Metric Cards
+      document.getElementById("res-build-range").innerText = formatINRRange(res.buildCost.low, res.buildCost.high);
+      document.getElementById("res-monthly-range").innerText = formatINRRange(res.monthlyTotal.low, res.monthlyTotal.high);
+      document.getElementById("res-year1-range").innerText = formatINRRange(res.tco.year1.low, res.tco.year1.high);
+
+      // TCO Values & Bars
+      document.getElementById("tco-val-1yr").innerText = formatINR(res.tco.year1.typical);
+      document.getElementById("tco-val-3yr").innerText = formatINR(res.tco.year3);
+      document.getElementById("tco-val-5yr").innerText = formatINR(res.tco.year5);
+
+      const b = res.tco.breakdown1Year;
+      document.getElementById("tco-bar-1-dev").style.width = `${b.devPercent}%`;
+      document.getElementById("tco-bar-1-infra").style.width = `${b.infraPercent}%`;
+      document.getElementById("tco-bar-1-maint").style.width = `${b.maintPercent}%`;
+
+      // MVP vs Full Scope
+      document.getElementById("res-mvp-cost").innerText = formatINRRange(res.mvp.low, res.mvp.high);
+      document.getElementById("res-full-cost").innerText = formatINRRange(res.buildCost.low, res.buildCost.high);
+
+      // Why does it cost this much?
+      const chipsContainer = document.getElementById("why-chips-container");
+      chipsContainer.innerHTML = "";
+      res.reasons.forEach(r => {
+        const chip = document.createElement("div");
+        chip.className = "why-chip";
+        chip.innerHTML = `<span>⚡</span> <span>${r}</span>`;
+        chipsContainer.appendChild(chip);
+      });
+
+      // Table 1: Dev Components
+      const devTbody = document.getElementById("table-dev-rows");
+      devTbody.innerHTML = "";
+      res.breakdownComponents.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${row.name}</strong></td>
+          <td style="color:var(--text-muted); font-size:0.85rem;">${row.desc}</td>
+          <td class="text-right">${formatINR(row.low)}</td>
+          <td class="text-right" style="font-weight:700;">${formatINR(row.typ)}</td>
+          <td class="text-right">${formatINR(row.high)}</td>
+        `;
+        devTbody.appendChild(tr);
+      });
+
+      // Table 2: Infrastructure Breakdown
+      const infraTbody = document.getElementById("table-infra-rows");
+      infraTbody.innerHTML = "";
+
+      const usersObj = pricingData.infraCosts.users[state.infra.users];
+      const storageObj = pricingData.infraCosts.storage[state.infra.storage];
+      const dbObj = pricingData.infraCosts.database[state.infra.database];
+
+      const infraRows = [
+        { item: "Cloud Server Compute", size: usersObj.label, low: usersObj.low, typ: usersObj.typ },
+        { item: "Object Storage & Backups", size: storageObj.label, low: storageObj.low, typ: storageObj.typ },
+        { item: "Managed Database Instance", size: dbObj.label, low: dbObj.low, typ: dbObj.typ }
+      ];
+
+      res.selectedServices.forEach(srv => {
+        infraRows.push({ item: srv.label, size: "Managed Cloud Add-on", low: srv.low, typ: srv.typ });
+      });
+
+      infraRows.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${row.item}</strong></td>
+          <td style="color:var(--text-muted); font-size:0.85rem;">${row.size}</td>
+          <td class="text-right">${formatINR(row.low)}</td>
+          <td class="text-right" style="font-weight:700;">${formatINR(row.typ)}</td>
+          <td class="text-right">${formatINR(row.typ * 12)}</td>
+        `;
+        infraTbody.appendChild(tr);
+      });
+
+      // Table 3: Maintenance Breakdown
+      const maintTbody = document.getElementById("table-maint-rows");
+      maintTbody.innerHTML = `
+        <tr>
+          <td><strong>Security Patches & Minor Upgrades</strong></td>
+          <td style="color:var(--text-muted); font-size:0.85rem;">Continuous CVE patching, server updates & uptime recovery</td>
+          <td class="text-right" style="font-weight:700;">${formatINR(res.monthlyMaint.typical)}</td>
+          <td class="text-right">${formatINR(res.monthlyMaint.typical * 12)}</td>
+        </tr>
+      `;
+
+      // Timeline Gantt Representation
+      document.getElementById("res-total-weeks").innerText = `${res.timelineWeeks.min} – ${res.timelineWeeks.max} Weeks`;
+      renderProjectPhases(res.timelineWeeks.min);
+
+      // Tiers Comparison Matrix
+      renderTiersMatrix(res.buildCost.typical);
+    }
+
+    function renderProjectPhases(baseWeeks) {
+      const container = document.getElementById("phases-container");
+      container.innerHTML = "";
+
+      const phases = [
+        { name: "Phase 1: Discovery & Planning", duration: "1 Week", width: "20%" },
+        { name: "Phase 2: UI/UX Prototyping", duration: "2 Weeks", width: "35%" },
+        { name: "Phase 3: Core Architecture & APIs", duration: `${Math.max(2, baseWeeks - 4)} Weeks`, width: "70%" },
+        { name: "Phase 4: Integrations & Payments", duration: "1.5 Weeks", width: "45%" },
+        { name: "Phase 5: Testing, Hardening & QA", duration: "1 Week", width: "25%" },
+        { name: "Phase 6: Cloud Deployment & Handoff", duration: "3 Days", width: "15%" },
+        { name: "Phase 7: Production Support", duration: "Ongoing", width: "100%" }
+      ];
+
+      phases.forEach(p => {
+        const row = document.createElement("div");
+        row.className = "phase-row";
+        row.innerHTML = `
+          <div class="phase-name">${p.name}</div>
+          <div class="phase-bar-track">
+            <div class="phase-bar-fill" style="width: ${p.width};"></div>
+          </div>
+          <div class="phase-duration">${p.duration}</div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function renderTiersMatrix(currentTyp) {
+      const tbody = document.getElementById("tiers-table-body");
+      tbody.innerHTML = `
+        <tr>
+          <td><strong>UI/UX Design</strong></td>
+          <td>Basic / Template Guided</td>
+          <td class="highlight">Custom Modern Tailored</td>
+          <td>High-End Animated / Interactive</td>
+        </tr>
+        <tr>
+          <td><strong>Feature Scope</strong></td>
+          <td>Essential MVP Functions Only</td>
+          <td class="highlight">Configured Feature Set</td>
+          <td>Enterprise Workflows & Multi-Region</td>
+        </tr>
+        <tr>
+          <td><strong>Support & SLA</strong></td>
+          <td>Basic Bug Fixes</td>
+          <td class="highlight">24h Response SLA & Patching</td>
+          <td>Continuous Dedicated Engineer Sprint</td>
+        </tr>
+        <tr>
+          <td><strong>Indicative Build</strong></td>
+          <td><strong>${formatINR(Math.round(currentTyp * 0.65))}</strong></td>
+          <td class="highlight"><strong>${formatINR(currentTyp)}</strong></td>
+          <td><strong>${formatINR(Math.round(currentTyp * 1.65))}</strong></td>
+        </tr>
+      `;
+    }
+
+    // Toggle breakdown accordions
+    function toggleAccordion(id) {
+      const body = document.getElementById(id);
+      const icon = document.getElementById(`${id}-icon`);
+      if (body.classList.contains("collapsed")) {
+        body.classList.remove("collapsed");
+        if (icon) icon.innerText = "▼";
+      } else {
+        body.classList.add("collapsed");
+        if (icon) icon.innerText = "▶";
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 7. IDEA PROCESSOR & MODALS
+    // --------------------------------------------------------------------------
+    function processIdeaMode() {
+      const input = document.getElementById("idea-input").value;
+      const result = analyzeIdeaText(input);
+      if (result) {
+        showToast("Smart analysis completed! Loaded requirements.");
+        showResultsView();
+      }
+    }
+
+    // Currency Formatter Helper (INR Lakhs / Crores notation clean format)
+    function formatINR(num) {
+      if (!num || isNaN(num)) return "₹0";
+      return "₹" + Number(num).toLocaleString('en-IN');
+    }
+
+    function formatINRRange(low, high) {
+      return `${formatINR(low)} – ${formatINR(high)}`;
+    }
+
+    // LocalStorage Estimates Manager
+    function saveCurrentEstimate() {
+      if (!state.computedResult) return;
+      const key = `costpilot_saved_${state.computedResult.estimateId}`;
+      const savedObj = {
+        id: state.computedResult.estimateId,
+        date: new Date().toLocaleDateString(),
+        title: state.computedResult.projectTitle,
+        build: formatINR(state.computedResult.buildCost.typical),
+        state: state
+      };
+
+      try {
+        localStorage.setItem(key, JSON.stringify(savedObj));
+        showToast(`Estimate ${state.computedResult.estimateId} saved locally!`);
+      } catch (err) {
+        showToast("Could not save to localStorage (storage full or disabled).");
+      }
+    }
+
+    function showSavedEstimates() {
+      const container = document.getElementById("saved-list-container");
+      container.innerHTML = "";
+
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("costpilot_saved_"));
+      if (keys.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:1.5rem; color:var(--text-muted); font-size:0.9rem;">No estimates saved yet. Generate one and click 'Save in Browser'.</div>`;
+      } else {
+        keys.forEach(k => {
+          const item = JSON.parse(localStorage.getItem(k));
+          const div = document.createElement("div");
+          div.style.cssText = "background:var(--bg-subtle); padding:0.85rem; border-radius:var(--radius-md); display:flex; justify-content:space-between; align-items:center;";
+          div.innerHTML = `
+            <div>
+              <strong style="color:var(--secondary);">${item.id}</strong> — <span>${item.title}</span><br>
+              <span style="font-size:0.75rem; color:var(--text-muted);">Saved: ${item.date} • Typ: ${item.build}</span>
+            </div>
+            <div style="display:flex; gap:0.4rem;">
+              <button class="btn btn-outline btn-sm" onclick="restoreEstimate('${k}')">Load</button>
+              <button class="btn btn-ghost btn-sm" style="color:var(--danger);" onclick="deleteSavedEstimate('${k}')">✕</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+      openModal("modal-saved");
+    }
+
+    function restoreEstimate(key) {
+      try {
+        const item = JSON.parse(localStorage.getItem(key));
+        if (item && item.state) {
+          Object.assign(state, item.state);
+          closeModals();
+          showResultsView();
+          showToast(`Restored estimate ${item.id}`);
+        }
+      } catch (e) {
+        showToast("Error restoring saved configuration.");
+      }
+    }
+
+    function deleteSavedEstimate(key) {
+      localStorage.removeItem(key);
+      showSavedEstimates();
+      showToast("Estimate removed.");
+    }
+
+    function clearAllSavedEstimates() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("costpilot_saved_"));
+      keys.forEach(k => localStorage.removeItem(k));
+      showSavedEstimates();
+      showToast("All saved estimates cleared.");
+    }
+
+    // Consultation Lead Submit
+    function handleConsultationSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById("lead-name").value;
+      const email = document.getElementById("lead-email").value;
+      const notes = document.getElementById("lead-notes").value;
+      
+      closeModals();
+      showToast(`Thank you, ${name}! Ezrah Innovations will review your estimate at ${email}.`);
+      document.getElementById("consultation-form").reset();
+    }
+
+    // Modal Utilities
+    function openModal(id) {
+      closeModals();
+      const m = document.getElementById(id);
+      if (m) m.classList.add("active");
+    }
+
+    function closeModals() {
+      document.querySelectorAll(".modal-backdrop").forEach(m => m.classList.remove("active"));
+    }
+
+    function openHowItWorksModal() { openModal("modal-how-it-works"); }
+    function openContactModal() { openModal("modal-contact"); }
+    function openDisclaimerModal() { openModal("modal-disclaimer"); }
+    function openPrivacyModal() { openModal("modal-privacy"); }
+
+    // Toast Messenger
+    function showToast(msg) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<span>ℹ️</span> <span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+
+    // Close modals on Escape key or backdrop click
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModals();
+    });
+    document.querySelectorAll(".modal-backdrop").forEach(b => {
+      b.addEventListener("click", (e) => {
+        if (e.target === b) closeModals();
+      });
+    });
+
+    // --------------------------------------------------------------------------
+    // 8. APP INITIALIZATION
+    // --------------------------------------------------------------------------
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("current-year").innerText = new Date().getFullYear();
+      // Pre-seed sample estimate ID
+      state.estimateId = generateEstimateId();
+    });
+  </script>
+</body>
+</html>
