@@ -914,15 +914,17 @@
     }
 
     /* ==========================================================================
-       NON-TECHNICAL PLAIN-ENGLISH PARITY MATRIX
+       NON-TECHNICAL PLAIN-ENGLISH PARITY MATRIX (Hidden until audited)
        ========================================================================== */
     .parity-section {
+      display: none; /* Hidden by default until user audits an offer */
       background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-xl);
       padding: 2rem;
       margin-bottom: 2.5rem;
       overflow-x: auto;
+      animation: fadeIn 0.3s ease;
     }
     
     /* Highlight Card: The 5 Headaches */
@@ -1357,7 +1359,7 @@
                 <textarea 
                   id="idea-input" 
                   class="idea-textarea" 
-                  placeholder="e.g. I want to build an online learning platform for a coaching centre. Students should be able to register, watch recorded classes, download PDFs, and pay monthly fees online."
+                  placeholder="e.g. I want to build an online learning platform for a coaching centre. Students should be able to register, watch recorded classes, and download PDFs."
                 ></textarea>
                 <button class="btn btn-secondary" id="btn-analyze-idea" style="width:100%;" onclick="processIdeaMode()">
                   Analyze & Value Project →
@@ -1691,7 +1693,7 @@
         </div>
 
         <!-- ==========================================================================
-             COUNTER-OFFER EVALUATOR & WORST-CASE SCRUTINY MODULE
+             COUNTER-OFFER AUDITOR CARD & WORST-CASE SCRUTINY MODULE
              ========================================================================== -->
         <div class="audit-card">
           <div class="audit-header">
@@ -1723,8 +1725,9 @@
                 <option value="inhouse">Informal / Acquaintance</option>
               </select>
             </div>
-            <div>
+            <div style="display:flex; gap:0.5rem;">
               <button class="btn btn-primary" onclick="runQuoteAudit()">Run Worst-Case Audit →</button>
+              <button class="btn btn-outline" onclick="resetQuoteAudit()" title="Clear Audit">🔄 Reset</button>
             </div>
           </div>
 
@@ -1757,16 +1760,17 @@
 
             <ul class="verdict-checklist" id="verdict-checklist-box" style="margin-top:1rem;"></ul>
 
-            <div style="margin-top:1.25rem; display:flex; gap:0.75rem; justify-content:flex-end;">
+            <div style="margin-top:1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+              <button class="btn btn-ghost btn-sm" onclick="resetQuoteAudit()">🔄 Clear & Test Another Quote</button>
               <button class="btn btn-secondary btn-sm" onclick="openContactModal()">Discuss Offer with Ezrah →</button>
             </div>
           </div>
         </div>
 
         <!-- ==========================================================================
-             ENHANCED: NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX
+             NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX (Appears only upon Audit)
              ========================================================================== -->
-        <div class="parity-section">
+        <div class="parity-section" id="parity-section">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
             <div>
               <span class="badge badge-primary" style="margin-bottom:0.25rem;">🔍 Real-World Comparison</span>
@@ -1783,9 +1787,9 @@
           <div class="headaches-banner">
             <h4>⚠️ The 5 Costly Headaches of Hiring a Lowball Freelancer:</h4>
             <div class="headaches-grid">
-              <div class="headache-item"><strong>1. Manual Work:</strong> Verifying payments by hand because auto-unlock wasn't coded.</div>
+              <div class="headache-item"><strong>1. Manual Work:</strong> Verifying user access by hand because automated webhooks were skipped.</div>
               <div class="headache-item"><strong>2. Surprise Bills:</strong> Hosting companies sending ₹8,000 bills for video bandwidth spikes.</div>
-              <div class="headache-item"><strong>3. Lost Customers:</strong> Mobile checkout buttons disappearing or breaking on phones.</div>
+              <div class="headache-item"><strong>3. Lost Customers:</strong> Mobile buttons disappearing or breaking on phones.</div>
               <div class="headache-item"><strong>4. Data Disaster:</strong> No automated backups; permanent customer data loss if servers crash.</div>
               <div class="headache-item"><strong>5. Held Hostage:</strong> Freelancers refusing to hand over code unless you pay extra.</div>
             </div>
@@ -1801,7 +1805,7 @@
               </tr>
             </thead>
             <tbody id="parity-table-body">
-              <!-- Populated with Plain-English Daily Scenarios -->
+              <!-- Populated dynamically and conditionally -->
             </tbody>
           </table>
         </div>
@@ -1960,7 +1964,7 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Commercial Software Standards • Production v4.5 Business-Outcome Engine</div>
+        <div>Commercial Software Standards • Production v5.0 Precision Release</div>
       </div>
     </div>
   </footer>
@@ -2200,13 +2204,13 @@
       },
 
       features: {
-        "feat_auth": { label: "User Authentication & Profiles", costA: 3500, costB: 9000, devFloor: 2000 },
+        "feat_auth": { label: "User Accounts & Student Login", costA: 3500, costB: 9000, devFloor: 2000 },
         "feat_social": { label: "Social Single Sign-on (Google/Apple)", costA: 3000, costB: 8000, devFloor: 1500 },
-        "feat_search": { label: "Search & Dynamic Filtering", costA: 3500, costB: 10000, devFloor: 2000 },
-        "feat_payments": { label: "Payment Gateway Integration", costA: 6000, costB: 15000, devFloor: 3000 },
+        "feat_search": { label: "Search & Content Filtering", costA: 3500, costB: 10000, devFloor: 2000 },
+        "feat_payments": { label: "Online Fee & Payment Gateway", costA: 6000, costB: 15000, devFloor: 3000 },
         "feat_wa_sms": { label: "WhatsApp & SMS Gateway", costA: 4500, costB: 12000, devFloor: 2500, annualHardOutlay: 3500 },
         "feat_ai_bot": { label: "Embedded AI Chat Assistant", costA: 8000, costB: 24000, devFloor: 4000, annualHardOutlay: 12000 },
-        "feat_storage": { label: "Direct Cloud Object Storage", costA: 3000, costB: 9000, devFloor: 1500 }
+        "feat_storage": { label: "Direct Cloud Document Storage", costA: 3000, costB: 9000, devFloor: 1500 }
       }
     };
 
@@ -2217,13 +2221,14 @@
       activePackageView: "serverless",
       fromIdeaMode: false,
       rawIdeaText: "",
+      customProjectTitle: null,
       analysisBreakdown: [],
       
       projectType: "lms",
       dynamicScope: [],
       uiuxTier: "custom",
       formScale: "1-3",
-      selectedFeatures: ["feat_auth", "feat_payments"],
+      selectedFeatures: ["feat_auth"], // Clean default (No payments unless requested)
       
       infra: {
         users: "under100",
@@ -2316,9 +2321,11 @@
       const year3B = buildB_typ + (monthlyB * 36);
       const year5B = buildB_typ + (monthlyB * 60);
 
+      const displayProjectTitle = cfg.customProjectTitle || p.title;
+
       return {
         estimateId: "CP-2026-" + Math.floor(10000 + Math.random() * 90000),
-        projectTitle: p.title,
+        projectTitle: displayProjectTitle,
         packageA: {
           name: "Cloud-Optimized Architecture",
           tagline: "Zero-Idle Serverless & Edge Compute",
@@ -2330,16 +2337,16 @@
           year3: year3A,
           year5: year5A,
           breakdown: [
-            { phase: "Requirements & Architecture Plan", desc: "Technical specs, database schema design, and API mapping", cost: Math.round(buildA_typ * 0.12) },
+            { phase: "Requirements & Architecture Plan", desc: "Technical specs, database schema design, and workflow mapping", cost: Math.round(buildA_typ * 0.12) },
             { phase: "UI/UX Layout Implementation", desc: ui.title, cost: Math.round(ui.costA + (buildA_typ * 0.28)) },
-            { phase: "Core Backend, Database & Workflows", desc: "Endpoints, authentication, payments, and data models", cost: Math.round(buildA_typ * 0.38) },
+            { phase: "Core Backend, Database & Workflows", desc: "Endpoints, accounts, media delivery, and data models", cost: Math.round(buildA_typ * 0.38) },
             { phase: "QA, Mobile Optimization & Edge Launch", desc: "Browser testing, domain verification, and edge SSL launch", cost: Math.round(buildA_typ * 0.22) }
           ],
           infraItems: [
             { item: "Managed Cloud Compute & Database", spec: "Zero-idle auto-scaling edge compute & relational cloud DB", cost: "Included" },
             { item: "Custom Domain & Global SSL Certificate", spec: "256-bit encryption and automated yearly renewals", cost: "Included" },
             { item: "Automated Offsite Database Backups", spec: "Weekly disaster-recovery snapshots", cost: "Included" },
-            { item: "Minor Content Update Allowance", spec: "Up to 1 hour per month of text, image, or pricing adjustments", cost: `₹${monthlyA.toLocaleString('en-IN')} / mo` }
+            { item: "Minor Content Update Allowance", spec: "Up to 1 hour per month of text, image, or content adjustments", cost: `₹${monthlyA.toLocaleString('en-IN')} / mo` }
           ]
         },
         packageB: {
@@ -2372,7 +2379,7 @@
       const reasons = [];
       if (cfg.uiuxTier === "premium") reasons.push("High-fidelity studio UI/UX and micro-interaction sprints");
       if (cfg.formScale === "9-15" || cfg.formScale === "15+") reasons.push("Complex multi-step interactive workflows & validations");
-      if (cfg.selectedFeatures.includes("feat_payments")) reasons.push("Payment gateway webhooks & automated tax invoice generation");
+      if (cfg.selectedFeatures.includes("feat_payments")) reasons.push("Payment gateway webhooks & automated tax receipt generation");
       if (cfg.selectedFeatures.includes("feat_ai_bot")) reasons.push("AI LLM streaming token integration & vector search pipeline");
       if (cfg.infra.users === "10k+") reasons.push("High-concurrency cloud scaling requirements (>10,000 users)");
       if (reasons.length === 0) reasons.push("Clean architectural baseline with lean module footprint");
@@ -2457,7 +2464,7 @@
         titleText.innerText = "High Risk: Suspected Lowball / Hidden Surcharge Trap";
         
         descText.innerText = isFreeTierOperational
-          ? `A build quote of ₹${counterAmount.toLocaleString('en-IN')} translates to less than ₹150/hour of developer effort. At this level, freelancers routinely cut basic security, fail to test mobile screens, or abandon projects halfway.`
+          ? `A build quote of ₹${counterAmount.toLocaleString('en-IN')} translates to less than ₹150/hour of developer effort. At this rate, vendors routinely cut basic security, fail to test mobile screens, or abandon projects halfway.`
           : `This project involves real third-party API or cloud storage bills (~₹${annualHardOutlays.toLocaleString('en-IN')}/yr in hard outlays). A vendor quoting ₹${counterAmount.toLocaleString('en-IN')} will either hit you with surprise hosting invoices post-launch or shut down when their trial credits expire.`;
 
         worstCaseText.innerHTML = `Estimated Hidden Post-Launch Cost: <strong>₹${worstCaseExposure.toLocaleString('en-IN')} to ₹${(worstCaseExposure * 1.8).toLocaleString('en-IN')}</strong> in emergency bug repairs, surprise video bandwidth penalties, or completely rebuilding from scratch.`;
@@ -2487,9 +2494,9 @@
         document.getElementById("scope-match-grid-box").style.display = "grid";
 
         includedList.innerHTML = `
-          <li>✓ Instant Online Payment & Auto-Access Setup</li>
-          <li>✓ Zero-Buffering Video Streaming Player</li>
-          <li>✓ Fully Tested Mobile & WhatsApp Viewports</li>
+          <li>✓ Core ${state.computedResult.projectTitle} Architecture & Workflows</li>
+          <li>✓ Zero-Buffering Media Streaming Player</li>
+          <li>✓ Fully Tested Mobile Viewports</li>
           <li>✓ Automated Weekly Database Snapshots</li>
           <li>✓ 100% Code Handover & 30-Day Written Warranty</li>
         `;
@@ -2497,7 +2504,7 @@
         deferredList.innerHTML = `
           <li>⏳ Custom Micro-Animations (Using clean production component styling)</li>
           <li>⏳ Secondary PDF Reports / Custom Invoices (Staged to Phase 2)</li>
-          <li>⏳ Paid SMS Gateway Packs (Using standard transactional emails)</li>
+          <li>⏳ Advanced Third-Party SMS Integrations (Using standard email alerts)</li>
         `;
 
         checklist.innerHTML = `
@@ -2519,48 +2526,68 @@
         document.getElementById("scope-match-grid-box").style.display = "grid";
         includedList.innerHTML = `
           <li>✓ All Selected Functional Capabilities</li>
-          <li>✓ Custom UI/UX Styling & Animations</li>
-          <li>✓ Payment Gateway, Invoicing & Webhooks</li>
-          <li>✓ 100% IP & GitHub Repository Handover</li>
+          <li>✓ Custom UI/UX Styling & Polish</li>
+          <li>✓ 100% IP & Source Code Handover</li>
         `;
         deferredList.innerHTML = `
           <li>✓ None (Full scope preserved at matched price)</li>
         `;
       }
 
+      // Populate & reveal parity table ONLY upon running audit
       renderScopeParityTable(counterAmount);
+      const parityEl = document.getElementById("parity-section");
+      parityEl.style.display = "block";
+      parityEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
       showToast("Quote audited against technical and infrastructure cost floors.");
+    }
+
+    // Reset Audit and Hide Parity Table
+    function resetQuoteAudit() {
+      document.getElementById("audit-quote-amount").value = "";
+      const verdictBox = document.getElementById("audit-verdict-box");
+      verdictBox.className = "audit-verdict-box";
+      document.getElementById("parity-section").style.display = "none";
+      showToast("Audit cleared. Ready to test another offer.");
     }
 
     // ==========================================================================
     // NON-TECHNICAL PLAIN-ENGLISH FEATURE PARITY MATRIX RENDERER
+    // (Strictly conditional: No payment rows if payment is not in scope!)
     // ==========================================================================
     function renderScopeParityTable(counterAmount) {
       const tbody = document.getElementById("parity-table-body");
-      const matchedPriceText = counterAmount ? `Ezrah Matched MVP (₹${counterAmount.toLocaleString('en-IN')})` : "Ezrah Matched MVP";
+      tbody.innerHTML = "";
 
-      tbody.innerHTML = `
-        <!-- ROW 1: PAYMENTS -->
-        <tr>
-          <td>
-            <span class="cell-title">💳 When a Customer Pays Online</span>
-            <span class="cell-desc">How payments, accounts, and fee receipts work in daily life.</span>
-          </td>
-          <td class="highlight">
-            <span class="cell-title" style="color:var(--primary);">Instant Auto-Unlock & Invoice</span>
-            <span class="cell-desc">Customer pays via UPI/Card $\rightarrow$ Account activates <strong>instantly</strong> $\rightarrow$ Branded tax receipt is emailed automatically. You do zero manual work.</span>
-          </td>
-          <td>
-            <span class="cell-title">Instant Auto-Unlock</span>
-            <span class="cell-desc">Seamless automatic access upon verified payment with standard email confirmation.</span>
-          </td>
-          <td>
-            <span class="cell-title" style="color:#b91c1c;">❌ Manual Checking Nightmare</span>
-            <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but course is locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
-          </td>
-        </tr>
+      const hasPayments = state.selectedFeatures.includes("feat_payments") || state.projectType === "ecommerce" || state.projectType === "saas_product";
 
-        <!-- ROW 2: VIDEOS & HOSTING -->
+      // 1. CONDITIONAL ROW: PAYMENTS (Only if project has payments!)
+      if (hasPayments) {
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <span class="cell-title">💳 When a Customer Pays Online</span>
+              <span class="cell-desc">How fee collection and access activation work in daily life.</span>
+            </td>
+            <td class="highlight">
+              <span class="cell-title" style="color:var(--primary);">Instant Auto-Unlock & Receipt</span>
+              <span class="cell-desc">Customer pays via UPI/Card $\rightarrow$ Account activates <strong>instantly</strong> $\rightarrow$ Branded tax receipt is emailed automatically. Zero manual work.</span>
+            </td>
+            <td>
+              <span class="cell-title">Instant Auto-Unlock</span>
+              <span class="cell-desc">Seamless automatic access upon verified payment with standard email confirmation.</span>
+            </td>
+            <td>
+              <span class="cell-title" style="color:#b91c1c;">❌ Manual Checking Nightmare</span>
+              <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but course is locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
+            </td>
+          </tr>
+        `;
+      }
+
+      // 2. VIDEO & MEDIA STREAMING
+      tbody.innerHTML += `
         <tr>
           <td>
             <span class="cell-title">🎥 Watching Videos & Loading Media</span>
@@ -2579,8 +2606,10 @@
             <span class="cell-danger">Raw video files dumped on cheap servers. When 15 users watch at 7 PM, it buffers and crashes. Hosting companies hit you with surprise bandwidth bills or suspend your site.</span>
           </td>
         </tr>
+      `;
 
-        <!-- ROW 3: MOBILE PHONES -->
+      // 3. MOBILE USABILITY
+      tbody.innerHTML += `
         <tr>
           <td>
             <span class="cell-title">📱 Browsing on Mobile & WhatsApp</span>
@@ -2588,19 +2617,21 @@
           </td>
           <td class="highlight">
             <span class="cell-title" style="color:var(--primary);">Flawless Mobile Experience</span>
-            <span class="cell-desc">Rigorously tested on budget Androids, iPhones, and iPads. Buttons, payment fields, and forms never overlap or break.</span>
+            <span class="cell-desc">Rigorously tested on budget Androids, iPhones, and iPads. Buttons, registration fields, and forms never overlap or break.</span>
           </td>
           <td>
             <span class="cell-title">Responsive Component UI</span>
             <span class="cell-desc">Built with verified mobile component libraries so checkout works smoothly on all phone screens.</span>
           </td>
           <td>
-            <span class="cell-title" style="color:#b91c1c;">❌ Broken Checkout on Phones</span>
-            <span class="cell-danger">Built only on developer's laptop screen. On phones, text overlaps, the "Enroll Now" button goes off-screen, and frustrated parents leave without paying.</span>
+            <span class="cell-title" style="color:#b91c1c;">❌ Broken Mobile Layout</span>
+            <span class="cell-danger">Built only on developer's laptop screen. On mobile, text overlaps, buttons go off-screen, and frustrated users leave without completing actions.</span>
           </td>
         </tr>
+      `;
 
-        <!-- ROW 4: DATA LOSS -->
+      // 4. DATA SAFETY & DISASTER RECOVERY
+      tbody.innerHTML += `
         <tr>
           <td>
             <span class="cell-title">🛡️ What Happens if the Server Crashes?</span>
@@ -2608,7 +2639,7 @@
           </td>
           <td class="highlight">
             <span class="cell-title" style="color:var(--primary);">Automated Weekly Vault Backups</span>
-            <span class="cell-desc">The database takes automatic weekly snapshots to an isolated vault. If anything ever fails, all user data and payment history are restored with 1 click.</span>
+            <span class="cell-desc">The database takes automatic weekly snapshots to an isolated vault. If anything ever fails, all user data and student records are restored with 1 click.</span>
           </td>
           <td>
             <span class="cell-title">Automated Weekly Backups</span>
@@ -2616,11 +2647,13 @@
           </td>
           <td>
             <span class="cell-title" style="color:#b91c1c;">❌ Permanent Data Loss Risk</span>
-            <span class="cell-danger">Zero automated backups. If their cheap server corrupts, all customer accounts, course progress, and fee records are erased. You have to ask users for bank screenshots.</span>
+            <span class="cell-danger">Zero automated backups. If their cheap server corrupts, all customer accounts, course progress, and records are erased permanently.</span>
           </td>
         </tr>
+      `;
 
-        <!-- ROW 5: OWNERSHIP -->
+      // 5. INTELLECTUAL PROPERTY & OWNERSHIP
+      tbody.innerHTML += `
         <tr>
           <td>
             <span class="cell-title">🔐 Who Actually Owns Your Platform?</span>
@@ -2639,8 +2672,10 @@
             <span class="cell-danger">Developer keeps the code on their personal machine. If you want changes later or have an argument, they demand extra money just to give you access to your own platform.</span>
           </td>
         </tr>
+      `;
 
-        <!-- ROW 6: POST-LAUNCH HELP -->
+      // 6. POST-LAUNCH WARRANTY
+      tbody.innerHTML += `
         <tr>
           <td>
             <span class="cell-title">🔧 Help When Something Breaks</span>
@@ -2672,6 +2707,7 @@
 
     function startWizardMode() {
       state.fromIdeaMode = false;
+      state.customProjectTitle = null;
       state.projectScale = "standard_mvp";
       document.getElementById("landing-section").style.display = "none";
       document.getElementById("estimator-section").style.display = "block";
@@ -2686,7 +2722,8 @@
       document.getElementById("estimator-section").style.display = "none";
       document.getElementById("results-section").style.display = "block";
       renderResults();
-      renderScopeParityTable(null);
+      // Notice: Do NOT display parity section on load! It only displays upon running audit!
+      document.getElementById("parity-section").style.display = "none";
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -2700,11 +2737,12 @@
       if (confirm("Reset current configuration to default benchmarks?")) {
         state.currentStep = 1;
         state.fromIdeaMode = false;
+        state.customProjectTitle = null;
         state.projectType = "lms";
         state.dynamicScope = [];
         state.uiuxTier = "custom";
         state.formScale = "1-3";
-        state.selectedFeatures = ["feat_auth", "feat_payments"];
+        state.selectedFeatures = ["feat_auth"];
         renderWizardStep(1);
         showToast("Estimator reset.");
       }
@@ -3078,15 +3116,18 @@
       state.selectedFeatures = ai.detected_features || ["feat_auth"];
       state.dynamicScope = ai.dynamic_scope || [];
 
+      // Extract a tailored project name directly from the idea
+      state.customProjectTitle = ai.project_title || generateSmartTitle(rawText, state.projectType);
+
       // Storage & users
       state.infra.storage = (ai.storage_requirement === "document_pdf_repo") ? "20gb" : (ai.storage_requirement === "high_volume_media" ? "100gb" : "5gb");
       state.infra.users = (ai.project_scale === "enterprise_scale") ? "10k+" : (ai.project_scale === "growth_scale" ? "1k-10k" : "under100");
 
       const chips = [
-        { title: "🎯 Archetype & Scale", desc: `${pricingData.projectTypes[state.projectType].title} (${formatScaleLabel(state.projectScale)})` },
-        { title: "🎥 Video Architecture", desc: ai.video_strategy === "zero_egress_embedded" ? "Zero-Egress Embedded Delivery (Keeps monthly at ₹1,000/mo)" : "Standard Web Media Pipeline" },
-        { title: "📂 Data & Forms", desc: `${state.infra.storage.toUpperCase()} Storage • ${state.formScale} Interactive Workflows` },
-        { title: "💡 Architect's Note", desc: ai.architectural_summary || "Configured for maximum cost-effectiveness and fast time to market." }
+        { title: "🎯 Identified Project", desc: `${state.customProjectTitle} (${formatScaleLabel(state.projectScale)})` },
+        { title: "🎥 Video Architecture", desc: ai.video_strategy === "zero_egress_embedded" ? "Zero-Egress Embedded Delivery (Keeps monthly at ₹1,000/mo)" : "Standard Media Pipeline" },
+        { title: "📂 Data & Workflows", desc: `${state.infra.storage.toUpperCase()} Storage • ${state.formScale} Interactive Workflows` },
+        { title: "💡 Architect's Note", desc: ai.architectural_summary || "Configured for maximum cost-effectiveness and fast launch." }
       ];
 
       state.analysisBreakdown = chips;
@@ -3105,67 +3146,104 @@
       state.infra.storage = "5gb";
       state.projectScale = "standard_mvp";
 
-      if (lower.includes("small") || lower.includes("tiny") || lower.includes("personal") || lower.includes("single branch")) {
+      if (lower.includes("small") || lower.includes("tiny") || lower.includes("personal") || lower.includes("single branch") || lower.includes("tuition")) {
         state.projectScale = "micro_local";
       }
 
       const chips = [];
 
-      // Project Type
-      if (lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("class")) {
+      // PRIORITY 1: LMS / Educational / Coaching
+      // Comprehensive check to guarantee LMS is NEVER misclassified as e-commerce!
+      const isEducational = lower.includes("learn") || lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("class") || lower.includes("tuition") || lower.includes("academy") || lower.includes("institute") || lower.includes("lecture") || lower.includes("education") || lower.includes("training");
+
+      if (isEducational) {
         state.projectType = "lms";
-        chips.push({ title: "🎯 Archetype", desc: "Learning Management System (LMS / EdTech)" });
-      } else if (lower.includes("store") || lower.includes("shop") || lower.includes("ecommerce") || lower.includes("product") || lower.includes("cart")) {
+        state.customProjectTitle = generateSmartTitle(text, "lms");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (EdTech / LMS)` });
+      } else if (lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("shopping") || lower.includes("storefront") || lower.includes("retail cart")) {
         state.projectType = "ecommerce";
-        chips.push({ title: "🎯 Archetype", desc: "E-Commerce Catalog & Checkout Platform" });
-      } else if (lower.includes("mobile") || lower.includes("android") || lower.includes("ios") || lower.includes("app")) {
+        state.customProjectTitle = generateSmartTitle(text, "ecommerce");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (E-Commerce)` });
+      } else if (lower.includes("mobile") || lower.includes("android") || lower.includes("ios") || lower.includes("flutter app")) {
         state.projectType = "mobile_app";
-        chips.push({ title: "🎯 Archetype", desc: "Cross-Platform Mobile Application" });
-      } else if (lower.includes("ai") || lower.includes("chatbot") || lower.includes("llm")) {
+        state.customProjectTitle = generateSmartTitle(text, "mobile_app");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (Mobile App)` });
+      } else if (lower.includes("ai") || lower.includes("chatbot") || lower.includes("llm") || lower.includes("gpt")) {
         state.projectType = "ai_app";
-        chips.push({ title: "🎯 Archetype", desc: "AI / LLM Workflow Engine" });
-      } else if (lower.includes("saas") || lower.includes("subscription")) {
+        state.customProjectTitle = generateSmartTitle(text, "ai_app");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (AI Application)` });
+      } else if (lower.includes("saas") || lower.includes("subscription software") || lower.includes("b2b platform")) {
         state.projectType = "saas_product";
-        chips.push({ title: "🎯 Archetype", desc: "Multi-Tenant SaaS Platform" });
-      } else if (lower.includes("portfolio")) {
+        state.customProjectTitle = generateSmartTitle(text, "saas_product");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (SaaS Product)` });
+      } else if (lower.includes("portfolio") || lower.includes("showcase")) {
         state.projectType = "portfolio";
-        chips.push({ title: "🎯 Archetype", desc: "Interactive Brand Portfolio" });
+        state.customProjectTitle = generateSmartTitle(text, "portfolio");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (Portfolio)` });
       } else {
         state.projectType = "biz_website";
-        chips.push({ title: "🎯 Archetype", desc: "Modern Responsive Web Platform" });
+        state.customProjectTitle = generateSmartTitle(text, "biz_website");
+        chips.push({ title: "🎯 Identified Project", desc: `${state.customProjectTitle} (Web Platform)` });
       }
 
       // Video Strategy
       if (lower.includes("video") || lower.includes("recorded") || lower.includes("lecture") || lower.includes("classes") || lower.includes("watch")) {
-        chips.push({ title: "🎥 Video Streaming Strategy", desc: "Zero-Egress Embedded Delivery (Keeps monthly cloud at ₹1,000/mo instead of ₹10,000/mo)" });
+        chips.push({ title: "🎥 Video Streaming Strategy", desc: "Zero-Egress Embedded Delivery (Fixed ₹1,000/mo cloud baseline)" });
       }
 
-      // Features
+      // Feature: Authentication
       if (lower.includes("student") || lower.includes("register") || lower.includes("login") || lower.includes("account") || lower.includes("user")) {
         state.selectedFeatures.push("feat_auth");
-        chips.push({ title: "🔐 User & Profiles", desc: "User Authentication & Session Management" });
+        chips.push({ title: "🔐 User & Accounts", desc: "Secure Student Login & Profile Accounts" });
       }
-      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document") || lower.includes("file")) {
+
+      // Feature: Document Storage
+      if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document") || lower.includes("file") || lower.includes("material")) {
         state.selectedFeatures.push("feat_storage");
         state.infra.storage = "20gb";
-        chips.push({ title: "📂 Asset Repository", desc: "Cloud Object Storage for PDF notes and downloadable course materials" });
+        chips.push({ title: "📂 Asset Repository", desc: "Cloud Document Storage for PDFs and notes" });
       }
-      if (lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("money") || lower.includes("checkout")) {
+
+      // Feature: Payments (ONLY IF EXPLICITLY MENTIONED!)
+      // If the user did NOT mention money/payment/fees/pricing, do NOT add feat_payments!
+      const mentionsMoney = lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("money") || lower.includes("checkout") || lower.includes("price") || lower.includes("pricing") || lower.includes("charge");
+      if (mentionsMoney) {
         state.selectedFeatures.push("feat_payments");
-        chips.push({ title: "💳 Transaction Engine", desc: "Payment Gateway, webhooks, and automated receipt generation" });
+        chips.push({ title: "💳 Transaction Engine", desc: "Online Payment Gateway & Automatic Fee Receipts" });
       }
+
+      // Feature: Quizzes / Tests
       if (lower.includes("quiz") || lower.includes("test") || lower.includes("exam")) {
         if (state.projectType === "lms") state.dynamicScope.push("lms_quizzes");
         chips.push({ title: "📝 Evaluation Engine", desc: "Timed Quizzes & Automated Scoring Module" });
       }
+
+      // Feature: AI Bot
       if (lower.includes("ai") || lower.includes("chat") || lower.includes("bot")) {
         state.selectedFeatures.push("feat_ai_bot");
         chips.push({ title: "🤖 Intelligence Module", desc: "Embedded AI Assistant & Streaming Chat UI" });
       }
 
-      if (state.selectedFeatures.length === 0) state.selectedFeatures = ["feat_auth"];
+      if (state.selectedFeatures.length === 0) {
+        state.selectedFeatures = ["feat_auth"];
+      }
+
       state.analysisBreakdown = chips;
       document.getElementById("ai-engine-badge").innerText = "Local Semantic Engine";
+    }
+
+    function generateSmartTitle(text, type) {
+      const lower = text.toLowerCase();
+      if (lower.includes("coaching")) return "Coaching Centre Learning Platform";
+      if (lower.includes("tuition")) return "Tuition Portal & Student System";
+      if (lower.includes("school") || lower.includes("college")) return "Academic Learning & Resource Portal";
+      if (lower.includes("yoga") || lower.includes("fitness")) return "Studio Member & Class Booking App";
+      if (lower.includes("clinic") || lower.includes("doctor")) return "Healthcare Consultation & Booking Portal";
+      if (type === "lms") return "Online Learning & Training Platform";
+      if (type === "ecommerce") return "Digital Storefront & Order Portal";
+      if (type === "mobile_app") return "Cross-Platform Mobile Application";
+      if (type === "ai_app") return "AI Workflow & Assistant Platform";
+      return pricingData.projectTypes[type].title;
     }
 
     function formatScaleLabel(scale) {
