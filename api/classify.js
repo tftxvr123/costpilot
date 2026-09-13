@@ -1,5 +1,5 @@
 // api/classify.js — Vercel Serverless Function (Node.js)
-// Dynamic Effort-Hours Classification: Zero Price Hallucination
+// Intelligent Requirement & Scope-Exclusion Analyzer
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -28,44 +28,65 @@ module.exports = async (req, res) => {
       });
     }
 
-    const systemPrompt = `You are a senior software architect at Ezrah Innovations.
-Analyze the user's project idea and evaluate the REALISTIC ENGINEERING EFFORT (in hours) needed to build it.
-DO NOT generate prices, currency numbers, or hourly rates. Output ONLY technical effort units.
+    const systemPrompt = `You are a senior software architect and technical scoping expert at Ezrah Innovations.
+Analyze the user's project idea with extreme attention to INCLUSIONS vs EXCLUSIONS.
 
-Rules for Effort Sizing:
-1. "static_content": Simple 1-page or 3-page portfolios, photography showcases, brochure sites with NO database. Requires 8 to 20 hours of work. monthly_infra_demand must be "zero_infra".
-2. "lightweight_interactive": Filterable galleries, simple contact forms, basic blogs with light CMS. Requires 20 to 45 hours. monthly_infra_demand: "zero_infra" or "light_gateway".
-3. "full_database_platform": LMS, SaaS, E-Commerce, portals with student/user login, payments, databases. Requires 45 to 100+ hours. monthly_infra_demand: "managed_cloud_app".
+CRITICAL RULES FOR EXTRACTION:
+1. DISTINGUISH REQUIREMENTS FROM EXCLUSIONS:
+   - Explicit negative statements must NEVER be interpreted as included features!
+   - Examples:
+     * "Restaurant website with menu and cart, no online payment" -> menu: INCLUDED, cart: INCLUDED, payment gateway: EXCLUDED.
+     * "Website with login, but no admin panel" -> login: INCLUDED, admin: EXCLUDED.
+     * "No mobile app, web only" -> mobile app: EXCLUDED, web: INCLUDED.
+     * "No AI features" -> AI: EXCLUDED.
+   - Negative trigger phrases: "no", "not required", "without", "excluding", "don't need", "doesn't need", "not needed", "not included", "out of scope", "only", "just", "web only", "no payment", "no admin", "no login", "no app".
 
-Feature Rule:
-- ONLY include "feat_payments" if they explicitly mention paying money, fees, pricing, checkout, or selling. If they do not ask to collect money, DO NOT include "feat_payments".`;
+2. DO NOT ASSUME UNMENTIONED FEATURES:
+   - "Simple restaurant website with menu and contact" -> DO NOT assume online ordering, cart, payment, login, admin panel, delivery tracking.
+   - "Basic business website with 5 pages" -> DO NOT assume CMS, admin dashboard, authentication, or payment gateway.
+
+3. PREVENT PRICE COMPRESSION:
+   - Accurately estimate realistic developer hours without compressing everything into 50 hours:
+     * Very simple portfolio / landing page: 15–30 hours.
+     * Basic business website (5-8 pages): 35–60 hours.
+     * Business website + Admin/CMS / Restaurant ordering (no payment): 60–100 hours.
+     * Small to medium web application / MVP: 100–180 hours.
+     * LMS / SaaS platform / Complex portal: 180–350+ hours.
+     * Complex marketplace / Multi-vendor: 320–550+ hours.
+   - DO NOT generate currency prices. Output technical effort units only.`;
 
     const responseSchema = {
       type: "OBJECT",
       properties: {
         project_title: {
           type: "STRING",
-          description: "A tailored, professional title for their exact project (e.g. 'Photography Portfolio Showcase', 'Coaching Centre LMS')."
+          description: "A professional tailored title reflecting the exact project scope."
         },
         archetype: {
           type: "STRING",
           enum: ["portfolio", "biz_website", "lms", "ecommerce", "web_app", "mobile_app", "saas_product", "ai_app"]
         },
-        architecture_type: {
+        platform_scope: {
           type: "STRING",
-          enum: ["static_content", "lightweight_interactive", "full_database_platform"]
+          enum: ["website_only", "web_application", "mobile_app_only", "cross_platform_web_mobile"]
         },
-        estimated_dev_hours_min: {
-          type: "INTEGER",
-          description: "Minimum realistic developer hours required (e.g. 8 for simple portfolio, 55 for LMS)."
-        },
-        estimated_dev_hours_max: {
-          type: "INTEGER",
-          description: "Maximum realistic developer hours required (e.g. 14 for simple portfolio, 85 for LMS)."
-        },
+        has_admin_panel: { type: "BOOLEAN" },
+        user_roles_count: { type: "INTEGER" },
+        estimated_dev_hours_min: { type: "INTEGER" },
+        estimated_dev_hours_max: { type: "INTEGER" },
         monthly_infra_demand: {
           type: "STRING",
           enum: ["zero_infra", "light_gateway", "managed_cloud_app"]
+        },
+        included_features: {
+          type: "ARRAY",
+          items: { type: "STRING" },
+          description: "List of explicitly requested features."
+        },
+        excluded_features: {
+          type: "ARRAY",
+          items: { type: "STRING" },
+          description: "List of explicitly excluded or rejected features (e.g. 'No Online Payment', 'No Admin Panel')."
         },
         detected_features: {
           type: "ARRAY",
@@ -76,16 +97,20 @@ Feature Rule:
         },
         architectural_summary: {
           type: "STRING",
-          description: "A 1-sentence technical explanation of the effort sizing and architecture class."
+          description: "A 1-2 sentence technical summary explaining what is included and how exclusions were respected."
         }
       },
       required: [
         "project_title",
         "archetype",
-        "architecture_type",
+        "platform_scope",
+        "has_admin_panel",
+        "user_roles_count",
         "estimated_dev_hours_min",
         "estimated_dev_hours_max",
         "monthly_infra_demand",
+        "included_features",
+        "excluded_features",
         "detected_features",
         "architectural_summary"
       ]
@@ -97,7 +122,7 @@ Feature Rule:
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `User Project Description: "${prompt}"` }] }],
+        contents: [{ parts: [{ text: `Scrutinize this user project description:\n"${prompt}"` }] }],
         generationConfig: {
           response_mime_type: "application/json",
           response_schema: responseSchema,
