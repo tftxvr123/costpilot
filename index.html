@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1384,7 +1383,7 @@
                   <button class="btn btn-outline btn-sm" onclick="clearIdeaInput()" title="Clear text">Clear</button>
                 </div>
                 <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
-                  🔒 Negative statements (e.g. 'no payment') are strictly honored as scope exclusions.
+                  🔒 Negative statements (e.g. 'no payment', 'no customer login') are strictly honored as scope exclusions.
                 </span>
               </div>
             </div>
@@ -1483,7 +1482,7 @@
               <div>
                 <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Interactive Form / Workflow Scale</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-                  Includes inquiries, student registration, multi-step checkouts, file uploads, and onboarding wizards.
+                  Includes inquiries, registration flows, multi-step checkouts, file uploads, and onboarding wizards.
                 </p>
                 <div class="pill-selector" id="form-count-options">
                   <button class="pill-btn selected" data-forms="none" onclick="selectFormCount('none')">Simple / None</button>
@@ -1569,7 +1568,7 @@
     <section id="results-section">
       <div class="container">
 
-        <!-- SMART REQUIREMENT ANALYSIS CALLOUT (For Idea Mode) -->
+        <!-- SMART REQUIREMENT ANALYSIS CALLOUT -->
         <div class="smart-analysis-banner" id="smart-analysis-banner">
           <div class="analysis-header-badge">
             <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -2026,7 +2025,6 @@
       currencySymbol: "₹",
       lastUpdated: "February 2026",
 
-      // Commercial agency billing rate & discounted studio execution rate
       hourlyRateStandard: 550,
       hourlyRateOptimized: 465,
 
@@ -2166,14 +2164,12 @@
       customProjectTitle: null,
       analysisBreakdown: [],
       
-      // Extraction tracking
       includedList: [],
       excludedList: [],
       hasAdminPanel: false,
       userRolesCount: 1,
       platformScope: "website_only",
 
-      // Dynamic Effort Metrics
       estimatedHoursMin: null,
       estimatedHoursMax: null,
       
@@ -2203,7 +2199,6 @@
       const fScale = pricingData.formScale[cfg.formScale] || pricingData.formScale["1-3"];
       const rawText = (cfg.rawIdeaText || "").toLowerCase();
 
-      // Helper to verify if an item is explicitly excluded
       function isExplicitlyExcluded(term) {
         if (cfg.excludedList && cfg.excludedList.some(ex => ex.toLowerCase().includes(term.toLowerCase()))) {
           return true;
@@ -2214,7 +2209,6 @@
         return false;
       }
 
-      // Helper to check if a requirement is present & NOT excluded
       function hasRequirement(keywords, featureId, dynamicId) {
         for (const kw of keywords) {
           if (isExplicitlyExcluded(kw)) return false;
@@ -2252,50 +2246,51 @@
       });
 
       // ========================================================================
-      // DEEP COMPLEXITY ACCUMULATION (Scans exact requirements & prevents compression)
+      // DEEP COMPLEXITY ACCUMULATION
       // ========================================================================
 
-      // A. BACKEND & DATABASE COMPLEXITY (Must materially matter!)
+      // A. BACKEND & DATABASE COMPLEXITY
       const needsDatabase = hasRequirement(["database", "db", "crud", "data storage", "records", "sql", "postgres", "mongodb"], null, null) ||
                             cfg.projectType === "lms" || cfg.projectType === "saas_product" || cfg.projectType === "ecommerce" || cfg.projectType === "web_app";
       if (needsDatabase && !isExplicitlyExcluded("database")) {
-        accumulatedHours += 24; // Schema modeling, migrations, ORM, data access
+        accumulatedHours += 24;
       }
 
-      // B. USER AUTHENTICATION & LOGIN
-      const needsAuth = hasRequirement(["login", "auth", "register", "registration", "signup", "user account", "password", "jwt"], "feat_auth", null);
+      // B. USER AUTHENTICATION & LOGIN (Strictly checks customer auth exclusions)
+      const needsAuth = hasRequirement(["login", "auth", "register", "registration", "signup", "user account", "password", "jwt"], "feat_auth", null) &&
+                        !isExplicitlyExcluded("customer login") && !isExplicitlyExcluded("login");
       if (needsAuth && !cfg.selectedFeatures.includes("feat_auth")) {
         accumulatedHours += 14;
       }
 
-      // C. USER ROLES & RBAC PERMISSIONS (Must strongly matter!)
+      // C. USER ROLES & RBAC PERMISSIONS
       const needsRoles = hasRequirement(["role", "roles", "rbac", "permission", "permissions", "access control", "multi-role", "multiple roles"], null, "app_roles_multi") ||
                          hasRequirement(["student and teacher", "customer and admin", "buyer and seller", "vendor and admin", "instructor", "multi-tenant"], null, null);
       if (needsRoles && !isExplicitlyExcluded("roles")) {
-        accumulatedHours += 22; // Multi-role authorization matrix, route guards, testing matrix
+        accumulatedHours += 22;
       }
 
       // D. DASHBOARDS (Customer Dashboard vs Admin Dashboard)
       const needsAdminDashboard = (hasRequirement(["admin dashboard", "admin panel", "admin portal", "management panel", "admin console", "admin"], null, null) || cfg.hasAdminPanel) &&
                                   !isExplicitlyExcluded("admin");
       if (needsAdminDashboard) {
-        accumulatedHours += 28; // Admin data tables, filters, actions, user moderation
+        accumulatedHours += 28;
       }
 
       const needsCustomerDashboard = hasRequirement(["customer dashboard", "user dashboard", "client portal", "member dashboard", "student dashboard", "vendor dashboard", "partner dashboard"], null, null) &&
-                                     !isExplicitlyExcluded("dashboard");
+                                     !isExplicitlyExcluded("dashboard") && !isExplicitlyExcluded("customer login");
       if (needsCustomerDashboard) {
-        accumulatedHours += 22; // Dedicated interactive user dashboard, widgets, profile stats
+        accumulatedHours += 22;
       }
 
-      // E. COMPLEX MULTI-STEP WORKFLOWS
+      // E. WORKFLOWS
       const hasBookingWorkflow = hasRequirement(["booking", "reserve", "slot", "appointment", "schedule", "reservation"], null, null);
       if (hasBookingWorkflow && !isExplicitlyExcluded("booking")) {
         accumulatedHours += 18;
       }
 
       const hasOrderingWorkflow = hasRequirement(["cart", "shopping cart", "ordering", "order management", "checkout flow"], null, null);
-      if (hasOrderingWorkflow && !isExplicitlyExcluded("cart")) {
+      if (hasOrderingWorkflow && !isExplicitlyExcluded("cart") && !isExplicitlyExcluded("shopping cart") && !isExplicitlyExcluded("checkout")) {
         accumulatedHours += 18;
       }
 
@@ -2304,102 +2299,76 @@
         accumulatedHours += 18;
       }
 
-      // F. INTEGRATIONS (Payment, WhatsApp, Maps, Storage, AI, APIs, Analytics)
-      // Payment Gateway (ONLY IF INCLUDED AND NOT EXCLUDED!)
+      // F. INTEGRATIONS
       const needsPayment = hasRequirement(["payment", "payments", "pay", "fee", "fees", "razorpay", "stripe", "gateway", "online payment"], "feat_payments", null) &&
-                           !isExplicitlyExcluded("payment");
+                           !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("online payment");
       if (needsPayment && !cfg.selectedFeatures.includes("feat_payments")) {
-        accumulatedHours += 22; // Webhooks, signature verification, payment logging
+        accumulatedHours += 22;
       }
 
-      // Subscriptions
       const needsSubscription = hasRequirement(["subscription", "recurring", "monthly plan", "membership fee"], null, "saas_billing") &&
                                 !isExplicitlyExcluded("subscription");
       if (needsSubscription) {
         accumulatedHours += 18;
       }
 
-      // WhatsApp / SMS
       const needsWhatsApp = hasRequirement(["whatsapp", "sms", "text alert"], "feat_wa_sms", null) && !isExplicitlyExcluded("whatsapp");
       if (needsWhatsApp && !cfg.selectedFeatures.includes("feat_wa_sms")) {
         accumulatedHours += 10;
       }
 
-      // Maps
       const needsMaps = hasRequirement(["maps", "google maps", "location", "gps", "geolocation"], null, "mob_maps") && !isExplicitlyExcluded("maps");
       if (needsMaps) {
         accumulatedHours += 8;
       }
 
-      // Cloud File Uploads / Storage
       const needsStorage = hasRequirement(["upload", "file", "storage", "pdf", "documents", "s3", "blob"], "feat_storage", null) && !isExplicitlyExcluded("storage");
       if (needsStorage && !cfg.selectedFeatures.includes("feat_storage")) {
         accumulatedHours += 10;
       }
 
-      // AI / LLM Module
       const needsAI = hasRequirement(["ai", "llm", "chatbot", "gpt", "rag", "vector", "assistant"], "feat_ai_bot", null) && !isExplicitlyExcluded("ai");
       if (needsAI && !cfg.selectedFeatures.includes("feat_ai_bot")) {
         accumulatedHours += 35;
       }
 
-      // External APIs / Webhooks
       const needsAPIs = hasRequirement(["api", "apis", "webhook", "webhooks", "third-party", "integration", "rest api"], null, "app_webhooks") && !isExplicitlyExcluded("api");
       if (needsAPIs) {
         accumulatedHours += 16;
       }
 
-      // Analytics & Reporting
       const needsAnalytics = hasRequirement(["analytics", "reports", "reporting", "export", "csv", "excel export", "chart", "graphs"], null, "app_analytics") && !isExplicitlyExcluded("analytics");
       if (needsAnalytics) {
         accumulatedHours += 14;
       }
 
-      // G. PLATFORM SCOPE (Web only vs Mobile app vs Both)
+      // G. PLATFORM SCOPE
       const hasMobileApp = hasRequirement(["mobile app", "android", "ios", "flutter", "react native"], null, null) &&
                            !isExplicitlyExcluded("mobile app") &&
                            !isExplicitlyExcluded("app");
       if (hasMobileApp && cfg.projectType !== "mobile_app") {
-        accumulatedHours += 75; // Substantial extra effort for native mobile application client
+        accumulatedHours += 75;
       }
 
-      // Multi-Vendor / Marketplace Scale
       const isMarketplace = hasRequirement(["marketplace", "multi-vendor", "multivendor", "multi vendor", "buyer and seller"], null, null);
       if (isMarketplace) {
         accumulatedHours += 80;
       }
 
-      // H. Scope Deductions for Explicit Exclusions
-      if (isExplicitlyExcluded("payment")) {
-        // Guarantee payment gateway adds 0
-      }
-      if (isExplicitlyExcluded("admin")) {
-        // Guarantee admin adds 0
-      }
-      if (isExplicitlyExcluded("mobile app") || isExplicitlyExcluded("mobile")) {
-        // Guarantee mobile adds 0
-      }
-
       // ========================================================================
       // CALCULATE UNCOMPRESSED MARKET PRICE & DISCOUNTED PRICE
       // ========================================================================
-
-      // Derive Market Price directly from accumulated hours
       const calculatedMarketPrice = Math.round(accumulatedHours * pricingData.hourlyRateStandard);
-
-      // Calibration sanity floor & ceiling alignment (respecting scope, never capping complex apps!)
       let standardA = calculatedMarketPrice;
 
-      // Ensure minimal portfolio stays low (~₹12K–₹22K) ONLY if it's actually simple
+      // Calibration sanity floor & ceiling alignment
       if (cfg.projectType === "portfolio" && accumulatedHours <= 30) {
         standardA = Math.min(standardA, 22000);
         standardA = Math.max(standardA, 12000);
       } else if (cfg.projectType === "biz_website" && accumulatedHours <= 45 && !needsDatabase && !needsAdminDashboard) {
-        // Simple business website stays in its calibration bracket (~₹20K–₹35K)
         standardA = Math.max(standardA, 22000);
         standardA = Math.min(standardA, 38000);
       } else if (accumulatedHours >= 150) {
-        // Complex platforms: Guarantee they break out into ₹1L+ bracket
         standardA = Math.max(standardA, 95000);
       }
 
@@ -2407,7 +2376,6 @@
       const optimizedA = Math.round(standardA * 0.85);
       const savingsA = standardA - optimizedA;
 
-      // Monthly Operating Cost for Package A: FIXED ₹1,000 / mo
       const monthlyA = 1000;
 
       // PACKAGE B: Dedicated Enterprise Cluster
@@ -3103,13 +3071,11 @@
       document.getElementById("res-estimate-id").innerText = res.estimateId;
       document.getElementById("res-project-name").innerText = `${res.projectTitle} Specification`;
 
-      // Update Hours Badge
       const hoursBadge = document.getElementById("effort-hours-badge");
       if (res.hoursMin && res.hoursMax) {
         hoursBadge.innerText = `${res.hoursMin}–${res.hoursMax} Dev Hours`;
       }
 
-      // Smart Analysis Callout
       const banner = document.getElementById("smart-analysis-banner");
       if (state.fromIdeaMode) {
         banner.classList.add("active");
@@ -3127,10 +3093,8 @@
         banner.classList.remove("active");
       }
 
-      // Render Active View
       updateSelectedPackageDisplay();
 
-      // Why Chips
       const chips = document.getElementById("why-chips-container");
       chips.innerHTML = "";
       res.reasons.forEach(r => {
@@ -3154,7 +3118,6 @@
       const isA = state.activePackageView === "serverless";
       const active = isA ? res.packageA : res.packageB;
 
-      // Update Hero Valuation Card
       document.getElementById("res-hero-arch-badge").innerText = isA ? "Package A: Cloud-Optimized Architecture" : "Package B: Dedicated Enterprise Cluster";
       document.getElementById("res-overkill-warning-badge").style.display = (!isA && !res.isHighScale) ? "inline-flex" : "none";
 
@@ -3165,7 +3128,6 @@
       document.getElementById("val-monthly-price").innerText = `₹${active.monthly.toLocaleString('en-IN')} / mo`;
       document.getElementById("val-monthly-desc").innerText = active.monthlyDesc;
 
-      // Update TCO Indicator & Values
       document.getElementById("tco-package-indicator").innerHTML = `Displaying projection for: <strong>${active.name}</strong>`;
       document.getElementById("dev-active-pkg-label").innerText = isA ? "Package A (Cloud-Optimized)" : "Package B (Dedicated Enterprise)";
       document.getElementById("infra-active-pkg-label").innerText = isA ? "Package A (Zero-Idle Stack)" : "Package B (Dedicated VPC Cluster)";
@@ -3174,7 +3136,6 @@
       document.getElementById("tco-val-3yr").innerText = formatINR(active.year3);
       document.getElementById("tco-val-5yr").innerText = formatINR(active.year5);
 
-      // Breakdown: Dev
       const devTbody = document.getElementById("table-dev-rows");
       devTbody.innerHTML = "";
       active.breakdown.forEach(row => {
@@ -3187,7 +3148,6 @@
         devTbody.appendChild(tr);
       });
 
-      // Breakdown: Infra
       const infraTbody = document.getElementById("table-infra-rows");
       infraTbody.innerHTML = "";
       active.infraItems.forEach(row => {
@@ -3214,7 +3174,7 @@
     }
 
     // ==========================================================================
-    // REQUIREMENT & EXCLUSION-AWARE SEMANTIC ANALYZER (UNTOUCHED LOGIC)
+    // REQUIREMENT & EXCLUSION-AWARE SEMANTIC ANALYZER (WITH STRICT PRECEDENCE)
     // ==========================================================================
     async function processIdeaMode() {
       const inputEl = document.getElementById("idea-input");
@@ -3229,7 +3189,6 @@
       btnEl.disabled = true;
       btnEl.innerText = "Scrutinizing Scope & Exclusions...";
 
-      // Attempt AI Proxy Call (/api/classify)
       if (AI_WORKER_URL) {
         try {
           const response = await fetch(AI_WORKER_URL, {
@@ -3252,7 +3211,6 @@
         }
       }
 
-      // Fallback: Local Exclusion-Aware Classifier
       applyLocalClassification(text);
       btnEl.disabled = false;
       btnEl.innerText = "Analyze & Value Project →";
@@ -3279,6 +3237,9 @@
       state.estimatedHoursMin = ai.estimated_dev_hours_min;
       state.estimatedHoursMax = ai.estimated_dev_hours_max;
 
+      // STRICT PRECEDENCE ENFORCEMENT ON AI OUTPUT
+      enforceStrictExclusionPrecedence(state, rawText);
+
       const chips = [
         { title: "🎯 Scoped Product", desc: `${state.customProjectTitle}` },
         { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin || 40} – ${state.estimatedHoursMax || 75} Dev Hours` },
@@ -3291,24 +3252,15 @@
       document.getElementById("ai-engine-badge").innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
     }
 
-    // Checks if a keyword appears in a negated context (e.g. "no payment", "without admin")
+    // Flexible negation checker: handles intermediate words (e.g. "no customer login", "without online payment")
     function isNegatedInText(text, keyword) {
       const lower = text.toLowerCase();
+      const kwPattern = keyword.replace(/\s+/g, '\\s+');
       const negationPatterns = [
-        `no\\s+${keyword}`,
-        `not\\s+${keyword}`,
-        `without\\s+${keyword}`,
-        `excluding\\s+${keyword}`,
-        `don't\\s+need\\s+${keyword}`,
-        `doesn't\\s+need\\s+${keyword}`,
-        `not\\s+needed\\s+${keyword}`,
-        `no\\s+need\\s+for\\s+${keyword}`,
-        `out\\s+of\\s+scope`,
-        `${keyword}\\s+not\\s+required`,
-        `${keyword}\\s+not\\s+needed`,
-        `skip\\s+${keyword}`,
-        `except\\s+${keyword}`,
-        `no\\s+online\\s+${keyword}`
+        `(?:no|without|excluding|excluded|out\\s+of\\s+scope|don't\\s+need|doesn't\\s+need|not\\s+needed|not\\s+required|not\\s+included|skip)\\s+(?:\\w+\\s+){0,3}${kwPattern}`,
+        `${kwPattern}\\s+(?:is\\s+)?not\\s+(?:required|needed|included)`,
+        `${kwPattern}\\s+is\\s+out\\s+of\\s+scope`,
+        `except\\s+(?:\\w+\\s+){0,2}${kwPattern}`
       ];
       for (const pattern of negationPatterns) {
         if (new RegExp(pattern, 'i').test(lower)) {
@@ -3318,6 +3270,7 @@
       return false;
     }
 
+    // Local Requirement Analysis with explicit exclusion override rules
     function applyLocalClassification(text) {
       const lower = text.toLowerCase();
       state.fromIdeaMode = true;
@@ -3332,58 +3285,134 @@
       const included = [];
       const excluded = [];
 
-      // 1. Detect Explicit Exclusions First (UNTOUCHED)
-      if (isNegatedInText(lower, "payment") || isNegatedInText(lower, "payments") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "checkout") || lower.includes("no payment") || lower.includes("without payment") || lower.includes("no online payment")) {
-        excluded.push("No Online Payment");
-      }
-      if (isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "dashboard") || lower.includes("no admin")) {
-        excluded.push("No Admin Panel");
-      }
-      if (isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile") || isNegatedInText(lower, "app") || lower.includes("web only") || lower.includes("website only")) {
-        excluded.push("Web Only (No Mobile App)");
-      }
-      if (isNegatedInText(lower, "login") || isNegatedInText(lower, "auth") || isNegatedInText(lower, "registration") || lower.includes("no login")) {
-        excluded.push("No User Accounts/Login");
-      }
-      if (isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || lower.includes("no ai")) {
-        excluded.push("No AI / LLM Features");
-      }
+      // 1. Detect Explicit Exclusions First
+      const isCustomerAuthExcluded = isNegatedInText(lower, "login") || 
+                                     isNegatedInText(lower, "customer login") || 
+                                     isNegatedInText(lower, "user login") || 
+                                     isNegatedInText(lower, "auth") || 
+                                     isNegatedInText(lower, "authentication") || 
+                                     isNegatedInText(lower, "registration") || 
+                                     isNegatedInText(lower, "accounts") || 
+                                     lower.includes("no customer login") || 
+                                     lower.includes("no user login") || 
+                                     lower.includes("no login") || 
+                                     lower.includes("no registration");
+
+      const isPaymentExcluded = isNegatedInText(lower, "payment") || 
+                                isNegatedInText(lower, "payments") || 
+                                isNegatedInText(lower, "online payment") || 
+                                isNegatedInText(lower, "gateway") || 
+                                isNegatedInText(lower, "checkout") || 
+                                lower.includes("no online payment") || 
+                                lower.includes("no payment") || 
+                                lower.includes("without payment");
+
+      const isCartExcluded = isNegatedInText(lower, "cart") || 
+                             isNegatedInText(lower, "shopping cart") || 
+                             isNegatedInText(lower, "checkout") || 
+                             lower.includes("no shopping cart") || 
+                             lower.includes("no checkout") || 
+                             lower.includes("without cart");
+
+      const isMobileExcluded = isNegatedInText(lower, "mobile app") || 
+                               isNegatedInText(lower, "mobile application") || 
+                               isNegatedInText(lower, "mobile") || 
+                               isNegatedInText(lower, "app") || 
+                               lower.includes("web only") || 
+                               lower.includes("website only") || 
+                               lower.includes("no mobile app");
+
+      const isAdminExcluded = isNegatedInText(lower, "admin") || 
+                              isNegatedInText(lower, "admin panel") || 
+                              isNegatedInText(lower, "admin dashboard") || 
+                              lower.includes("no admin");
+
+      const isDatabaseExcluded = isNegatedInText(lower, "database") || 
+                                 isNegatedInText(lower, "db") || 
+                                 lower.includes("no database");
+
+      const isAIExcluded = isNegatedInText(lower, "ai") || 
+                           isNegatedInText(lower, "chatbot") || 
+                           lower.includes("no ai");
+
+      // Populate Exclusions List
+      if (isCustomerAuthExcluded) excluded.push("Customer Login & Accounts");
+      if (isCartExcluded) excluded.push("Shopping Cart & Checkout");
+      if (isPaymentExcluded) excluded.push("Online Payment Gateway");
+      if (isMobileExcluded) excluded.push("Mobile Application (Web Only)");
+      if (isAdminExcluded) excluded.push("Admin Panel");
+      if (isDatabaseExcluded) excluded.push("Database Storage");
+      if (isAIExcluded) excluded.push("AI / LLM Features");
 
       // 2. Identify Core Archetype
       const isEdu = (lower.includes("learn") || lower.includes("course") || lower.includes("student") || lower.includes("lms") || lower.includes("teach") || lower.includes("coach") || lower.includes("tuition") || lower.includes("academy") || lower.includes("lecture")) && !isNegatedInText(lower, "lms");
       const isPortfolio = (lower.includes("portfolio") || lower.includes("photographer") || lower.includes("artist") || lower.includes("resume") || lower.includes("showcase")) && !isNegatedInText(lower, "portfolio");
-      const isEcom = (lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("storefront") || lower.includes("shopping") || lower.includes("catalog") || lower.includes("cart") || lower.includes("ordering") || lower.includes("menu")) && !isNegatedInText(lower, "ecommerce");
-      const isAI = (lower.includes("ai") || lower.includes("llm") || lower.includes("gpt") || lower.includes("rag")) && !excluded.includes("No AI / LLM Features");
-      const isMobile = (lower.includes("mobile app") || lower.includes("android") || lower.includes("ios") || lower.includes("flutter")) && !excluded.includes("Web Only (No Mobile App)");
+      const isEcom = (lower.includes("ecommerce") || lower.includes("e-commerce") || lower.includes("storefront") || lower.includes("shopping") || lower.includes("catalog") || lower.includes("wishlist") || lower.includes("cart") || lower.includes("ordering") || lower.includes("menu")) && !isNegatedInText(lower, "ecommerce");
+      const isAI = (lower.includes("ai") || lower.includes("llm") || lower.includes("gpt") || lower.includes("rag")) && !isAIExcluded;
+      const isMobile = (lower.includes("mobile app") || lower.includes("android") || lower.includes("ios") || lower.includes("flutter")) && !isMobileExcluded;
       const isSaaS = (lower.includes("saas") || lower.includes("subscription software") || lower.includes("b2b platform"));
 
       if (isEdu) {
         state.projectType = "lms";
         state.customProjectTitle = generateSmartTitle(text, "lms");
+        state.estimatedHoursMin = 140;
+        state.estimatedHoursMax = 250;
       } else if (isPortfolio) {
         state.projectType = "portfolio";
         state.customProjectTitle = generateSmartTitle(text, "portfolio");
+        state.estimatedHoursMin = 18;
+        state.estimatedHoursMax = 32;
       } else if (isEcom) {
         state.projectType = "ecommerce";
         state.customProjectTitle = generateSmartTitle(text, "ecommerce");
+        state.estimatedHoursMin = 80;
+        state.estimatedHoursMax = 150;
       } else if (isAI) {
         state.projectType = "ai_app";
         state.customProjectTitle = generateSmartTitle(text, "ai_app");
+        state.estimatedHoursMin = 150;
+        state.estimatedHoursMax = 270;
       } else if (isMobile) {
         state.projectType = "mobile_app";
         state.customProjectTitle = generateSmartTitle(text, "mobile_app");
+        state.estimatedHoursMin = 150;
+        state.estimatedHoursMax = 280;
       } else if (isSaaS) {
         state.projectType = "saas_product";
         state.customProjectTitle = generateSmartTitle(text, "saas_product");
+        state.estimatedHoursMin = 160;
+        state.estimatedHoursMax = 290;
       } else {
         state.projectType = "biz_website";
         state.customProjectTitle = generateSmartTitle(text, "biz_website");
+        state.estimatedHoursMin = 35;
+        state.estimatedHoursMax = 65;
       }
 
-      // 3. Feature Detections (HONORING EXCLUSIONS)
-      if (!excluded.includes("No User Accounts/Login") && (lower.includes("student") || lower.includes("register") || lower.includes("login") || lower.includes("account") || lower.includes("profile"))) {
+      // 3. Feature Detections (WITH STRICT PRECEDENCE OVER INCLUSIONS)
+      if (lower.includes("catalog") || lower.includes("browse") || (isEcom && !lower.includes("no catalog"))) {
+        included.push("Product Catalog & Browsing");
+      }
+
+      if (lower.includes("search") || lower.includes("filter")) {
+        included.push("Product Search & Filtering");
+        state.selectedFeatures.push("feat_search");
+      }
+
+      if (lower.includes("wishlist") || lower.includes("saved items")) {
+        included.push("Product Wishlist");
+      }
+
+      // Admin product management (Does NOT imply customer accounts!)
+      if (!isAdminExcluded && (lower.includes("admin can") || lower.includes("admin manage") || lower.includes("manage products") || lower.includes("admin panel") || lower.includes("admin dashboard"))) {
+        included.push("Admin Product Management");
+        state.hasAdminPanel = true;
+      }
+
+      // Customer login & accounts: ONLY IF NOT EXCLUDED!
+      if (!isCustomerAuthExcluded && (lower.includes("customer login") || lower.includes("user login") || lower.includes("student login") || lower.includes("register") || lower.includes("signup") || lower.includes("user accounts"))) {
         state.selectedFeatures.push("feat_auth");
-        included.push("User Authentication & Accounts");
+        included.push("Customer Accounts & Authentication");
       }
 
       if (lower.includes("pdf") || lower.includes("notes") || lower.includes("download") || lower.includes("document")) {
@@ -3396,26 +3425,51 @@
         included.push("WhatsApp / SMS Integration");
       }
 
-      // Online payment check: ONLY IF MENTIONED AND NOT EXCLUDED
-      const mentionsPayment = (lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("razorpay") || lower.includes("stripe") || lower.includes("checkout")) && !excluded.includes("No Online Payment");
+      // Payment gateway: ONLY IF NOT EXCLUDED!
+      const mentionsPayment = (lower.includes("pay") || lower.includes("fee") || lower.includes("fees") || lower.includes("razorpay") || lower.includes("stripe")) && !isPaymentExcluded;
       if (mentionsPayment) {
         state.selectedFeatures.push("feat_payments");
         included.push("Online Payment Gateway");
       }
 
-      if (!excluded.includes("No AI / LLM Features") && (lower.includes("ai") || lower.includes("chat") || lower.includes("bot"))) {
+      if (!isAIExcluded && (lower.includes("ai") || lower.includes("chat") || lower.includes("bot"))) {
         state.selectedFeatures.push("feat_ai_bot");
         included.push("AI Assistant Module");
+      }
+
+      // 4. Scope Deductions for Explicit Exclusions
+      if (isPaymentExcluded) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
+        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 25);
+      }
+      if (isAdminExcluded) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 20);
+        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 30);
+      }
+      if (isMobileExcluded) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 40);
+        state.estimatedHoursMax = Math.max(25, state.estimatedHoursMax - 60);
+      }
+      if (isCustomerAuthExcluded) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
+        state.estimatedHoursMax = Math.max(20, state.estimatedHoursMax - 20);
+      }
+      if (isCartExcluded) {
+        state.estimatedHoursMin = Math.max(15, state.estimatedHoursMin - 15);
+        state.estimatedHoursMax = Math.max(20, state.estimatedHoursMax - 20);
       }
 
       state.includedList = included;
       state.excludedList = excluded;
 
-      // Note: calculateCostModels will now accumulate the hours dynamically
+      // Final sanitization sweep
+      enforceStrictExclusionPrecedence(state, text);
+
       const chips = [
         { title: "🎯 Scoped Project", desc: `${state.customProjectTitle}` },
-        { title: "✅ Inclusions", desc: included.length ? included.join(', ') : "Core Workflow Requirements" },
-        { title: "🚫 Scope Exclusions", desc: excluded.length ? excluded.join(', ') : "Standard scope (No unrequested add-ons)" },
+        { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
+        { title: "✅ Inclusions", desc: state.includedList.length ? state.includedList.join(', ') : "Core Workflow Requirements" },
+        { title: "🚫 Scope Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested add-ons)" },
         { title: "💡 Architect's Note", desc: "Scope tuned precisely to your requirements. Exclusions actively subtracted from pricing." }
       ];
 
@@ -3423,8 +3477,76 @@
       document.getElementById("ai-engine-badge").innerText = "Local Scoping Engine";
     }
 
+    // STRICT PRECEDENCE ENFORCER: Explicit exclusion > explicit inclusion > inferred requirement
+    function enforceStrictExclusionPrecedence(st, text) {
+      const lower = text.toLowerCase();
+
+      const isCustomerAuthExcluded = st.excludedList.some(e => /login|auth|account|registration/i.test(e)) ||
+                                     isNegatedInText(lower, "login") || 
+                                     isNegatedInText(lower, "customer login") || 
+                                     isNegatedInText(lower, "auth") || 
+                                     lower.includes("no customer login") || 
+                                     lower.includes("no user login") || 
+                                     lower.includes("no login");
+
+      const isPaymentExcluded = st.excludedList.some(e => /payment|gateway/i.test(e)) ||
+                                isNegatedInText(lower, "payment") || 
+                                isNegatedInText(lower, "online payment") || 
+                                lower.includes("no online payment") || 
+                                lower.includes("no payment");
+
+      const isCartExcluded = st.excludedList.some(e => /cart|checkout/i.test(e)) ||
+                             isNegatedInText(lower, "cart") || 
+                             isNegatedInText(lower, "shopping cart") || 
+                             isNegatedInText(lower, "checkout") || 
+                             lower.includes("no shopping cart") || 
+                             lower.includes("no checkout");
+
+      const isMobileExcluded = st.excludedList.some(e => /mobile/i.test(e)) ||
+                               isNegatedInText(lower, "mobile app") || 
+                               lower.includes("web only") || 
+                               lower.includes("website only") || 
+                               lower.includes("no mobile app");
+
+      // 1. Enforce Customer Auth Exclusion
+      if (isCustomerAuthExcluded) {
+        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_auth");
+        st.includedList = (st.includedList || []).filter(item => !/login|auth|account|registration|user authentication/i.test(item));
+        if (!st.excludedList.some(e => /login|auth|account/i.test(e))) {
+          st.excludedList.push("Customer Login & Accounts");
+        }
+      }
+
+      // 2. Enforce Payment Exclusion
+      if (isPaymentExcluded) {
+        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
+        st.includedList = (st.includedList || []).filter(item => !/payment|gateway|checkout payment/i.test(item));
+        if (!st.excludedList.some(e => /payment/i.test(e))) {
+          st.excludedList.push("Online Payment Gateway");
+        }
+      }
+
+      // 3. Enforce Cart Exclusion
+      if (isCartExcluded) {
+        st.includedList = (st.includedList || []).filter(item => !/cart|checkout/i.test(item));
+        if (!st.excludedList.some(e => /cart/i.test(e))) {
+          st.excludedList.push("Shopping Cart & Checkout");
+        }
+      }
+
+      // 4. Enforce Mobile Exclusion
+      if (isMobileExcluded) {
+        st.platformScope = "website_only";
+        st.includedList = (st.includedList || []).filter(item => !/mobile app|android|ios/i.test(item));
+        if (!st.excludedList.some(e => /mobile/i.test(e))) {
+          st.excludedList.push("Mobile Application (Web Only)");
+        }
+      }
+    }
+
     function generateSmartTitle(text, type) {
       const lower = text.toLowerCase();
+      if (lower.includes("catalog") && lower.includes("e-commerce")) return "E-Commerce Product Catalog Platform";
       if (lower.includes("restaurant")) return "Restaurant Ordering & Menu Web Platform";
       if (lower.includes("coaching")) return "Coaching Centre Learning Platform";
       if (lower.includes("tuition")) return "Tuition Portal & Student System";
