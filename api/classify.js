@@ -1,5 +1,5 @@
 // api/classify.js — Vercel Serverless Function (Node.js)
-// Intelligent Requirement & Scope-Exclusion Analyzer
+// Enforces: Explicit exclusion > explicit inclusion > inferred requirement
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -29,38 +29,33 @@ module.exports = async (req, res) => {
     }
 
     const systemPrompt = `You are a senior software architect and technical scoping expert at Ezrah Innovations.
-Analyze the user's project idea with extreme attention to INCLUSIONS vs EXCLUSIONS.
+Analyze the user's project idea.
 
-CRITICAL RULES FOR EXTRACTION:
-1. DISTINGUISH REQUIREMENTS FROM EXCLUSIONS:
-   - Explicit negative statements must NEVER be interpreted as included features!
-   - Examples:
-     * "Restaurant website with menu and cart, no online payment" -> menu: INCLUDED, cart: INCLUDED, payment gateway: EXCLUDED.
-     * "Website with login, but no admin panel" -> login: INCLUDED, admin: EXCLUDED.
-     * "No mobile app, web only" -> mobile app: EXCLUDED, web: INCLUDED.
-     * "No AI features" -> AI: EXCLUDED.
-   - Negative trigger phrases: "no", "not required", "without", "excluding", "don't need", "doesn't need", "not needed", "not included", "out of scope", "only", "just", "web only", "no payment", "no admin", "no login", "no app".
+CRITICAL PRECEDENCE RULE:
+Explicit exclusion > explicit inclusion > inferred requirement
 
-2. DO NOT ASSUME UNMENTIONED FEATURES:
-   - "Simple restaurant website with menu and contact" -> DO NOT assume online ordering, cart, payment, login, admin panel, delivery tracking.
-   - "Basic business website with 5 pages" -> DO NOT assume CMS, admin dashboard, authentication, or payment gateway.
+1. EXCLUSIONS OVERRIDE ALL INFERENCES:
+   - If a feature is explicitly excluded, it must NEVER appear in included_features or detected_features!
+   - Negative phrases include: "no", "not required", "without", "excluding", "don't need", "doesn't need", "not needed", "not included", "out of scope", "only", "just", "web only", "no customer login", "no payment", "no admin", "no cart", "no checkout", "no mobile app".
 
-3. PREVENT PRICE COMPRESSION:
-   - Accurately estimate realistic developer hours without compressing everything into 50 hours:
-     * Very simple portfolio / landing page: 15–30 hours.
-     * Basic business website (5-8 pages): 35–60 hours.
-     * Business website + Admin/CMS / Restaurant ordering (no payment): 60–100 hours.
-     * Small to medium web application / MVP: 100–180 hours.
-     * LMS / SaaS platform / Complex portal: 180–350+ hours.
-     * Complex marketplace / Multi-vendor: 320–550+ hours.
-   - DO NOT generate currency prices. Output technical effort units only.`;
+2. DO NOT CONFUSE ADMIN WITH CUSTOMER AUTHENTICATION:
+   - "Admin can manage products. No customer login" -> Admin management is INCLUDED. Customer login/authentication is strictly EXCLUDED! Do NOT add "User Authentication & Accounts" or "feat_auth" simply because admin manages items.
+
+3. EXAMPLES OF NEGATIVE OVERRIDES:
+   - "No customer login" -> Customer authentication / registration / accounts MUST be in excluded_features and NEVER in included_features.
+   - "No shopping cart, no checkout, no online payment" -> Cart, checkout, and payment gateway MUST be in excluded_features.
+   - "No mobile app, web only" -> Mobile app MUST be in excluded_features.
+
+4. PRICE INTEGRITY:
+   - Excluded features must contribute 0 developer hours.
+   - DO NOT generate currency numbers. Output technical effort units only.`;
 
     const responseSchema = {
       type: "OBJECT",
       properties: {
         project_title: {
           type: "STRING",
-          description: "A professional tailored title reflecting the exact project scope."
+          description: "Tailored title reflecting the exact project scope."
         },
         archetype: {
           type: "STRING",
@@ -81,23 +76,24 @@ CRITICAL RULES FOR EXTRACTION:
         included_features: {
           type: "ARRAY",
           items: { type: "STRING" },
-          description: "List of explicitly requested features."
+          description: "List of explicitly requested features. MUST NOT contain anything the user excluded!"
         },
         excluded_features: {
           type: "ARRAY",
           items: { type: "STRING" },
-          description: "List of explicitly excluded or rejected features (e.g. 'No Online Payment', 'No Admin Panel')."
+          description: "List of explicitly excluded features (e.g. 'Customer Login & Accounts', 'Shopping Cart & Checkout', 'Online Payment')."
         },
         detected_features: {
           type: "ARRAY",
           items: {
             type: "STRING",
             enum: ["feat_auth", "feat_social", "feat_search", "feat_payments", "feat_wa_sms", "feat_ai_bot", "feat_storage"]
-          }
+          },
+          description: "Feature keys. MUST NOT contain feat_auth if customer login is excluded. MUST NOT contain feat_payments if payment is excluded."
         },
         architectural_summary: {
           type: "STRING",
-          description: "A 1-2 sentence technical summary explaining what is included and how exclusions were respected."
+          description: "A 1-2 sentence technical summary explaining how scope exclusions were strictly enforced."
         }
       },
       required: [
@@ -122,7 +118,7 @@ CRITICAL RULES FOR EXTRACTION:
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `Scrutinize this user project description:\n"${prompt}"` }] }],
+        contents: [{ parts: [{ text: `Analyze and extract requirements with strict exclusion overrides:\n"${prompt}"` }] }],
         generationConfig: {
           response_mime_type: "application/json",
           response_schema: responseSchema,
