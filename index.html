@@ -1300,7 +1300,7 @@
 
   <!-- Top Announcement -->
   <aside class="market-banner">
-    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Low-Base Additive Pricing Model) — Accurate, deterministic cost modeling.
+    📍 <strong>Verified Commercial Benchmark Data</strong> (Last Updated: <strong>February 2026</strong> • Baseline: Dynamic Effort & Pricing Engine) — Accurate, deterministic cost modeling.
   </aside>
 
   <!-- Navigation -->
@@ -1399,7 +1399,7 @@
               
               <ul style="list-style: none; margin: 1.5rem 0; font-size: 0.9rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.5rem;">
                 <li>✓ Standard Market vs Optimized Direct Pricing</li>
-                <li>✓ Low-base additive engineering calibration</li>
+                <li>✓ Dynamic effort-hours evaluation</li>
                 <li>✓ Form volume & custom UI/UX design tiers</li>
                 <li>✓ Predictable flat monthly operations</li>
                 <li>✓ 1, 3, and 5-Year TCO financial projections</li>
@@ -1927,7 +1927,7 @@
 
       <div class="footer-bottom">
         <div>© <span id="current-year">2026</span> CostPilot. All rights reserved. Built by Ezrah Innovations.</div>
-        <div>Commercial Software Standards • Additive Engineering Sizing Engine</div>
+        <div>Commercial Software Standards • Dynamic Effort Pricing Engine</div>
       </div>
     </div>
   </footer>
@@ -2025,84 +2025,42 @@
       currencySymbol: "₹",
       lastUpdated: "February 2026",
 
-      // ========================================================================
-      // 1. BASE PROJECT PRICES (Starting Points)
-      // ========================================================================
-      basePrices: {
-        "portfolio": 18000,
-        "biz_website": 25000,
-        "restaurant_info": 28000,
-        "biz_website_cms": 40000,
-        "service_booking": 55000,
-        "restaurant_ordering": 70000,
-        "clinic_booking": 75000,
-        "doc_management": 100000,
-        "lms": 125000,
-        "ai_app": 125000,
-        "saas_product": 150000,
-        "marketplace": 150000,
-        "mobile_app": 120000,
-        "ecommerce": 70000
-      },
-
-      // ========================================================================
-      // 2. FEATURE ADDITIONS (Added ONLY when explicitly included & NOT excluded)
-      // ========================================================================
-      featureCosts: {
-        "contact_form": 2000,
-        "whatsapp_button": 1000,
-        "whatsapp_api": 15000,
-        "cms": 12000,
-        "admin_dashboard": 15000,
-        "database": 10000,
-        "user_auth": 10000,
-        "customer_account": 8000,
-        "search_filter": 7000,
-        "shopping_cart": 10000,
-        "checkout": 8000,
-        "payment_gateway": 12000,
-        "order_management": 12000,
-        "booking_workflow": 15000,
-        "appointment_management": 12000,
-        "file_upload_storage": 12000,
-        "ai_integration": 20000,
-        "api_integration": 10000,
-        "extra_page": 1500
-      },
+      hourlyRateStandard: 520,  // Standard commercial agency rate
+      hourlyRateOptimized: 442, // Optimized direct offer (~15% discount)
 
       projectTypes: {
-        "portfolio": { id: "portfolio", title: "Personal Creator Portfolio", icon: "🎨", desc: "Showcase for creators, designers, architects, and photographers." },
-        "biz_website": { id: "biz_website", title: "Business Website", icon: "🏢", desc: "Corporate brand presence, conversion pages, and contact workflows." },
-        "ecommerce": { id: "ecommerce", title: "E-Commerce Platform", icon: "🛍️", desc: "Online catalog, shopping cart, checkout, and inventory." },
-        "web_app": { id: "web_app", title: "Web Application", icon: "💻", desc: "Client dashboards, internal portals, or dynamic SaaS MVP." },
-        "mobile_app": { id: "mobile_app", title: "Mobile Application", icon: "📱", desc: "Cross-platform iOS and Android mobile app (Flutter/React Native)." },
-        "saas_product": { id: "saas_product", title: "SaaS Product", icon: "🚀", desc: "Multi-tier subscription platform with billing & accounts." },
-        "lms": { id: "lms", title: "Learning Management (LMS)", icon: "🎓", desc: "EdTech platform for students, video lectures, and quizzes." },
-        "ai_app": { id: "ai_app", title: "AI / LLM Application", icon: "🤖", desc: "RAG knowledge base, AI customer agent, or workflow tool." }
+        "portfolio": { id: "portfolio", title: "Personal Creator Portfolio", icon: "🎨", desc: "Showcase for creators, designers, architects, and photographers.", defaultHoursMin: 10, defaultHoursMax: 16 },
+        "biz_website": { id: "biz_website", title: "Business Website", icon: "🏢", desc: "Corporate brand presence, conversion pages, and contact workflows.", defaultHoursMin: 22, defaultHoursMax: 35 },
+        "ecommerce": { id: "ecommerce", title: "E-Commerce Platform", icon: "🛍️", desc: "Online catalog, shopping cart, checkout, and inventory.", defaultHoursMin: 65, defaultHoursMax: 95 },
+        "web_app": { id: "web_app", title: "Web Application", icon: "💻", desc: "Client dashboards, internal portals, or dynamic SaaS MVP.", defaultHoursMin: 60, defaultHoursMax: 90 },
+        "mobile_app": { id: "mobile_app", title: "Mobile Application", icon: "📱", desc: "Cross-platform iOS and Android mobile app (Flutter/React Native).", defaultHoursMin: 110, defaultHoursMax: 160 },
+        "saas_product": { id: "saas_product", title: "SaaS Product", icon: "🚀", desc: "Multi-tier subscription platform with billing & accounts.", defaultHoursMin: 110, defaultHoursMax: 170 },
+        "lms": { id: "lms", title: "Learning Management (LMS)", icon: "🎓", desc: "EdTech platform for students, video lectures, and quizzes.", defaultHoursMin: 95, defaultHoursMax: 150 },
+        "ai_app": { id: "ai_app", title: "AI / LLM Application", icon: "🤖", desc: "RAG knowledge base, AI customer agent, or workflow tool.", defaultHoursMin: 95, defaultHoursMax: 150 }
       },
 
       uiuxTiers: {
-        "template": { id: "template", title: "Modern Component Library", cost: 0 },
-        "custom": { id: "custom", title: "Custom Tailored UI/UX", cost: 6000 },
-        "premium": { id: "premium", title: "High-Fidelity Studio UI/UX", cost: 15000 }
+        "template": { id: "template", title: "Modern Component Library", hours: 0 },
+        "custom": { id: "custom", title: "Custom Tailored UI/UX", hours: 8 },
+        "premium": { id: "premium", title: "High-Fidelity Studio UI/UX", hours: 20 }
       },
 
       formScale: {
-        "none": { cost: 0 },
-        "1-3": { cost: 2000 },
-        "4-8": { cost: 5000 },
-        "9-15": { cost: 10000 },
-        "15+": { cost: 18000 }
+        "none": { hours: 0 },
+        "1-3": { hours: 3 },
+        "4-8": { hours: 8 },
+        "9-15": { hours: 16 },
+        "15+": { hours: 25 }
       },
 
       features: {
-        "feat_auth": { label: "User Accounts & Authentication", cost: 10000, key: "user_auth" },
-        "feat_social": { label: "Social Single Sign-on (Google/Apple)", cost: 4000 },
-        "feat_search": { label: "Search & Content Filtering", cost: 7000, key: "search_filter" },
-        "feat_payments": { label: "Payment Gateway Integration (Razorpay/Stripe)", cost: 12000, key: "payment_gateway" },
-        "feat_wa_sms": { label: "WhatsApp & SMS Gateway", cost: 15000, key: "whatsapp_api" },
-        "feat_ai_bot": { label: "Embedded AI Chat Assistant", cost: 20000, key: "ai_integration" },
-        "feat_storage": { label: "Direct Cloud Document Storage", cost: 12000, key: "file_upload_storage" }
+        "feat_auth": { label: "User Accounts & Authentication", hours: 14 },
+        "feat_social": { label: "Social Single Sign-on (Google/Apple)", hours: 6 },
+        "feat_search": { label: "Search & Content Filtering", hours: 8 },
+        "feat_payments": { label: "Payment Gateway Integration (Razorpay/Stripe)", hours: 18 },
+        "feat_wa_sms": { label: "WhatsApp & SMS Gateway", hours: 8 },
+        "feat_ai_bot": { label: "Embedded AI Chat Assistant", hours: 24 },
+        "feat_storage": { label: "Direct Cloud Document Storage", hours: 8 }
       }
     };
 
@@ -2122,6 +2080,9 @@
       userRolesCount: 1,
       platformScope: "website_only",
       
+      estimatedHoursMin: null,
+      estimatedHoursMax: null,
+
       projectType: "biz_website",
       dynamicScope: [],
       uiuxTier: "custom",
@@ -2139,188 +2100,57 @@
     };
 
     // ==========================================================================
-    // LOW-BASE ADDITIVE PRICING ENGINE (FINAL CORRECTED LOGIC)
-    // FINAL MARKET PRICE = BASE PROJECT PRICE + INCLUDED FEATURE COSTS
-    // DISCOUNTED PRICE = MARKET PRICE * 0.85 (Exact 15% discount)
+    // DYNAMIC EFFORT-DRIVEN PRICING ENGINE
+    // Derived strictly from real engineering hours: Market = Hours * ₹520 | Offer = Market * 0.85
     // ==========================================================================
     function calculateCostModels(cfg) {
+      const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
       const rawText = (cfg.rawIdeaText || "").toLowerCase();
 
-      function isExplicitlyExcluded(term) {
-        if (cfg.excludedList && cfg.excludedList.some(ex => ex.toLowerCase().includes(term.toLowerCase()))) {
-          return true;
-        }
-        if (rawText && isNegatedInText(rawText, term)) {
-          return true;
-        }
-        return false;
-      }
+      // 1. Determine Hours based on actual requirement scope
+      let hMin = cfg.estimatedHoursMin || p.defaultHoursMin || 22;
+      let hMax = cfg.estimatedHoursMax || p.defaultHoursMax || 38;
 
-      function hasRequirement(keywords, featureKey) {
-        for (const kw of keywords) {
-          if (isExplicitlyExcluded(kw)) return false;
-        }
-        if (featureKey && cfg.selectedFeatures) {
-          if (cfg.selectedFeatures.some(fid => pricingData.features[fid] && pricingData.features[fid].key === featureKey)) {
-            return true;
+      // In Wizard Mode (if not using Idea mode): adjust for explicit options
+      if (!cfg.fromIdeaMode) {
+        const ui = pricingData.uiuxTiers[cfg.uiuxTier] || pricingData.uiuxTiers["template"];
+        const fScale = pricingData.formScale[cfg.formScale] || pricingData.formScale["none"];
+        hMin += (ui.hours || 0) + (fScale.hours || 0);
+        hMax += (ui.hours || 0) + (fScale.hours || 0);
+
+        (cfg.selectedFeatures || []).forEach(fid => {
+          const feat = pricingData.features[fid];
+          if (feat && feat.hours) {
+            hMin += Math.round(feat.hours * 0.8);
+            hMax += feat.hours;
           }
-        }
-        if (cfg.includedList && cfg.includedList.some(inc => keywords.some(k => inc.toLowerCase().includes(k)))) {
-          return true;
-        }
-        if (rawText) {
-          return keywords.some(k => rawText.includes(k));
-        }
-        return false;
+        });
       }
 
-      // 1. Determine Starting Base Project Price
-      let baseProjectPrice = pricingData.basePrices.biz_website; // default ₹25,000
-      let baseProjectKey = "biz_website";
+      const avgHours = (hMin + hMax) / 2;
+
+      // 2. Standard Market Price calculation
+      let standardMarketPrice = Math.round(avgHours * pricingData.hourlyRateStandard);
+
+      // Floor protection for simple portfolios (₹18K–₹30K max)
       const titleLower = (cfg.customProjectTitle || "").toLowerCase();
-
-      if (titleLower.includes("portfolio") || cfg.projectType === "portfolio") {
-        baseProjectPrice = pricingData.basePrices.portfolio; // ₹18,000
-        baseProjectKey = "portfolio";
-      } else if (titleLower.includes("informational restaurant")) {
-        baseProjectPrice = pricingData.basePrices.restaurant_info; // ₹28,000
-        baseProjectKey = "restaurant_info";
-      } else if (titleLower.includes("restaurant ordering")) {
-        baseProjectPrice = pricingData.basePrices.restaurant_ordering; // ₹70,000
-        baseProjectKey = "restaurant_ordering";
-      } else if (titleLower.includes("clinic appointment") || titleLower.includes("clinic booking")) {
-        baseProjectPrice = pricingData.basePrices.clinic_booking; // ₹75,000
-        baseProjectKey = "clinic_booking";
-      } else if (titleLower.includes("service booking")) {
-        baseProjectPrice = pricingData.basePrices.service_booking; // ₹55,000
-        baseProjectKey = "service_booking";
-      } else if (titleLower.includes("document management")) {
-        baseProjectPrice = pricingData.basePrices.doc_management; // ₹1,00,000
-        baseProjectKey = "doc_management";
-      } else if (titleLower.includes("learning") || titleLower.includes("lms") || cfg.projectType === "lms") {
-        baseProjectPrice = pricingData.basePrices.lms; // ₹1,25,000
-        baseProjectKey = "lms";
-      } else if (titleLower.includes("task management") || titleLower.includes("saas") || cfg.projectType === "saas_product") {
-        baseProjectPrice = pricingData.basePrices.saas_product; // ₹1,50,000
-        baseProjectKey = "saas_product";
-      } else if (titleLower.includes("marketplace")) {
-        baseProjectPrice = pricingData.basePrices.marketplace; // ₹1,50,000
-        baseProjectKey = "marketplace";
-      } else if (titleLower.includes("ai") || cfg.projectType === "ai_app") {
-        baseProjectPrice = pricingData.basePrices.ai_app; // ₹1,25,000
-        baseProjectKey = "ai_app";
-      } else if (titleLower.includes("e-commerce ordering") || (cfg.projectType === "ecommerce" && hasRequirement(["cart", "checkout"], "shopping_cart"))) {
-        baseProjectPrice = pricingData.basePrices.ecommerce; // ₹70,000
-        baseProjectKey = "ecommerce";
-      } else if (titleLower.includes("cms") || hasRequirement(["cms", "blog"], "cms")) {
-        baseProjectPrice = pricingData.basePrices.biz_website_cms; // ₹40,000
-        baseProjectKey = "biz_website_cms";
-      } else {
-        baseProjectPrice = pricingData.basePrices.biz_website; // ₹25,000
-        baseProjectKey = "biz_website";
-      }
-
-      // 2. Feature Additions (ONLY add when explicitly included and NOT excluded)
-      let featureAdditions = 0;
-
-      // Contact Form (+₹2,000)
-      if (hasRequirement(["contact form", "contact details", "inquiry form", "enquiry form"], null) && !isExplicitlyExcluded("contact form")) {
-        featureAdditions += pricingData.featureCosts.contact_form;
-      }
-
-      // WhatsApp Click-to-Chat Button (+₹1,000, NOT ₹15,000!)
-      const isWhatsAppAPI = hasRequirement(["whatsapp business api", "automated whatsapp", "whatsapp api", "sms gateway", "otp"], "whatsapp_api");
-      if (isWhatsAppAPI && !isExplicitlyExcluded("whatsapp")) {
-        featureAdditions += pricingData.featureCosts.whatsapp_api; // +₹15,000
-      } else if (hasRequirement(["whatsapp", "whatsapp button", "whatsapp chat", "click-to-chat"], null) && !isExplicitlyExcluded("whatsapp")) {
-        featureAdditions += pricingData.featureCosts.whatsapp_button; // +₹1,000
-      }
-
-      // Extra Pages (Base includes up to 6 pages. Only charge if explicitly exceeding 6 pages)
-      const pageMatch = rawText.match(/(\d+)\s*(?:page|pages)/);
-      if (pageMatch) {
-        const pages = parseInt(pageMatch[1], 10);
-        if (pages > 6) {
-          featureAdditions += (pages - 6) * pricingData.featureCosts.extra_page;
+      if (cfg.projectType === "portfolio" || titleLower.includes("portfolio")) {
+        if (hMax <= 20) {
+          standardMarketPrice = Math.min(standardMarketPrice, 24000);
+          standardMarketPrice = Math.max(standardMarketPrice, 6000); // 8-10 hrs
         }
       }
 
-      // User Authentication (+₹10,000)
-      const needsAuth = hasRequirement(["login", "user login", "patient login", "student login", "auth", "registration", "signup"], "user_auth");
-      if (needsAuth && !isExplicitlyExcluded("customer login") && !isExplicitlyExcluded("login") && !["lms", "saas_product"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.user_auth;
-      }
-
-      // Database (+₹10,000)
-      const needsDB = hasRequirement(["database", "db", "crud", "persistent data"], "database");
-      if (needsDB && !isExplicitlyExcluded("database") && !["lms", "saas_product", "clinic_booking", "doc_management", "restaurant_ordering"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.database;
-      }
-
-      // Admin Dashboard (+₹15,000)
-      const needsAdmin = hasRequirement(["admin dashboard", "admin panel", "admin management", "admin portal"], "admin_dashboard") || cfg.hasAdminPanel;
-      if (needsAdmin && !isExplicitlyExcluded("admin") && !["lms", "saas_product", "doc_management", "restaurant_ordering"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.admin_dashboard;
-      }
-
-      // Search & Filter (+₹7,000)
-      if (hasRequirement(["search", "filter", "filtering"], "search_filter") && !isExplicitlyExcluded("search")) {
-        featureAdditions += pricingData.featureCosts.search_filter;
-      }
-
-      // Shopping Cart (+₹10,000)
-      if (hasRequirement(["cart", "shopping cart"], "shopping_cart") && !isExplicitlyExcluded("cart") && !["ecommerce", "restaurant_ordering"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.shopping_cart;
-      }
-
-      // Checkout (+₹8,000)
-      if (hasRequirement(["checkout"], "checkout") && !isExplicitlyExcluded("checkout") && !["ecommerce", "restaurant_ordering"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.checkout;
-      }
-
-      // Payment Gateway (+₹12,000)
-      const needsPayment = hasRequirement(["payment gateway", "online payment", "razorpay", "stripe", "pay fees", "pay online"], "payment_gateway");
-      if (needsPayment && !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("online payment")) {
-        featureAdditions += pricingData.featureCosts.payment_gateway;
-      }
-
-      // Booking Workflow (+₹15,000)
-      const needsBooking = hasRequirement(["booking workflow", "appointment booking", "book slots"], "booking_workflow");
-      if (needsBooking && !isExplicitlyExcluded("booking") && !["clinic_booking", "service_booking"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.booking_workflow;
-      }
-
-      // File / Document Upload & Storage (+₹12,000)
-      const needsStorage = hasRequirement(["file upload", "pdf upload", "document upload", "document storage"], "file_upload_storage");
-      if (needsStorage && !isExplicitlyExcluded("storage") && !["doc_management"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.file_upload_storage;
-      }
-
-      // AI Integration (+₹20,000)
-      const needsAI = hasRequirement(["ai integration", "ai-generated", "llm processing", "chatbot", "rag"], "ai_integration");
-      if (needsAI && !isExplicitlyExcluded("ai") && !["ai_app"].includes(baseProjectKey)) {
-        featureAdditions += pricingData.featureCosts.ai_integration;
-      }
-
-      // Third-Party API Integration (+₹10,000)
-      const needsAPI = hasRequirement(["api integration", "third-party api", "rest api"], "api_integration");
-      if (needsAPI && !isExplicitlyExcluded("api")) {
-        featureAdditions += pricingData.featureCosts.api_integration;
-      }
-
-      // 3. FINAL MARKET PRICE CALCULATION (Base + Features)
-      let standardMarketPrice = baseProjectPrice + featureAdditions;
-
-      // 4. DISCOUNTED PRICE CALCULATION (Exact 15% discount)
+      // 3. Discounted Price (Exactly 15% discount)
       const discountedPrice = Math.round(standardMarketPrice * 0.85);
       const savings = standardMarketPrice - discountedPrice;
 
-      // Package B: Dedicated Enterprise Cluster
+      // 4. Enterprise Package B (Only when explicitly toggled)
       let standardB = Math.round(standardMarketPrice * 1.5 + 20000);
       let discountedB = Math.round(standardB * 0.85);
       let savingsB = standardB - discountedB;
 
-      // Monthly costs
+      // Fixed Monthly Operations (₹1,000/mo flat)
       const monthlyA = 1000;
       const monthlyB = (cfg.infra && cfg.infra.users === "10k+") ? 8500 : 5000;
 
@@ -2333,14 +2163,13 @@
       const year3B = discountedB + (monthlyB * 36);
       const year5B = discountedB + (monthlyB * 60);
 
-      const displayTitle = cfg.customProjectTitle || (pricingData.projectTypes[cfg.projectType] ? pricingData.projectTypes[cfg.projectType].title : "Project");
-      const hoursEst = Math.round(standardMarketPrice / 500);
+      const displayTitle = cfg.customProjectTitle || p.title;
 
       return {
         estimateId: "CP-2026-" + Math.floor(10000 + Math.random() * 90000),
         projectTitle: displayTitle,
-        hoursMin: Math.round(hoursEst * 0.85),
-        hoursMax: Math.round(hoursEst * 1.15),
+        hoursMin: Math.round(hMin),
+        hoursMax: Math.round(hMax),
         isHighScale: (cfg.infra && cfg.infra.users === "10k+"),
 
         packageA: {
@@ -2354,7 +2183,7 @@
           year5: year5A,
           monthlyDesc: "Includes custom domain management, automated weekly offsite backups, and zero server waste.",
           breakdown: [
-            { phase: "Architecture Planning & Base Setup", desc: "Core layout, responsive framework, and domain setup", cost: Math.round(discountedPrice * 0.30) },
+            { phase: "Requirements Planning & Base Setup", desc: "Core layout, responsive framework, and domain setup", cost: Math.round(discountedPrice * 0.30) },
             { phase: "Feature Implementation & Styling", desc: "Verified functional inclusions and component styling", cost: Math.round(discountedPrice * 0.45) },
             { phase: "Testing, Mobile QA & Cloud Deployment", desc: "Cross-device testing, SSL activation, and launch", cost: Math.round(discountedPrice * 0.25) }
           ],
@@ -2386,18 +2215,14 @@
             { item: "Priority SLA & Infrastructure Telemetry", spec: "24/7 uptime monitoring & rapid ticket resolution", cost: `₹${monthlyB - 4500} / mo` }
           ]
         },
-        reasons: generateWhyReasons(displayTitle, baseProjectPrice, featureAdditions, cfg.excludedList)
+        reasons: generateWhyReasons(displayTitle, Math.round(hMin), Math.round(hMax), cfg.excludedList)
       };
     }
 
-    function generateWhyReasons(title, basePrice, additions, excludedList) {
+    function generateWhyReasons(title, hMin, hMax, excludedList) {
       const reasons = [];
-      reasons.push(`Priced from base package (₹${basePrice.toLocaleString('en-IN')}) for ${title}`);
-      if (additions > 0) {
-        reasons.push(`Added verified feature implementations (+₹${additions.toLocaleString('en-IN')})`);
-      } else {
-        reasons.push("No unnecessary feature overhead added");
-      }
+      reasons.push(`Sized directly from ${hMin}–${hMax} hours of verified development effort`);
+      reasons.push("Flat ₹1,000/mo operations covers domain, weekly offsite backups, and zero server waste");
       if (excludedList && excludedList.length > 0) {
         reasons.push(`Zero cost added for explicit exclusions: ${excludedList.join(', ')}`);
       }
@@ -2657,7 +2482,7 @@
     }
 
     // ==========================================================================
-    // DOMAIN-DRIVEN REQUIREMENT EXTRACTION & PRE-DISPLAY VALIDATOR
+    // DOMAIN & REQUIREMENT PARSING
     // ==========================================================================
     async function processIdeaMode() {
       const inputEl = document.getElementById("idea-input");
@@ -2671,7 +2496,7 @@
 
       if (btnEl) {
         btnEl.disabled = true;
-        btnEl.innerText = "Analyzing Requirements & Domain...";
+        btnEl.innerText = "Analyzing Requirements & Effort...";
       }
 
       if (AI_WORKER_URL) {
@@ -2689,12 +2514,12 @@
               btnEl.disabled = false;
               btnEl.innerText = "Analyze & Value Project →";
             }
-            showToast("✨ Precision domain analysis complete!");
+            showToast("✨ Analysis complete!");
             showResultsView();
             return;
           }
         } catch (err) {
-          console.warn("AI proxy unavailable, switching to local domain analyzer.", err);
+          console.warn("AI proxy unavailable, switching to local analyzer.", err);
         }
       }
 
@@ -2703,7 +2528,7 @@
         btnEl.disabled = false;
         btnEl.innerText = "Analyze & Value Project →";
       }
-      showToast("Smart domain requirement analysis complete!");
+      showToast("Smart requirement analysis complete!");
       showResultsView();
     }
 
@@ -2711,26 +2536,25 @@
       state.fromIdeaMode = true;
       state.rawIdeaText = rawText;
       state.projectType = ai.archetype || "biz_website";
-      state.uiuxTier = "custom";
-      state.formScale = "1-3";
+      state.uiuxTier = "template";
+      state.formScale = "none";
       state.selectedFeatures = ai.detected_features || [];
       state.dynamicScope = [];
 
       state.includedList = ai.included_features || [];
       state.excludedList = ai.excluded_features || [];
-      state.hasAdminPanel = !!ai.has_admin_panel;
-      state.userRolesCount = ai.user_roles_count || 1;
-      state.platformScope = ai.platform_scope || "website_only";
-
       state.customProjectTitle = ai.project_title || generateSmartTitle(rawText, state.projectType);
+      state.estimatedHoursMin = ai.estimated_dev_hours_min;
+      state.estimatedHoursMax = ai.estimated_dev_hours_max;
 
       validateAndSanitizeScope(state, rawText);
 
       const chips = [
         { title: "🎯 Scoped Product", desc: `${state.customProjectTitle}` },
-        { title: "✅ Explicit Inclusions", desc: state.includedList.length ? state.includedList.slice(0, 5).join(', ') : "Core Workflow Requirements" },
+        { title: "⏱️ Estimated Effort", desc: `${state.estimatedHoursMin || 14} – ${state.estimatedHoursMax || 28} Dev Hours` },
+        { title: "✅ Verified Inclusions", desc: state.includedList.length ? state.includedList.slice(0, 5).join(', ') : "Core Stated Scope" },
         { title: "🚫 Scope Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested add-ons)" },
-        { title: "💡 Architect's Insight", desc: ai.architectural_summary || "Priced directly from base project cost + verified feature additions." }
+        { title: "💡 Architect's Insight", desc: ai.architectural_summary || "Sized strictly to the requested engineering hours." }
       ];
 
       state.analysisBreakdown = chips;
@@ -2773,13 +2597,14 @@
       return false;
     }
 
+    // Local semantic effort sizing (Accurate hours based on size of requirement)
     function applyLocalClassification(text) {
       const lower = (text || "").toLowerCase();
       state.fromIdeaMode = true;
       state.rawIdeaText = text;
       state.selectedFeatures = [];
       state.dynamicScope = [];
-      state.uiuxTier = "custom";
+      state.uiuxTier = "template";
       state.formScale = "none";
       state.infra.users = "under100";
       state.infra.storage = "5gb";
@@ -2812,14 +2637,14 @@
       if (isCMSExcluded) excluded.push("Content Management System (CMS)");
       if (isAPIExcluded) excluded.push("Third-Party API Integrations");
 
-      // 2. Strict Domain Detection
+      // 2. Domain & Sizing Detection
       const isLMS = /\b(lms|course|courses|student|students|teacher|teachers|instructor|tuition|coaching|lecture|lectures|elearning)\b/i.test(lower);
-      const isClinic = /\b(clinic|doctor|patient|hospital|dental|dentist|healthcare|medical)\b/i.test(lower) && /\b(appointment|appointments|slots?|doctor\s*profiles?)\b/i.test(lower);
+      const isClinic = /\b(clinic|doctor|patient|hospital|dental|dentist|healthcare|medical)\b/i.test(lower) && /\b(appointment|appointments|slots?)\b/i.test(lower);
       const isRestaurant = /\b(restaurant|cafe|bakery|diner|bistro|food|eatery|takeout)\b/i.test(lower);
       const isDocManagement = (/\b(document\s*management|pdf\s*management|document\s*portal|document\s*repository|dms)\b/i.test(lower) ||
                               (/\b(document|pdf|file)\b/i.test(lower) && /\b(folders?|upload|download|repository|organize)\b/i.test(lower))) && !isLMS;
-      const isSaaSTask = /\b(task\s*management|workspaces?|projects?|tasks?|task\s*assignments?|kanban|board)\b/i.test(lower) && !isClinic && !isRestaurant && !isLMS;
-      const isServiceMarketplace = /\b(marketplace|multi-vendor|multiple\s*service\s*providers|provider\s*listings?|service\s*providers)\b/i.test(lower);
+      const isSaaSTask = /\b(task\s*management|workspaces?|tasks?|task\s*assignments?)\b/i.test(lower) && !isClinic && !isRestaurant && !isLMS;
+      const isServiceMarketplace = /\b(marketplace|multi-vendor|multiple\s*service\s*providers|provider\s*listings?)\b/i.test(lower);
       const isServiceBooking = /\b(service\s*booking|salon|spa|mechanic|cleaning|consultation\s*booking|slot\s*booking)\b/i.test(lower) && !isClinic && !isServiceMarketplace;
       const isPortfolio = /\b(portfolio|photographer|photography|artist|designer\s*portfolio|resume\s*website|showcase)\b/i.test(lower) && !isLMS;
       const isEcom = /\b(ecommerce|e-commerce|catalog|storefront|shop|store|wishlist)\b/i.test(lower) && !isRestaurant && !isLMS && !isServiceMarketplace;
@@ -2830,6 +2655,8 @@
       if (isLMS) {
         state.projectType = "lms";
         state.customProjectTitle = lower.includes("coaching") ? "Coaching Centre Learning Platform" : "Online Learning Platform";
+        state.estimatedHoursMin = 95;
+        state.estimatedHoursMax = 150;
         included.push("Course Browsing");
         included.push("Course Details");
         included.push("Video Lectures");
@@ -2838,8 +2665,6 @@
           included.push("Student Login");
           state.selectedFeatures.push("feat_auth");
         }
-        if (lower.includes("enroll")) included.push("Course Enrollment");
-        if (lower.includes("progress") || lower.includes("tracking")) included.push("Progress Tracking");
         if (!isAdminExcluded && (lower.includes("admin") || lower.includes("upload") || lower.includes("manage"))) {
           included.push("Admin Course Upload & Management");
           state.hasAdminPanel = true;
@@ -2847,6 +2672,8 @@
       } else if (isClinic) {
         state.projectType = "web_app";
         state.customProjectTitle = "Clinic Appointment Booking Platform";
+        state.estimatedHoursMin = 65;
+        state.estimatedHoursMax = 100;
         if (!isCustomerAuthExcluded && (lower.includes("patient") || lower.includes("register") || lower.includes("login"))) {
           included.push("Patient Registration & Login");
           state.selectedFeatures.push("feat_auth");
@@ -2864,10 +2691,11 @@
         if (hasOrdering) {
           state.projectType = "ecommerce";
           state.customProjectTitle = "Restaurant Ordering & Menu Web Platform";
+          state.estimatedHoursMin = 50;
+          state.estimatedHoursMax = 80;
           included.push("Restaurant Menu & Food Categories");
           if (!isCartExcluded) included.push("Shopping Cart");
           if (!isOrderingExcluded) included.push("Order Placement Workflow");
-          if (lower.includes("history") || lower.includes("past orders")) included.push("Order History");
           if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
             included.push("Admin Order Management");
             state.hasAdminPanel = true;
@@ -2875,22 +2703,23 @@
         } else {
           state.projectType = "biz_website";
           state.customProjectTitle = "Informational Restaurant Website";
+          state.estimatedHoursMin = 20;
+          state.estimatedHoursMax = 32;
           included.push("Restaurant Menu & Food Showcase");
           included.push("Location, Hours & Contact Info");
-          if (lower.includes("reservation") || lower.includes("table")) included.push("Table Reservation Inquiry");
         }
       } else if (isSaaSTask) {
         state.projectType = "saas_product";
         state.customProjectTitle = "SaaS Task Management Platform";
+        state.estimatedHoursMin = 110;
+        state.estimatedHoursMax = 170;
         if (!isCustomerAuthExcluded) {
           included.push("User Registration & Login");
           state.selectedFeatures.push("feat_auth");
         }
         included.push("Workspaces");
         included.push("Projects");
-        included.push("Tasks");
-        included.push("Task Assignment");
-        if (lower.includes("notification")) included.push("Notifications");
+        included.push("Tasks & Assignments");
         if (!isAdminExcluded) {
           included.push("Admin Dashboard");
           state.hasAdminPanel = true;
@@ -2898,10 +2727,10 @@
       } else if (isServiceMarketplace) {
         state.projectType = "web_app";
         state.customProjectTitle = "Service Marketplace Platform";
+        state.estimatedHoursMin = 140;
+        state.estimatedHoursMax = 220;
         included.push("Service Provider Listings");
-        included.push("Service Search & Categorization");
         included.push("Booking & Request System");
-        if (lower.includes("provider dashboard")) included.push("Provider Dashboard");
         if (!isAdminExcluded) {
           included.push("Marketplace Administration Panel");
           state.hasAdminPanel = true;
@@ -2909,42 +2738,46 @@
       } else if (isDocManagement) {
         state.projectType = "web_app";
         state.customProjectTitle = "Document Management Web Application";
+        state.estimatedHoursMin = 70;
+        state.estimatedHoursMax = 110;
         included.push("PDF & Document Upload");
         included.push("Folder/Document Organization");
         included.push("Document Search");
         included.push("File Download");
-        included.push("Cloud/File Storage");
         state.selectedFeatures.push("feat_storage");
-        if (!isCustomerAuthExcluded && (lower.includes("login") || lower.includes("account") || lower.includes("user"))) {
-          included.push("User Login");
-          included.push("User Dashboard");
+        if (!isCustomerAuthExcluded && (lower.includes("login") || lower.includes("account"))) {
+          included.push("User Login & Dashboard");
           state.selectedFeatures.push("feat_auth");
         }
-        if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
+        if (!isAdminExcluded) {
           included.push("Admin Panel");
           state.hasAdminPanel = true;
         }
       } else if (isServiceBooking) {
         state.projectType = "web_app";
         state.customProjectTitle = "Service Booking Platform";
+        state.estimatedHoursMin = 40;
+        state.estimatedHoursMax = 65;
         included.push("Service Catalog");
         included.push("Booking Request Submission");
         if (!isAdminExcluded && (lower.includes("admin") || lower.includes("manage"))) {
-          included.push("Admin Login");
-          included.push("Booking Request Management");
-          if (lower.includes("status")) included.push("Booking Status Management");
+          included.push("Admin Booking Management");
           state.hasAdminPanel = true;
         }
       } else if (isPortfolio) {
         state.projectType = "portfolio";
         state.customProjectTitle = "Personal Creator Portfolio";
+        state.estimatedHoursMin = 10;
+        state.estimatedHoursMax = 16;
         included.push("Gallery & Portfolio Showcase");
-        included.push("About & Contact Pages");
+        included.push("About & Contact Section");
       } else if (isEcom) {
         const hasCart = (lower.includes("cart") || lower.includes("checkout") || lower.includes("order")) && !isCartExcluded;
         if (hasCart) {
           state.projectType = "ecommerce";
           state.customProjectTitle = "E-Commerce Ordering Platform";
+          state.estimatedHoursMin = 65;
+          state.estimatedHoursMax = 100;
           included.push("Product Catalog & Categories");
           if (!isCartExcluded) included.push("Shopping Cart");
           if (!isCheckoutExcluded) included.push("Checkout");
@@ -2955,6 +2788,8 @@
         } else {
           state.projectType = "ecommerce";
           state.customProjectTitle = "E-Commerce Product Catalog Platform";
+          state.estimatedHoursMin = 35;
+          state.estimatedHoursMax = 55;
           included.push("Product Catalog");
           included.push("Product Browsing");
           if (lower.includes("wishlist")) included.push("Wishlist");
@@ -2966,27 +2801,32 @@
       } else if (isTrueAI) {
         state.projectType = "ai_app";
         state.customProjectTitle = "AI Web Application";
-        if (lower.includes("upload") || lower.includes("input") || lower.includes("text")) included.push("Text Upload");
-        included.push("AI-Generated Summaries");
-        if (!isCustomerAuthExcluded && lower.includes("login")) { included.push("User Login"); state.selectedFeatures.push("feat_auth"); }
-        if (lower.includes("history")) included.push("Summary History");
-        if (!isAdminExcluded && lower.includes("admin")) { included.push("Admin Dashboard"); state.hasAdminPanel = true; }
+        state.estimatedHoursMin = 95;
+        state.estimatedHoursMax = 150;
+        included.push("AI Processing Pipeline");
+        included.push("AI-Generated Responses");
         state.selectedFeatures.push("feat_ai_bot");
       } else if (isTrueMobile) {
         state.projectType = "mobile_app";
         state.customProjectTitle = "Cross-Platform Mobile Application";
+        state.estimatedHoursMin = 110;
+        state.estimatedHoursMax = 170;
         included.push("Cross-Platform Mobile App (iOS & Android)");
         state.platformScope = "mobile_app_only";
       } else if (isSaaSGeneric) {
         state.projectType = "saas_product";
         state.customProjectTitle = "SaaS Platform";
+        state.estimatedHoursMin = 110;
+        state.estimatedHoursMax = 170;
         included.push("Multi-Tenant Core Architecture");
         if (!isCustomerAuthExcluded) { included.push("User Registration & Login"); state.selectedFeatures.push("feat_auth"); }
       } else {
         state.projectType = "biz_website";
         state.customProjectTitle = "Business Website";
+        state.estimatedHoursMin = 22;
+        state.estimatedHoursMax = 35;
         included.push("Responsive Informational Pages");
-        if (lower.includes("contact")) included.push("Contact Form & Business Overview");
+        if (lower.includes("contact")) included.push("Contact Form");
       }
 
       // WhatsApp Button vs Business API
@@ -3020,9 +2860,10 @@
 
       const chips = [
         { title: "🎯 Scoped Domain", desc: `${state.customProjectTitle}` },
+        { title: "⏱️ Estimated Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
         { title: "✅ Verified Inclusions", desc: state.includedList.join(', ') },
         { title: "🚫 Strict Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested features)" },
-        { title: "💡 Architect's Validation", desc: "Domain workflows mapped strictly. Exclusions guaranteed ₹0 cost." }
+        { title: "💡 Architect's Validation", desc: "Effort derived strictly from required features and workflows." }
       ];
 
       state.analysisBreakdown = chips;
@@ -3030,10 +2871,7 @@
       if (aiBadge) aiBadge.innerText = "Domain Scoping Engine";
     }
 
-    // ==========================================================================
-    // PRE-DISPLAY VALIDATION & SANITIZATION GATE
-    // Guarantees: Exclusion > Inclusion > Inference
-    // ==========================================================================
+    // Pre-Display Validation & Sanitization Gate
     function validateAndSanitizeScope(st, text) {
       const lower = (text || "").toLowerCase();
 
@@ -3070,7 +2908,7 @@
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
       }
 
-      // 4. Purge Excluded Customer Login / Patient Login / Registration
+      // 4. Purge Excluded Customer Login
       if (isCustomerAuthExcluded) {
         st.includedList = (st.includedList || []).filter(item => !/\bcustomer\s*login|user\s*login|patient\s*registration|patient\s*login|student\s*registration|student\s*login|user\s*accounts\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_auth");
@@ -3109,7 +2947,6 @@
         }
       }
 
-      // 8. Title Validation Matching Verified Domain
       st.customProjectTitle = generateSmartTitle(text, st.projectType);
     }
 
@@ -3135,9 +2972,7 @@
       return pricingData.projectTypes[type] ? pricingData.projectTypes[type].title : "Business Website";
     }
 
-    // ==========================================================================
-    // UI CONTROLLERS & RESULTS DISPLAY
-    // ==========================================================================
+    // UI Controllers
     function showLanding() {
       document.getElementById("landing-section").style.display = "block";
       document.getElementById("estimator-section").style.display = "none";
@@ -3148,6 +2983,8 @@
     function startWizardMode() {
       state.fromIdeaMode = false;
       state.customProjectTitle = null;
+      state.estimatedHoursMin = null;
+      state.estimatedHoursMax = null;
       state.includedList = [];
       state.excludedList = [];
       document.getElementById("landing-section").style.display = "none";
@@ -3201,10 +3038,12 @@
       state.hasAdminPanel = false;
       state.userRolesCount = 1;
       state.platformScope = "website_only";
+      state.estimatedHoursMin = null;
+      state.estimatedHoursMax = null;
       state.projectType = "biz_website";
       state.dynamicScope = [];
-      state.uiuxTier = "custom";
-      state.formScale = "1-3";
+      state.uiuxTier = "template";
+      state.formScale = "none";
       state.selectedFeatures = [];
       state.infra.users = "under100";
       state.infra.storage = "5gb";
