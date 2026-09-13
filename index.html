@@ -2190,7 +2190,7 @@
     };
 
     // ==========================================================================
-    // CUMULATIVE COMPLEXITY PRICING ENGINE (UNTOUCHED PRICING WEIGHTS)
+    // CUMULATIVE COMPLEXITY PRICING ENGINE
     // ==========================================================================
     function calculateCostModels(cfg) {
       const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
@@ -2244,7 +2244,7 @@
         }
       });
 
-      // Backend / Database
+      // Backend & Database
       const needsDatabase = hasRequirement(["database", "db", "crud", "data storage", "records", "sql", "postgres", "mongodb"], null, null) ||
                             cfg.projectType === "lms" || cfg.projectType === "saas_product" || cfg.projectType === "ecommerce" || cfg.projectType === "web_app";
       if (needsDatabase && !isExplicitlyExcluded("database")) {
@@ -2351,7 +2351,7 @@
         accumulatedHours += 80;
       }
 
-      // Calculate Market Price and Discounted Price
+      // Pricing Calculation
       const calculatedMarketPrice = Math.round(accumulatedHours * pricingData.hourlyRateStandard);
       let standardA = calculatedMarketPrice;
 
@@ -2624,7 +2624,7 @@
       const hasPayments = (state.selectedFeatures && state.selectedFeatures.includes("feat_payments")) || state.projectType === "ecommerce" || state.projectType === "saas_product";
       const isStatic = state.projectType === "portfolio";
 
-      // 1. CONDITIONAL ROW: PAYMENTS (Only if project has payments!)
+      // 1. CONDITIONAL ROW: PAYMENTS
       if (hasPayments) {
         tbody.innerHTML += `
           <tr>
@@ -2642,7 +2642,7 @@
             </td>
             <td>
               <span class="cell-title" style="color:#b91c1c;">❌ Manual Checking Nightmare</span>
-              <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
+              <span class="cell-danger">System does not auto-activate. Customers call you complaining: <em>"Money deducted but course is locked."</em> You must manually check bank SMS and unlock accounts one by one.</span>
             </td>
           </tr>
         `;
@@ -2765,15 +2765,17 @@
     async function processIdeaMode() {
       const inputEl = document.getElementById("idea-input");
       const btnEl = document.getElementById("btn-analyze-idea");
-      const text = inputEl.value;
+      const text = inputEl ? inputEl.value : "";
 
       if (!text || text.trim().length < 8) {
         showToast("Please enter a short description of what you wish to build.");
         return;
       }
 
-      btnEl.disabled = true;
-      btnEl.innerText = "Analyzing Requirements & Domain...";
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerText = "Analyzing Requirements & Domain...";
+      }
 
       if (AI_WORKER_URL) {
         try {
@@ -2786,8 +2788,10 @@
           if (response.ok) {
             const aiData = await response.json();
             applyAIClassification(aiData, text, true);
-            btnEl.disabled = false;
-            btnEl.innerText = "Analyze & Value Project →";
+            if (btnEl) {
+              btnEl.disabled = false;
+              btnEl.innerText = "Analyze & Value Project →";
+            }
             showToast("✨ Precision domain analysis complete!");
             showResultsView();
             return;
@@ -2798,8 +2802,10 @@
       }
 
       applyLocalClassification(text);
-      btnEl.disabled = false;
-      btnEl.innerText = "Analyze & Value Project →";
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerText = "Analyze & Value Project →";
+      }
       showToast("Smart domain requirement analysis complete!");
       showResultsView();
     }
@@ -2823,7 +2829,6 @@
       state.estimatedHoursMin = ai.estimated_dev_hours_min;
       state.estimatedHoursMax = ai.estimated_dev_hours_max;
 
-      // Internal validation check before display
       validateAndSanitizeScope(state, rawText);
 
       const chips = [
@@ -2835,30 +2840,48 @@
       ];
 
       state.analysisBreakdown = chips;
-      document.getElementById("ai-engine-badge").innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
+      const aiBadge = document.getElementById("ai-engine-badge");
+      if (aiBadge) aiBadge.innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
     }
 
-    // Strict negation checker
+    // Resilient negation checker
     function isNegatedInText(text, keyword) {
+      if (!text || !keyword) return false;
       const lower = text.toLowerCase();
-      const kwPattern = keyword.replace(/\s+/g, '\\s+');
-      const negationPatterns = [
-        `\\b(?:no|without|excluding|excluded|out\\s+of\\s+scope|don't\\s+need|doesn't\\s+need|not\\s+needed|not\\s+required|not\\s+included|skip)\\s+(?:\\w+\\s+){0,3}${kwPattern}\\b`,
-        `\\b${kwPattern}\\s+(?:is\\s+)?not\\s+(?:required|needed|included)\\b`,
-        `\\b${kwPattern}\\s+is\\s+out\\s+of\\s+scope\\b`,
-        `\\bexcept\\s+(?:\\w+\\s+){0,2}${kwPattern}\\b`
+      const cleanKw = keyword.toLowerCase().trim();
+      
+      const negativePrefixes = [
+        "no", "not", "without", "excluding", "excluded", "out of scope",
+        "don't need", "doesn't need", "not needed", "not required",
+        "not included", "skip", "no need for"
       ];
-      for (const pattern of negationPatterns) {
-        if (new RegExp(pattern, 'i').test(lower)) {
+      
+      for (const prefix of negativePrefixes) {
+        if (lower.includes(`${prefix} ${cleanKw}`) || 
+            lower.includes(`${prefix} online ${cleanKw}`) || 
+            lower.includes(`${prefix} customer ${cleanKw}`) || 
+            lower.includes(`${prefix} user ${cleanKw}`) || 
+            lower.includes(`${prefix} shopping ${cleanKw}`)) {
           return true;
         }
+      }
+      
+      if (lower.includes(`${cleanKw} not required`) || 
+          lower.includes(`${cleanKw} is not needed`) || 
+          lower.includes(`${cleanKw} not needed`)) {
+        return true;
+      }
+      
+      if ((cleanKw === "mobile app" || cleanKw === "mobile" || cleanKw === "app") && 
+          (lower.includes("web only") || lower.includes("website only"))) {
+        return true;
       }
       return false;
     }
 
     // Local Domain-Driven Classification & Extraction
     function applyLocalClassification(text) {
-      const lower = text.toLowerCase();
+      const lower = (text || "").toLowerCase();
       state.fromIdeaMode = true;
       state.rawIdeaText = text;
       state.selectedFeatures = [];
@@ -2872,11 +2895,11 @@
       const excluded = [];
 
       // 1. Identify Explicit Exclusions
-      const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "fees") || lower.includes("no online payment") || lower.includes("without online payment");
-      const isCustomerAuthExcluded = isNegatedInText(lower, "login") || isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup") || lower.includes("no customer login") || lower.includes("no user login");
+      const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "fees") || lower.includes("no online payment") || lower.includes("without payment") || lower.includes("no payment");
+      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup") || lower.includes("no customer login") || lower.includes("no user login") || lower.includes("no login");
       const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard") || lower.includes("no admin");
-      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout") || lower.includes("no shopping cart") || lower.includes("no cart");
-      const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || lower.includes("web only") || lower.includes("website only") || lower.includes("no mobile app");
+      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout") || lower.includes("no shopping cart") || lower.includes("no cart") || lower.includes("no checkout");
+      const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || isNegatedInText(lower, "mobile") || lower.includes("web only") || lower.includes("website only") || lower.includes("no mobile app");
       const isAIExcluded = isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || isNegatedInText(lower, "llm") || lower.includes("no ai") || lower.includes("no chatbot");
       const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "orders");
       const isDatabaseExcluded = isNegatedInText(lower, "database") || isNegatedInText(lower, "db");
@@ -2892,7 +2915,7 @@
       if (isDatabaseExcluded) excluded.push("Database Storage");
       if (isAPIExcluded) excluded.push("Third-Party API Integrations");
 
-      // 2. Strict Domain Detection (Using proper word boundaries!)
+      // 2. Strict Domain Detection (Word Boundaries to prevent false positives)
       const isRestaurant = /\b(restaurant|cafe|bakery|diner|bistro|food|eatery)\b/i.test(lower);
       const isClinic = /\b(clinic|doctor|patient|hospital|dental|dentist|healthcare|medical)\b/i.test(lower);
       const isDocManagement = /\b(document\s*management|pdf\s*management|document\s*portal|document\s*repository|dms)\b/i.test(lower) ||
@@ -2905,7 +2928,6 @@
       const isTrueMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter\s*app|react\s*native\s*app)\b/i.test(lower) && !isMobileExcluded;
       const isSaaS = /\b(saas|subscription\s*software|multi-tenant|b2b\s*platform)\b/i.test(lower);
 
-      // Map Domain -> Archetype, Title, and Base Hours
       if (isRestaurant) {
         const hasOrdering = (lower.includes("order") || lower.includes("ordering") || lower.includes("cart") || lower.includes("takeout")) && !isOrderingExcluded;
         if (hasOrdering) {
@@ -3026,8 +3048,7 @@
         included.push("Contact Form & Business Overview");
       }
 
-      // 3. Granular Verb/Noun Mappings:
-      // WhatsApp: Distinguish simple button vs API gateway!
+      // WhatsApp mapping: Distinguish simple button vs. API
       if (lower.includes("whatsapp") && !isNegatedInText(lower, "whatsapp")) {
         const isTrueAPI = /\b(whatsapp\s*api|sms\s*gateway|automated\s*notifications?|otp|text\s*alerts?)\b/i.test(lower);
         if (isTrueAPI) {
@@ -3035,7 +3056,6 @@
           state.selectedFeatures.push("feat_wa_sms");
         } else {
           included.push("WhatsApp Contact Button");
-          // Simple button: DO NOT add feat_wa_sms (0 API overhead)
         }
       }
 
@@ -3067,24 +3087,21 @@
       ];
 
       state.analysisBreakdown = chips;
-      document.getElementById("ai-engine-badge").innerText = "Domain Scoping Engine";
+      const aiBadge = document.getElementById("ai-engine-badge");
+      if (aiBadge) aiBadge.innerText = "Domain Scoping Engine";
     }
 
     // ==========================================================================
     // PRE-DISPLAY VALIDATION & SANITIZATION GATE
-    // Guarantees no hallucinated AI/Mobile/Payment and enforces: Exclusion > Inclusion
     // ==========================================================================
     function validateAndSanitizeScope(st, text) {
-      const lower = text.toLowerCase();
+      const lower = (text || "").toLowerCase();
 
-      // Check for presence of AI keywords with word boundary
-      const hasExplicitAI = /\b(ai|llm|gpt|chatbot|claude|gemini|rag|vector\s*db)\b/i.test(lower) && !isNegatedInText(lower, "ai");
+      const hasExplicitAI = /\b(ai\s*app|ai\s*platform|llm|chatbot|claude|gemini|rag|vector\s*db)\b/i.test(lower) && !isNegatedInText(lower, "ai");
       const hasExplicitMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter|react\s*native)\b/i.test(lower) && !isNegatedInText(lower, "mobile app");
-      const hasExplicitPayment = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isNegatedInText(lower, "online payment");
-      const hasExplicitCustomerLogin = /\b(customer\s*login|patient\s*login|student\s*login|user\s*login|login|register|signup)\b/i.test(lower) && !isNegatedInText(lower, "customer login") && !isNegatedInText(lower, "login");
-      const hasExplicitAdmin = /\b(admin|admin\s*panel|admin\s*dashboard|dashboard|manage\s*products|manage\s*orders)\b/i.test(lower) && !isNegatedInText(lower, "admin");
+      const hasExplicitPayment = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isNegatedInText(lower, "online payment") && !isNegatedInText(lower, "payment");
 
-      // 1. PURGE UNREQUESTED OR EXCLUDED AI
+      // 1. Purge Unrequested or Excluded AI
       if (!hasExplicitAI || st.excludedList.some(e => /ai|chatbot/i.test(e))) {
         st.includedList = (st.includedList || []).filter(item => !/\b(ai|llm|chatbot|assistant\s*module)\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_ai_bot");
@@ -3093,7 +3110,7 @@
         }
       }
 
-      // 2. PURGE UNREQUESTED OR EXCLUDED MOBILE
+      // 2. Purge Unrequested or Excluded Mobile
       if (!hasExplicitMobile || st.excludedList.some(e => /mobile/i.test(e))) {
         st.includedList = (st.includedList || []).filter(item => !/\bmobile\s*app|android|ios\b/i.test(item));
         if (st.projectType === "mobile_app") {
@@ -3102,14 +3119,15 @@
         st.platformScope = "website_only";
       }
 
-      // 3. PURGE UNREQUESTED OR EXCLUDED PAYMENTS
+      // 3. Purge Unrequested or Excluded Payments
       if (!hasExplicitPayment || st.excludedList.some(e => /payment|gateway/i.test(e))) {
         st.includedList = (st.includedList || []).filter(item => !/\bpayment|gateway\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
       }
 
-      // 4. PURGE EXCLUDED CUSTOMER LOGIN (Keep admin if separate)
-      if (isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || st.excludedList.some(e => /customer login/i.test(e))) {
+      // 4. Purge Excluded Customer Login
+      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || st.excludedList.some(e => /customer login|login/i.test(e));
+      if (isCustomerAuthExcluded) {
         st.includedList = (st.includedList || []).filter(item => !/\bcustomer\s*login|user\s*login|patient\s*registration|student\s*registration|user\s*accounts\b/i.test(item));
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_auth");
         if (!st.excludedList.some(e => /customer login/i.test(e))) {
@@ -3117,8 +3135,9 @@
         }
       }
 
-      // 5. PURGE EXCLUDED ADMIN
-      if (isNegatedInText(lower, "admin") || st.excludedList.some(e => /admin/i.test(e))) {
+      // 5. Purge Excluded Admin
+      const isAdminExcluded = isNegatedInText(lower, "admin") || st.excludedList.some(e => /admin/i.test(e));
+      if (isAdminExcluded) {
         st.includedList = (st.includedList || []).filter(item => !/\badmin\b/i.test(item));
         st.hasAdminPanel = false;
         if (!st.excludedList.some(e => /admin/i.test(e))) {
@@ -3126,7 +3145,7 @@
         }
       }
 
-      // 6. PURGE WHATSAPP API IF ONLY A BUTTON
+      // 6. Purge WhatsApp API if Only a Button
       const hasWhatsAppOnlyButton = /\b(whatsapp\s*button|whatsapp\s*link|contact\s*via\s*whatsapp)\b/i.test(lower) && !/\b(api|sms\s*gateway|otp)\b/i.test(lower);
       if (hasWhatsAppOnlyButton) {
         st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_wa_sms");
@@ -3136,12 +3155,12 @@
         }
       }
 
-      // 7. TITLE VALIDATION
+      // 7. Title Validation
       st.customProjectTitle = generateSmartTitle(text, st.projectType);
     }
 
     function generateSmartTitle(text, type) {
-      const lower = text.toLowerCase();
+      const lower = (text || "").toLowerCase();
       if (/\b(clinic|doctor|patient|hospital|dental)\b/i.test(lower)) return "Clinic Appointment Booking Platform";
       if (/\b(document\s*management|pdf\s*management|dms)\b/i.test(lower) || (/\b(document|pdf)\b/i.test(lower) && /\b(upload|download|repository)\b/i.test(lower))) return "Document Management Web Application";
       if (/\b(restaurant|cafe|bakery|diner)\b/i.test(lower)) {
@@ -3158,6 +3177,454 @@
       if (type === "ai_app") return "AI Workflow & Assistant Platform";
       if (type === "mobile_app") return "Cross-Platform Mobile Application";
       return pricingData.projectTypes[type] ? pricingData.projectTypes[type].title : "Business Website";
+    }
+
+    // ==========================================================================
+    // UI CONTROLLERS & RESULTS DISPLAY
+    // ==========================================================================
+    function showLanding() {
+      document.getElementById("landing-section").style.display = "block";
+      document.getElementById("estimator-section").style.display = "none";
+      document.getElementById("results-section").style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startWizardMode() {
+      state.fromIdeaMode = false;
+      state.customProjectTitle = null;
+      state.estimatedHoursMin = null;
+      state.estimatedHoursMax = null;
+      state.includedList = [];
+      state.excludedList = [];
+      document.getElementById("landing-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "block";
+      document.getElementById("results-section").style.display = "none";
+      renderWizardStep(state.currentStep);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showResultsView() {
+      try {
+        state.computedResult = calculateCostModels(state);
+        document.getElementById("landing-section").style.display = "none";
+        document.getElementById("estimator-section").style.display = "none";
+        document.getElementById("results-section").style.display = "block";
+        renderResults();
+        const parityEl = document.getElementById("parity-section");
+        if (parityEl) parityEl.style.display = "none";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (err) {
+        console.error("Error displaying results:", err);
+        showToast("Error generating valuation. Please check inputs.");
+      }
+    }
+
+    function editEstimate() {
+      document.getElementById("results-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "block";
+      renderWizardStep(state.currentStep);
+    }
+
+    function resetEstimator() {
+      if (confirm("Reset current configuration to default benchmarks?")) {
+        clearCurrentProjectSession();
+      }
+    }
+
+    function clearCurrentProjectSession() {
+      const ideaInput = document.getElementById("idea-input");
+      if (ideaInput) ideaInput.value = "";
+      const auditInput = document.getElementById("audit-quote-amount");
+      if (auditInput) auditInput.value = "";
+
+      state.currentStep = 1;
+      state.fromIdeaMode = false;
+      state.rawIdeaText = "";
+      state.customProjectTitle = null;
+      state.analysisBreakdown = [];
+      state.includedList = [];
+      state.excludedList = [];
+      state.hasAdminPanel = false;
+      state.userRolesCount = 1;
+      state.platformScope = "website_only";
+      state.estimatedHoursMin = null;
+      state.estimatedHoursMax = null;
+      state.projectType = "biz_website";
+      state.dynamicScope = [];
+      state.uiuxTier = "custom";
+      state.formScale = "1-3";
+      state.selectedFeatures = [];
+      state.infra.users = "under100";
+      state.infra.storage = "5gb";
+      state.computedResult = null;
+
+      document.getElementById("results-section").style.display = "none";
+      document.getElementById("estimator-section").style.display = "none";
+      document.getElementById("landing-section").style.display = "block";
+      const parityEl = document.getElementById("parity-section");
+      if (parityEl) parityEl.style.display = "none";
+      const verdictBox = document.getElementById("audit-verdict-box");
+      if (verdictBox) verdictBox.className = "audit-verdict-box";
+
+      showToast("Current project session cleared. Ready for a new estimate!");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function clearIdeaInput() {
+      const ideaInput = document.getElementById("idea-input");
+      if (ideaInput) ideaInput.value = "";
+      showToast("Idea text cleared.");
+    }
+
+    function jumpToStep(stepNum) {
+      state.currentStep = stepNum;
+      renderWizardStep(stepNum);
+    }
+
+    function wizardNext() {
+      if (state.currentStep < state.totalSteps) {
+        state.currentStep++;
+        renderWizardStep(state.currentStep);
+      } else {
+        showResultsView();
+      }
+    }
+
+    function wizardPrev() {
+      if (state.currentStep > 1) {
+        state.currentStep--;
+        renderWizardStep(state.currentStep);
+      } else {
+        showLanding();
+      }
+    }
+
+    function renderWizardStep(step) {
+      document.querySelectorAll(".step-item").forEach(el => {
+        const s = parseInt(el.getAttribute("data-step"));
+        el.classList.remove("active", "completed");
+        if (s === step) el.classList.add("active");
+        if (s < step) el.classList.add("completed");
+      });
+
+      document.querySelectorAll(".step-pane").forEach(p => p.classList.remove("active"));
+      const currentPane = document.getElementById(`wizard-step-${step}`);
+      if (currentPane) currentPane.classList.add("active");
+
+      document.getElementById("current-step-display").innerText = step;
+      document.getElementById("wizard-next-btn").innerText = (step === state.totalSteps) ? "Generate Estimate 🎉" : "Continue →";
+
+      if (step === 1) renderStep1();
+      if (step === 2) renderStep2();
+      if (step === 3) renderStep3();
+      if (step === 4) renderStep4();
+      if (step === 5) renderStep5();
+
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    }
+
+    function renderStep1() {
+      const container = document.getElementById("project-types-container");
+      container.innerHTML = "";
+      Object.values(pricingData.projectTypes).forEach(pt => {
+        const isSel = state.projectType === pt.id;
+        const card = document.createElement("div");
+        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
+        card.onclick = () => {
+          state.projectType = pt.id;
+          state.dynamicScope = [];
+          renderStep1();
+        };
+        card.innerHTML = `
+          <div class="card-check">✓</div>
+          <div style="font-size:1.8rem; margin-bottom:0.5rem;">${pt.icon}</div>
+          <div style="font-weight:700; margin-bottom:0.25rem;">${pt.title}</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">${pt.desc}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderStep2() {
+      const p = pricingData.projectTypes[state.projectType] || pricingData.projectTypes["biz_website"];
+      document.getElementById("scope-dynamic-title").innerText = `${p.title} Requirements`;
+      
+      const dynBox = document.getElementById("scope-dynamic-options");
+      dynBox.innerHTML = "";
+      if (p.dynamicQuestions && p.dynamicQuestions.length > 0) {
+        p.dynamicQuestions.forEach(q => {
+          const isSel = state.dynamicScope.includes(q.id);
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `pill-btn ${isSel ? 'selected' : ''}`;
+          btn.innerText = (isSel ? "✓ " : "+ ") + q.label;
+          btn.onclick = () => {
+            if (state.dynamicScope.includes(q.id)) {
+              state.dynamicScope = state.dynamicScope.filter(x => x !== q.id);
+            } else {
+              state.dynamicScope.push(q.id);
+            }
+            renderStep2();
+          };
+          dynBox.appendChild(btn);
+        });
+      } else {
+        dynBox.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">Standard architecture scope applies.</span>`;
+      }
+
+      // UI/UX
+      const uiBox = document.getElementById("uiux-options-container");
+      uiBox.innerHTML = "";
+      Object.values(pricingData.uiuxTiers).forEach(tier => {
+        const isSel = state.uiuxTier === tier.id;
+        const card = document.createElement("div");
+        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
+        card.onclick = () => {
+          state.uiuxTier = tier.id;
+          renderStep2();
+        };
+        card.innerHTML = `
+          <div class="card-check">✓</div>
+          <div style="font-weight:700; margin-bottom:0.25rem;">${tier.title}</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">${tier.desc}</div>
+        `;
+        uiBox.appendChild(card);
+      });
+
+      // Forms
+      document.querySelectorAll("#form-count-options .pill-btn").forEach(btn => {
+        btn.classList.toggle("selected", btn.getAttribute("data-forms") === state.formScale);
+      });
+    }
+
+    function selectFormCount(scale) {
+      state.formScale = scale;
+      document.querySelectorAll("#form-count-options .pill-btn").forEach(btn => {
+        btn.classList.toggle("selected", btn.getAttribute("data-forms") === scale);
+      });
+    }
+
+    function renderStep3() {
+      const container = document.getElementById("features-categorized-container");
+      container.innerHTML = "";
+
+      const grid = document.createElement("div");
+      grid.className = "feature-grid";
+
+      Object.entries(pricingData.features).forEach(([fid, feat]) => {
+        const checked = state.selectedFeatures.includes(fid);
+        const label = document.createElement("label");
+        label.className = "feature-item";
+        label.innerHTML = `
+          <input type="checkbox" ${checked ? 'checked' : ''} value="${fid}">
+          <span>${feat.label}</span>
+        `;
+        label.querySelector("input").onchange = (e) => {
+          if (e.target.checked) {
+            if (!state.selectedFeatures.includes(fid)) state.selectedFeatures.push(fid);
+          } else {
+            state.selectedFeatures = state.selectedFeatures.filter(x => x !== fid);
+          }
+        };
+        grid.appendChild(label);
+      });
+
+      container.appendChild(grid);
+    }
+
+    function renderStep4() {
+      document.querySelectorAll("#infra-users-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.users);
+      });
+      document.querySelectorAll("#infra-storage-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.infra.storage);
+      });
+    }
+
+    function setInfraParam(param, val) {
+      state.infra[param] = val;
+      renderStep4();
+    }
+
+    function renderStep5() {
+      const container = document.getElementById("maint-support-options");
+      container.innerHTML = "";
+      const maintOptions = [
+        { id: "basic", title: "Managed Cloud & Uptime Continuity", desc: "Domain renewal, weekly automated backups, and 1hr minor updates/month." },
+        { id: "standard", title: "Active Monthly Sprints", desc: "Includes 4 hours of active monthly feature development and SLA guarantee." }
+      ];
+
+      maintOptions.forEach(tier => {
+        const isSel = state.maintenanceTier === tier.id;
+        const card = document.createElement("div");
+        card.className = `selectable-card ${isSel ? 'selected' : ''}`;
+        card.onclick = () => {
+          state.maintenanceTier = tier.id;
+          renderStep5();
+        };
+        card.innerHTML = `
+          <div class="card-check">✓</div>
+          <div style="font-weight:700; margin-bottom:0.25rem;">${tier.title}</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">${tier.desc}</div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.querySelectorAll("#maint-freq-selector .pill-btn").forEach(b => {
+        b.classList.toggle("selected", b.getAttribute("data-val") === state.maintenanceFreq);
+      });
+    }
+
+    function setMaintFreq(freq) {
+      state.maintenanceFreq = freq;
+      renderStep5();
+    }
+
+    // Results Renderer
+    function renderResults() {
+      const res = state.computedResult;
+      if (!res) return;
+
+      const estIdEl = document.getElementById("res-estimate-id");
+      if (estIdEl) estIdEl.innerText = res.estimateId;
+      const projNameEl = document.getElementById("res-project-name");
+      if (projNameEl) projNameEl.innerText = `${res.projectTitle} Specification`;
+
+      const hoursBadge = document.getElementById("effort-hours-badge");
+      if (hoursBadge && res.hoursMin && res.hoursMax) {
+        hoursBadge.innerText = `${res.hoursMin}–${res.hoursMax} Dev Hours`;
+      }
+
+      const banner = document.getElementById("smart-analysis-banner");
+      if (banner) {
+        if (state.fromIdeaMode) {
+          banner.classList.add("active");
+          const promptEl = document.getElementById("analysis-prompt-text");
+          if (promptEl) promptEl.innerText = `"${state.rawIdeaText}"`;
+          
+          const chipsGrid = document.getElementById("analysis-chips-grid");
+          if (chipsGrid) {
+            chipsGrid.innerHTML = "";
+            (state.analysisBreakdown || []).forEach(item => {
+              const div = document.createElement("div");
+              div.className = "analysis-chip-card";
+              div.innerHTML = `<strong>${item.title}</strong><span>${item.desc}</span>`;
+              chipsGrid.appendChild(div);
+            });
+          }
+        } else {
+          banner.classList.remove("active");
+        }
+      }
+
+      updateSelectedPackageDisplay();
+
+      const chips = document.getElementById("why-chips-container");
+      if (chips) {
+        chips.innerHTML = "";
+        (res.reasons || []).forEach(r => {
+          const chip = document.createElement("div");
+          chip.className = "why-chip";
+          chip.innerHTML = `<span>⚡</span> <span>${r}</span>`;
+          chips.appendChild(chip);
+        });
+      }
+    }
+
+    function selectPackageView(pkgKey) {
+      state.activePackageView = pkgKey;
+      const btnServ = document.getElementById("btn-toggle-serverless");
+      const btnEnt = document.getElementById("btn-toggle-enterprise");
+      if (btnServ) btnServ.classList.toggle("active", pkgKey === "serverless");
+      if (btnEnt) btnEnt.classList.toggle("active", pkgKey === "enterprise");
+      updateSelectedPackageDisplay();
+      showToast(`Switched view to ${pkgKey === 'serverless' ? 'Cloud-Optimized Architecture' : 'Dedicated Enterprise Cluster'}`);
+    }
+
+    function updateSelectedPackageDisplay() {
+      const res = state.computedResult;
+      if (!res) return;
+      const isA = state.activePackageView === "serverless";
+      const active = isA ? res.packageA : res.packageB;
+      if (!active) return;
+
+      const archBadge = document.getElementById("res-hero-arch-badge");
+      if (archBadge) archBadge.innerText = isA ? "Package A: Cloud-Optimized Architecture" : "Package B: Dedicated Enterprise Cluster";
+      
+      const overkillBadge = document.getElementById("res-overkill-warning-badge");
+      if (overkillBadge) overkillBadge.style.display = (!isA && !res.isHighScale) ? "inline-flex" : "none";
+
+      const stdPriceEl = document.getElementById("val-standard-price");
+      if (stdPriceEl) stdPriceEl.innerText = formatINR(active.standardPrice);
+
+      const optPriceEl = document.getElementById("val-optimized-price");
+      if (optPriceEl) optPriceEl.innerText = formatINR(active.optimizedPrice);
+
+      const saveBadge = document.getElementById("val-savings-badge");
+      if (saveBadge) saveBadge.innerText = `You save ${formatINR(active.savings)}`;
+
+      const monPriceEl = document.getElementById("val-monthly-price");
+      if (monPriceEl) monPriceEl.innerText = `₹${active.monthly.toLocaleString('en-IN')} / mo`;
+
+      const monDescEl = document.getElementById("val-monthly-desc");
+      if (monDescEl) monDescEl.innerText = active.monthlyDesc;
+
+      const tcoIndicator = document.getElementById("tco-package-indicator");
+      if (tcoIndicator) tcoIndicator.innerHTML = `Displaying projection for: <strong>${active.name}</strong>`;
+
+      const devLabel = document.getElementById("dev-active-pkg-label");
+      if (devLabel) devLabel.innerText = isA ? "Package A (Cloud-Optimized)" : "Package B (Dedicated Enterprise)";
+
+      const infraLabel = document.getElementById("infra-active-pkg-label");
+      if (infraLabel) infraLabel.innerText = isA ? "Package A (Zero-Idle Stack)" : "Package B (Dedicated VPC Cluster)";
+
+      const tco1 = document.getElementById("tco-val-1yr");
+      if (tco1) tco1.innerText = formatINR(active.year1);
+      const tco3 = document.getElementById("tco-val-3yr");
+      if (tco3) tco3.innerText = formatINR(active.year3);
+      const tco5 = document.getElementById("tco-val-5yr");
+      if (tco5) tco5.innerText = formatINR(active.year5);
+
+      const devTbody = document.getElementById("table-dev-rows");
+      if (devTbody) {
+        devTbody.innerHTML = "";
+        (active.breakdown || []).forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${row.phase}</strong></td>
+            <td style="color:var(--text-muted); font-size:0.85rem;">${row.desc}</td>
+            <td class="text-right" style="font-weight:700;">${formatINR(row.cost)}</td>
+          `;
+          devTbody.appendChild(tr);
+        });
+      }
+
+      const infraTbody = document.getElementById("table-infra-rows");
+      if (infraTbody) {
+        infraTbody.innerHTML = "";
+        (active.infraItems || []).forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${row.item}</strong></td>
+            <td style="color:var(--text-muted); font-size:0.85rem;">${row.spec}</td>
+            <td class="text-right" style="font-weight:700; color:var(--primary);">${row.cost}</td>
+          `;
+          infraTbody.appendChild(tr);
+        });
+      }
+    }
+
+    function toggleAccordion(id) {
+      const body = document.getElementById(id);
+      const icon = document.getElementById(`${id}-icon`);
+      if (!body) return;
+      if (body.classList.contains("collapsed")) {
+        body.classList.remove("collapsed");
+        if (icon) icon.innerText = "▼";
+      } else {
+        body.classList.add("collapsed");
+        if (icon) icon.innerText = "▶";
+      }
     }
 
     // Utilities
@@ -3240,7 +3707,8 @@
 
     function openModal(id) {
       closeModals();
-      document.getElementById(id).classList.add("active");
+      const el = document.getElementById(id);
+      if (el) el.classList.add("active");
     }
     function closeModals() {
       document.querySelectorAll(".modal-backdrop").forEach(m => m.classList.remove("active"));
@@ -3251,6 +3719,7 @@
 
     function showToast(msg) {
       const container = document.getElementById("toast-container");
+      if (!container) return;
       const t = document.createElement("div");
       t.className = "toast";
       t.innerText = msg;
@@ -3262,7 +3731,8 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("current-year").innerText = new Date().getFullYear();
+      const yearEl = document.getElementById("current-year");
+      if (yearEl) yearEl.innerText = new Date().getFullYear();
     });
   </script>
 </body>
