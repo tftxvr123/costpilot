@@ -2296,16 +2296,62 @@
       const isServiceBooking = isFeatureVerified(["service booking", "book appointments", "booking request", "preferred date and time"], null, null) && !isBookingExcluded && !isClinicApp;
       
       const isDocManagement = isFeatureVerified(["document management", "upload pdf documents", "folders"], "feat_storage", null) && !cfg.projectType.includes("lms");
-      const isLMS = cfg.projectType === "lms" || isFeatureVerified(["lms", "courses", "video lectures", "enroll"], null, null);
       const isSaaS = cfg.projectType === "saas_product" || isFeatureVerified(["saas", "workspaces", "task management", "tasks"], null, null);
       const isAIApp = cfg.projectType === "ai_app" || isFeatureVerified(["ai web application", "ai summaries", "generate ai", "llm"], "feat_ai_bot", null);
-      
-      const isCmsBusiness = !isCmsExcluded && isFeatureVerified(["cms", "manage website content", "blog posts"], null, "cms_blog") && (isAdminExcluded ? false : true);
+      const isCmsBusiness = !isCmsExcluded && isFeatureVerified(["cms", "manage website content", "blog posts"], null, "cms_blog") && !isAdminExcluded;
+
+      // ========================================================================
+      // LMS CLASSIFICATION (5 TRAINING DATA TIERS)
+      // Tier 1: Static course showcase (₹25K–₹50K)
+      // Tier 2: Basic LMS with admin & course uploads (₹90K–₹1.4L)
+      // Tier 3: LMS with student login, enrollment & progress (₹1.25L–₹2L)
+      // Tier 4: LMS with payments / subscriptions (₹1.75L–₹3L+)
+      // Tier 5: Advanced LMS (quizzes, certificates, live classes, analytics, roles) (₹2.5L–₹5L+)
+      // ========================================================================
+      const isLMS = cfg.projectType === "lms" || (
+        isFeatureVerified(["lms", "courses", "course", "video lectures", "learning management"], null, null) &&
+        !rawText.includes("document management")
+      );
+
+      let lmsTier = 0;
+      if (isLMS) {
+        const hasLmsStudentAuth = isFeatureVerified(["student login", "student registration", "students can register", "login", "auth"], "feat_auth", null) && !isAuthExcluded;
+        const hasLmsEnrollment = isFeatureVerified(["enroll", "enrollment", "course enrollment"], null, null);
+        const hasLmsProgress = isFeatureVerified(["progress", "track their learning progress", "progress tracking"], null, null);
+        const hasLmsAdmin = isFeatureVerified(["admin", "admin dashboard", "course upload", "uploading videos", "managing students"], null, null) && !isAdminExcluded;
+        const hasLmsPayments = isFeatureVerified(["payment", "payments", "payment gateway", "subscription", "subscriptions", "paid courses", "razorpay", "stripe"], "feat_payments", "saas_billing") && !isExplicitlyExcluded("payment");
+        const hasLmsQuizzes = isFeatureVerified(["quiz", "quizzes", "test", "exams", "timed quizzes"], null, "lms_quizzes");
+        const hasLmsCerts = isFeatureVerified(["certificate", "certificates", "dynamic pdf certificate"], null, "lms_certs");
+        const hasLmsLive = isFeatureVerified(["live classes", "live sessions", "zoom", "webrtc", "live streaming"], null, null);
+        const hasLmsAnalytics = isFeatureVerified(["analytics", "detailed student analytics", "reports"], null, "app_analytics");
+        const hasLmsRoles = isFeatureVerified(["roles", "rbac", "instructor and student", "multi-role", "teachers and students"], null, "app_roles_multi");
+
+        const hasLmsAdvancedFeatures = hasLmsQuizzes || hasLmsCerts || hasLmsLive || hasLmsAnalytics || hasLmsRoles;
+        const hasStudentPortal = hasLmsStudentAuth || hasLmsEnrollment || hasLmsProgress;
+
+        if (hasLmsAdvancedFeatures) {
+          lmsTier = 5; // Advanced LMS: ₹2.5L–₹5L+
+        } else if (hasLmsPayments) {
+          lmsTier = 4; // LMS with payments/subscriptions: ₹1.75L–₹3L+
+        } else if (hasStudentPortal) {
+          lmsTier = 3; // LMS with student login, enrollment & progress: ₹1.25L–₹2L
+        } else if (hasLmsAdmin || isFeatureVerified(["course uploads", "upload courses"], null, null)) {
+          lmsTier = 2; // Basic LMS with admin and course uploads: ₹90K–₹1.4L
+        } else {
+          lmsTier = 1; // Static course showcase website: ₹25K–₹50K
+        }
+      }
 
       // 1. BASE PROJECT PRICE DETERMINATION
       let baseProjectPrice = 22000;
 
-      if (isPurePortfolio) {
+      if (isLMS) {
+        if (lmsTier === 1) baseProjectPrice = 25000;      // Static showcase base
+        else if (lmsTier === 2) baseProjectPrice = 55000; // Basic LMS base
+        else if (lmsTier === 3) baseProjectPrice = 60000; // Student LMS base
+        else if (lmsTier === 4) baseProjectPrice = 75000; // Paid LMS base
+        else if (lmsTier === 5) baseProjectPrice = 90000; // Advanced LMS base
+      } else if (isPurePortfolio) {
         baseProjectPrice = 18000;
       } else if (isInformationalRestaurant) {
         baseProjectPrice = 26000;
@@ -2317,8 +2363,6 @@
         baseProjectPrice = 45000;
       } else if (isDocManagement) {
         baseProjectPrice = 52000;
-      } else if (isLMS) {
-        baseProjectPrice = 60000;
       } else if (isSaaS) {
         baseProjectPrice = 70000;
       } else if (isAIApp) {
@@ -2356,7 +2400,7 @@
       }
 
       // Admin Auth & Dashboard (Only when needed for content, bookings, users, or workflows)
-      const needsAdmin = (isCmsBusiness || isServiceBooking || isRestaurantOrdering || isClinicApp || isDocManagement || isLMS || isSaaS || isAIApp || cfg.hasAdminPanel) && !isAdminExcluded;
+      const needsAdmin = (!isLMS && (isCmsBusiness || isServiceBooking || isRestaurantOrdering || isClinicApp || isDocManagement || isSaaS || isAIApp || cfg.hasAdminPanel)) && !isAdminExcluded;
       if (needsAdmin) {
         includedFeatureCosts += 15000;
       }
@@ -2384,10 +2428,40 @@
         if (isFeatureVerified(["search and filter", "search", "filter"], null, null)) includedFeatureCosts += 8000;
       }
 
-      // LMS Workflow (Course catalog, enrollment, video player, PDF downloads, progress tracking)
+      // LMS Modular Workflows (Scaled strictly by LMS Training Tiers)
       if (isLMS) {
-        includedFeatureCosts += 25000; // Course enrollment, video player, and resource downloads
-        if (isFeatureVerified(["progress", "track their learning progress"], null, null)) includedFeatureCosts += 12000;
+        if (lmsTier === 1) {
+          // Static course showcase website: ₹25K–₹50K
+          includedFeatureCosts += 5000; // Course list presentation & syllabus display
+        } else if (lmsTier === 2) {
+          // Basic LMS with admin and course uploads: ₹90K–₹1.4L
+          includedFeatureCosts += 35000; // Admin course upload & video/PDF file organization
+          includedFeatureCosts += 20000; // Course catalog & responsive lesson viewer
+        } else if (lmsTier === 3) {
+          // LMS with student login, enrollment and progress: ₹1.25L–₹2L
+          includedFeatureCosts += 16000; // Student auth & course enrollment system
+          includedFeatureCosts += 25000; // Video player, syllabus & PDF resource streaming
+          includedFeatureCosts += 14000; // Student learning progress tracking engine
+          includedFeatureCosts += 20000; // Admin course upload, video/PDF & student dashboard
+        } else if (lmsTier === 4) {
+          // LMS with payments / subscriptions: ₹1.75L–₹3L+
+          includedFeatureCosts += 16000; // Student auth & enrollment
+          includedFeatureCosts += 25000; // Video player & PDF resource streaming
+          includedFeatureCosts += 14000; // Progress tracking
+          includedFeatureCosts += 20000; // Admin management suite
+          includedFeatureCosts += 45000; // Paid courses checkout & subscription billing
+        } else if (lmsTier === 5) {
+          // Advanced LMS: ₹2.5L–₹5L+
+          includedFeatureCosts += 20000; // Multi-role student & instructor auth
+          includedFeatureCosts += 30000; // Course player & streaming infrastructure
+          includedFeatureCosts += 15000; // Progress tracking
+          includedFeatureCosts += 25000; // Admin management suite
+          includedFeatureCosts += 45000; // Paid courses / subscriptions
+          includedFeatureCosts += 25000; // Timed quizzes & automated scoring
+          includedFeatureCosts += 15000; // Dynamic PDF certificate generation
+          includedFeatureCosts += 30000; // Live classes / interactive sessions
+          includedFeatureCosts += 20000; // Detailed student analytics & multi-role RBAC
+        }
       }
 
       // SaaS Workflow (Workspaces, projects, tasks, assignments, status management, notifications)
@@ -2402,7 +2476,7 @@
       }
 
       // Customer Registration & Authentication (JWT/Sessions)
-      const needsUserAuth = (isRestaurantOrdering || isClinicApp || isDocManagement || isLMS || isSaaS || isAIApp || cfg.selectedFeatures.includes("feat_auth")) && !isAuthExcluded;
+      const needsUserAuth = (!isLMS && (isRestaurantOrdering || isClinicApp || isDocManagement || isSaaS || isAIApp || cfg.selectedFeatures.includes("feat_auth"))) && !isAuthExcluded;
       if (needsUserAuth) {
         includedFeatureCosts += 12000;
       }
@@ -2436,7 +2510,7 @@
       }
 
       // Payment Gateway (Razorpay/Stripe with webhooks)
-      const hasPayments = isFeatureVerified(["payment gateway", "online payment gateway", "payment", "razorpay", "stripe"], "feat_payments", null);
+      const hasPayments = !isLMS && isFeatureVerified(["payment gateway", "online payment gateway", "payment", "razorpay", "stripe"], "feat_payments", null);
       if (hasPayments && !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("payment gateway")) {
         integrationCosts += 14000;
       }
@@ -3027,12 +3101,30 @@
         if (!isAdminExcluded) { included.push("Admin User & Document Panel"); state.hasAdminPanel = true; }
       } else if (isLMS) {
         state.projectType = "lms";
-        state.customProjectTitle = "LMS Web Application";
-        if (!isCustomerAuthExcluded) { included.push("Student Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("Course Catalog & Enrollment");
-        included.push("Video Lectures & PDF Resources");
-        included.push("Learning Progress Tracking");
-        if (!isAdminExcluded) { included.push("Admin Course & Student Dashboard"); state.hasAdminPanel = true; }
+        const hasStudentAuth = !isCustomerAuthExcluded && (lower.includes("student") || lower.includes("login") || lower.includes("enroll"));
+        const hasAdmin = !isAdminExcluded && (lower.includes("admin") || lower.includes("upload"));
+        const hasPayments = !isOnlinePaymentExcluded && (lower.includes("payment") || lower.includes("subscription"));
+        const hasAdvanced = lower.includes("quiz") || lower.includes("certificate") || lower.includes("live") || lower.includes("analytics") || lower.includes("roles");
+
+        if (hasAdvanced) {
+          state.customProjectTitle = "Advanced Learning Management System (LMS)";
+        } else if (hasPayments) {
+          state.customProjectTitle = "Subscription / Paid LMS Web Application";
+        } else if (hasStudentAuth) {
+          state.customProjectTitle = "LMS Web Application";
+        } else if (hasAdmin) {
+          state.customProjectTitle = "Course Management LMS";
+        } else {
+          state.customProjectTitle = "Static Course Showcase Website";
+        }
+
+        if (hasStudentAuth) { included.push("Student Registration & Login"); state.selectedFeatures.push("feat_auth"); }
+        included.push("Course Catalog & Syllabus");
+        if (lower.includes("video") || lower.includes("resource") || hasAdmin || hasStudentAuth) included.push("Video Lectures & PDF Resources");
+        if (lower.includes("progress")) included.push("Learning Progress Tracking");
+        if (hasAdmin) { included.push("Admin Course & Student Dashboard"); state.hasAdminPanel = true; }
+        if (hasPayments) included.push("Payment Gateway / Subscriptions");
+        if (hasAdvanced) included.push("Quizzes, Certificates & Interactive Modules");
       } else if (isSaaS) {
         state.projectType = "saas_product";
         state.customProjectTitle = "SaaS Task Management Web Application";
@@ -3166,7 +3258,13 @@
         }
         return "Informational Restaurant Website";
       }
-      if (/\b(lms|course|courses|video\s*lectures)\b/i.test(lower)) return "LMS Web Application";
+      if (/\b(lms|course|courses|video\s*lectures)\b/i.test(lower)) {
+        if (lower.includes("quiz") || lower.includes("certificate") || lower.includes("live") || lower.includes("analytics")) return "Advanced Learning Management System (LMS)";
+        if (lower.includes("payment") || lower.includes("subscription")) return "Paid / Subscription LMS Web Application";
+        if (lower.includes("student") || lower.includes("login") || lower.includes("enroll")) return "LMS Web Application";
+        if (lower.includes("admin") || lower.includes("upload")) return "Course Management LMS";
+        return "Static Course Showcase Website";
+      }
       if (/\b(saas|task\s*management|workspaces)\b/i.test(lower)) return "SaaS Task Management Web Application";
       if (/\b(ai\s*web\s*application|ai\s*summaries|generate\s*ai)\b/i.test(lower)) return "AI Summary Web Application";
       if (/\b(service\s*booking|preferred\s*date|booking\s*request)\b/i.test(lower) && !isBookingExcluded) return "Service Booking Web Platform";
