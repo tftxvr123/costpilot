@@ -1522,6 +1522,63 @@
             <span class="eq-highlight">Total Cost of Ownership (TCO)</span>
           </div>
 
+         <div class="hero">
+          <span class="badge badge-primary">✨ Digital Project TCO Intelligence</span>
+          <h1>Know What Your Digital Project <span>Really Costs</span>.</h1>
+          <p class="hero-subtitle">
+            Get an authoritative, market-based estimate for building, launching, and maintaining your digital product. Transparent comparison between <strong>Standard Market Quotes</strong> and <strong>Optimized Direct Offers</strong>.
+          </p>
+
+         <!-- INTEGRATED HERO SEARCH BOX -->
+          <div class="hero-search-wrapper">
+            <div class="hero-search-card">
+              <div class="search-top-row">
+                <span>💡</span>
+                <span>Describe what you want to build in plain English:</span>
+              </div>
+
+              <textarea 
+                id="idea-input" 
+                class="hero-search-input" 
+                placeholder="e.g. 5-page business website with Home, About, Services, Gallery and Contact form. WhatsApp click-to-chat. No login, database, payment or mobile app."
+              ></textarea>
+
+              <div class="search-bottom-bar">
+                <span class="search-disclaimer">
+                  🔒 Negative statements (e.g. <em>'no payment'</em>, <em>'no login'</em>) strictly reduce costs.
+                </span>
+                <button class="btn btn-primary btn-lg" id="btn-analyze-idea" onclick="processIdeaMode()">
+                  Analyze Project →
+                </button>
+              </div>
+            </div>
+
+            <!-- 1-Click Quick Chips -->
+            <div class="hero-quick-chips">
+              <span class="quick-chip-label">Try an example:</span>
+              <button type="button" class="quick-chip" onclick="document.getElementById('idea-input').value = '5-page business website with Home, About, Services, Gallery and Contact pages. Include a contact form and WhatsApp click-to-chat button. No login, database, CMS or online payment.';">
+                🏢 5-Page Business
+              </button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('idea-input').value = 'Build a personal portfolio website with Home, About, Projects, Resume and Contact pages. Include a downloadable PDF resume and contact form. No database, CMS, payment or login.';">
+                🎨 Creator Portfolio
+              </button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('idea-input').value = 'Informational restaurant website with menu, food categories, gallery, location, opening hours and WhatsApp button. No online ordering, cart, checkout or payment.';">
+                🍽️ Restaurant Menu
+              </button>
+              <button type="button" class="quick-chip" onclick="document.getElementById('idea-input').value = 'Clinic appointment web application where patients register and log in, browse doctors, view available slots and book appointments with admin dashboard.';">
+                🏥 Clinic Appointments
+              </button>
+            </div>
+          </div>
+        </div>
+            
+
+         
+
+
+
+          
+
           <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
              <!-- <button class="btn btn-primary btn-lg" onclick="startWizardMode()">Estimate My Project</button> -->
             <button class="btn btn-outline btn-lg" onclick="openHowItWorksModal()">Explore Architecture Models</button>
