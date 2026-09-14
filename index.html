@@ -1460,7 +1460,65 @@
       transform: translateY(-1px);
     }
 
-
+/* ==========================================================================
+       TECH STACK & CLOUD ECOSYSTEM RIBBON
+       ========================================================================== */
+    .tech-ecosystem-wrapper {
+      margin: 3.5rem auto 1rem auto;
+      text-align: center;
+      max-width: 900px;
+    }
+    .tech-ecosystem-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .tech-ecosystem-label::before,
+    .tech-ecosystem-label::after {
+      content: '';
+      height: 1px;
+      width: 40px;
+      background: var(--border-color);
+    }
+    .tech-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+      padding: 0.45rem 1rem;
+      font-size: 0.825rem;
+      font-weight: 600;
+      color: var(--secondary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .tech-pill:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.1);
+    }
+    .tech-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
     
     
   </style>
