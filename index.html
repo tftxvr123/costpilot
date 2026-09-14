@@ -1612,37 +1612,6 @@
 
 
 
-        
-        <!-- Mode Selection Options -->
-        <div class="modes-grid">
-          
-          <!-- Mode 1: Idea Analyzer -->
-          <div class="mode-card">
-            <span class="badge badge-ai" style="align-self: flex-start; margin-bottom: 1rem;">✨ Smart Requirement Analysis</span>
-            <div>
-              <div class="mode-icon">💡</div>
-              <h3>I Have an Idea</h3>
-              <p>Describe what you want to build in plain English. We extract your exact domain requirements, honor your exclusions, and compute a tailored quote.</p>
-              
-              <div class="idea-box">
-                <textarea 
-                  id="idea-input" 
-                  class="idea-textarea" 
-                  placeholder="e.g. Restaurant ordering website with menu, cart and WhatsApp ordering. No online payment. Web only."
-                ></textarea>
-                <div style="display:flex; gap:0.5rem;">
-                  <button class="btn btn-secondary" id="btn-analyze-idea" style="flex:1;" onclick="processIdeaMode()">
-                    Analyze & Value Project →
-                  </button>
-                  <button class="btn btn-outline btn-sm" onclick="clearIdeaInput()" title="Clear text">Clear</button>
-                </div>
-                <span style="font-size:0.75rem; color:var(--text-muted); display:block; margin-top:0.5rem;" id="ai-status-note">
-                  🔒 Negative statements (e.g. 'no online payment', 'no customer login') strictly override inferred features.
-                </span>
-              </div>
-            </div>
-          </div>
-
           <!-- Mode 2: Precision Wizard -->
         <!--   <div class="mode-card">
             <span class="badge badge-neutral" style="align-self: flex-start; margin-bottom: 1rem;">Architectural Configurator</span>
