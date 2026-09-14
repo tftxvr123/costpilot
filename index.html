@@ -2034,8 +2034,8 @@
           baseCost: 18000,
           baseHours: 20,
           dynamicQuestions: [
-            { id: "port_anim", label: "Interactive Micro-Interactions", cost: 3000, hours: 4 },
-            { id: "port_booking", label: "Client Inquiry & Booking Flow", cost: 3000, hours: 4 }
+            { id: "port_anim", label: "Interactive Micro-Interactions", cost: 2000, hours: 3 },
+            { id: "port_booking", label: "Client Inquiry & Booking Flow", cost: 2000, hours: 3 }
           ]
         },
         "biz_website": {
@@ -2046,9 +2046,9 @@
           baseCost: 25000,
           baseHours: 28,
           dynamicQuestions: [
-            { id: "pages_large", label: "Expanded Content (10–20+ pages)", cost: 6000, hours: 8 },
-            { id: "cms_blog", label: "Self-Managed Headless CMS", cost: 12000, hours: 14 },
-            { id: "seo_adv", label: "Advanced Structured Data SEO", cost: 3500, hours: 4 }
+            { id: "pages_large", label: "Expanded Content (10–20+ pages)", cost: 5000, hours: 7 },
+            { id: "cms_blog", label: "Self-Managed Headless CMS", cost: 10000, hours: 12 },
+            { id: "seo_adv", label: "Advanced Structured Data SEO", cost: 3000, hours: 4 }
           ]
         },
         "ecommerce": {
@@ -2056,8 +2056,8 @@
           title: "E-Commerce Platform",
           icon: "🛍️",
           desc: "Online catalog, shopping cart, checkout, and inventory.",
-          baseCost: 75000,
-          baseHours: 75,
+          baseCost: 65000,
+          baseHours: 65,
           dynamicQuestions: [
             { id: "ecom_shipping", label: "Logistics & Courier API Integration", cost: 7000, hours: 8 },
             { id: "ecom_inventory", label: "Multi-Warehouse Inventory Tracking", cost: 9000, hours: 10 }
@@ -2068,8 +2068,8 @@
           title: "Web Application",
           icon: "💻",
           desc: "Client dashboards, internal portals, or dynamic SaaS MVP.",
-          baseCost: 70000,
-          baseHours: 70,
+          baseCost: 55000,
+          baseHours: 55,
           dynamicQuestions: [
             { id: "app_roles_multi", label: "Multi-Tenant RBAC Permissions", cost: 9000, hours: 10 },
             { id: "app_analytics", label: "Interactive Analytics & CSV/PDF Export", cost: 7000, hours: 8 },
@@ -2093,11 +2093,11 @@
           title: "SaaS Product",
           icon: "🚀",
           desc: "Multi-tier subscription platform with billing & accounts.",
-          baseCost: 145000,
-          baseHours: 145,
+          baseCost: 95000,
+          baseHours: 95,
           dynamicQuestions: [
-            { id: "saas_billing", label: "Subscription Billing & Tax Invoices", cost: 10000, hours: 12 },
-            { id: "saas_teams", label: "Team Workspaces & Member Seats", cost: 8000, hours: 9 }
+            { id: "saas_billing", label: "Subscription Billing & Tax Invoices", cost: 12000, hours: 12 },
+            { id: "saas_teams", label: "Team Workspaces & Member Seats", cost: 10000, hours: 10 }
           ]
         },
         "lms": {
@@ -2105,8 +2105,8 @@
           title: "Learning Management (LMS)",
           icon: "🎓",
           desc: "EdTech platform for students, video lectures, and quizzes.",
-          baseCost: 125000,
-          baseHours: 125,
+          baseCost: 85000,
+          baseHours: 85,
           dynamicQuestions: [
             { id: "lms_quizzes", label: "Timed Quizzes & Automated Scoring", cost: 8000, hours: 9 },
             { id: "lms_certs", label: "Dynamic PDF Certificate Generation", cost: 5000, hours: 6 }
@@ -2117,8 +2117,8 @@
           title: "AI / LLM Application",
           icon: "🤖",
           desc: "RAG knowledge base, AI customer agent, or workflow tool.",
-          baseCost: 125000,
-          baseHours: 125,
+          baseCost: 80000,
+          baseHours: 80,
           dynamicQuestions: [
             { id: "ai_rag_docs", label: "Custom Document Vector Store (RAG)", cost: 12000, hours: 14 },
             { id: "ai_chat_widget", label: "Streaming Chat UI with Token Quotas", cost: 8000, hours: 9 }
@@ -2128,16 +2128,16 @@
 
       uiuxTiers: {
         "template": { id: "template", title: "Modern Component Library", cost: 0, hours: 0 },
-        "custom": { id: "custom", title: "Custom Tailored UI/UX", cost: 5000, hours: 7 },
-        "premium": { id: "premium", title: "High-Fidelity Studio UI/UX", cost: 15000, hours: 18 }
+        "custom": { id: "custom", title: "Custom Tailored UI/UX", cost: 4000, hours: 5 },
+        "premium": { id: "premium", title: "High-Fidelity Studio UI/UX", cost: 12000, hours: 14 }
       },
 
       formScale: {
         "none": { cost: 0, hours: 0 },
-        "1-3": { cost: 2500, hours: 3 },
-        "4-8": { cost: 6000, hours: 7 },
-        "9-15": { cost: 12000, hours: 14 },
-        "15+": { cost: 18000, hours: 22 }
+        "1-3": { cost: 2000, hours: 3 },
+        "4-8": { cost: 5000, hours: 6 },
+        "9-15": { cost: 10000, hours: 12 },
+        "15+": { cost: 16000, hours: 18 }
       },
 
       features: {
@@ -2186,33 +2186,72 @@
       computedResult: null
     };
 
-    // Commercial price rounding helper
-    function roundCommercial(price) {
-      if (!price || isNaN(price)) return 25000;
-      if (price < 30000) {
-        return Math.max(15000, Math.round(price / 1000) * 1000);
-      } else if (price < 75000) {
-        const rem = price % 5000;
-        if (rem < 1500) return Math.floor(price / 5000) * 5000;
-        if (rem > 3500) return Math.ceil(price / 5000) * 5000;
-        return Math.floor(price / 5000) * 5000 + 2500;
-      } else if (price < 150000) {
-        return Math.round(price / 5000) * 5000;
-      } else {
-        return Math.round(price / 10000) * 10000;
+    // ==========================================================================
+    // ROBUST NEGATION PARSER & EXCLUSION CHECKER
+    // ==========================================================================
+    function extractNegatedTerms(text) {
+      if (!text) return [];
+      const lower = text.toLowerCase();
+      const terms = new Set();
+
+      const negativeClauses = /(?:^|[.;\n]|(?:\b(?:but|however|except)\b))\s*(?:no|not|without|excluding|exclude|skip|no need for|don't need|doesn't need|don't want|free of|out of scope)\s+([^.;\n]+)/gi;
+      let match;
+      while ((match = negativeClauses.exec(lower)) !== null) {
+        const clause = match[1];
+        const items = clause.split(/,|\band\b|\bor\b|\bnor\b|&|\+/);
+        for (let item of items) {
+          const clean = item.trim().replace(/^[\s\-_]+|[\s\-_]+$/g, '');
+          if (clean.length >= 2) {
+            terms.add(clean);
+          }
+        }
       }
+
+      const suffixMatches = /([a-z0-9\s_-]{2,30}?)\s+(?:is\s+|are\s+)?(?:not needed|not required|not included|out of scope)/gi;
+      while ((match = suffixMatches.exec(lower)) !== null) {
+        const item = match[1].trim();
+        if (item.length >= 2) {
+          terms.add(item);
+        }
+      }
+
+      return Array.from(terms);
+    }
+
+    function isNegatedInText(text, keyword) {
+      if (!text || !keyword) return false;
+      const lower = text.toLowerCase();
+      const cleanKw = keyword.toLowerCase().trim();
+
+      if ((cleanKw === "mobile app" || cleanKw === "mobile application" || cleanKw === "mobile" || cleanKw === "app" || cleanKw === "ios" || cleanKw === "android") &&
+          (lower.includes("web only") || lower.includes("website only") || lower.includes("desktop only"))) {
+        return true;
+      }
+
+      const negatedTerms = extractNegatedTerms(text);
+      for (const term of negatedTerms) {
+        if (term === cleanKw || term.includes(cleanKw) || cleanKw.includes(term)) {
+          return true;
+        }
+      }
+
+      const directRegex = new RegExp(`\\b(?:no|not|without|excluding|skip)\\s+(?:[\\w-]+\\s+){0,3}${cleanKw}\\b`, 'i');
+      if (directRegex.test(lower)) return true;
+
+      const suffixRegex = new RegExp(`\\b${cleanKw}\\b\\s+(?:is\\s+|are\\s+)?(?:not needed|not required|not included|out of scope)`, 'i');
+      if (suffixRegex.test(lower)) return true;
+
+      return false;
     }
 
     // ==========================================================================
-    // RESTRUCTURED PRICING & CALCULATION ENGINE
-    // Follows: Base Cost + Verified Feature Costs + Complexity Cost +
-    //          Integration Cost + Admin/Backend Cost = Market Price
-    //          Discounted Price = Market Price x (1 - Discount)
+    // RESTRUCTURED PRICING ENGINE DIRECTLY EXECUTING SPECIFIED FORMULA:
+    // Final Market Price = Base Project Price + Included Feature Costs + Integration Costs
+    // Discounted Price = Market Price x 0.85 (15% discount)
     // ==========================================================================
     function calculateCostModels(cfg) {
       const rawText = (cfg.rawIdeaText || "").toLowerCase();
 
-      // Helper: Explicit Exclusions check
       function isExplicitlyExcluded(term) {
         if (cfg.excludedList && cfg.excludedList.some(ex => ex.toLowerCase().includes(term.toLowerCase()))) {
           return true;
@@ -2223,7 +2262,6 @@
         return false;
       }
 
-      // Helper: Feature verification check
       function isFeatureVerified(keywords, featureId, dynamicId) {
         for (const kw of keywords) {
           if (isExplicitlyExcluded(kw)) return false;
@@ -2237,245 +2275,188 @@
         return false;
       }
 
-      // Detect Project Nature
-      const isInformationalRestaurant = (cfg.projectType === "biz_website" || rawText.includes("restaurant")) &&
+      // Detection flags
+      const isPersonalPortfolio = cfg.projectType === "portfolio" || (rawText.includes("portfolio") && !rawText.includes("lms"));
+      const isInformationalRestaurant = (cfg.projectType === "biz_website" || rawText.includes("restaurant") || rawText.includes("cafe")) &&
         (rawText.includes("restaurant") || rawText.includes("cafe") || rawText.includes("menu")) &&
-        !isFeatureVerified(["ordering", "order", "takeout"], null, null) &&
-        !isFeatureVerified(["cart", "checkout"], null, null);
+        !isFeatureVerified(["ordering", "order", "takeout", "cart", "checkout"], null, null);
+      const isRestaurantOrdering = (rawText.includes("restaurant") || rawText.includes("cafe")) &&
+        isFeatureVerified(["ordering", "order", "cart", "checkout"], null, null);
+      const isClinicBooking = isFeatureVerified(["clinic", "doctor", "patient", "appointment booking"], null, null);
+      const isServiceBooking = isFeatureVerified(["service booking", "slot booking", "booking website"], null, null) && !isClinicBooking;
 
-      const isStaticPortfolio = cfg.projectType === "portfolio" || (rawText.includes("portfolio") && !rawText.includes("lms"));
+      // 1. BASE PROJECT PRICE
+      let baseProjectPrice = 25000;
 
-      // 1. BASE PROJECT COST
-      let baseCost = 24000; // default basic business website
-      if (isStaticPortfolio) {
-        baseCost = 18000;
+      if (isPersonalPortfolio) {
+        baseProjectPrice = 18000;
       } else if (isInformationalRestaurant) {
-        baseCost = 26000;
-      } else if (cfg.projectType === "ecommerce") {
-        const hasCart = isFeatureVerified(["cart", "shopping cart"], null, null);
-        baseCost = hasCart ? 35000 : 30000;
-      } else if (cfg.projectType === "web_app") {
-        baseCost = 40000;
-      } else if (cfg.projectType === "saas_product") {
-        baseCost = 65000;
+        baseProjectPrice = 25000;
+      } else if (isRestaurantOrdering) {
+        baseProjectPrice = 55000;
+      } else if (isClinicBooking) {
+        baseProjectPrice = 55000;
+      } else if (isServiceBooking) {
+        baseProjectPrice = 45000;
       } else if (cfg.projectType === "lms") {
-        baseCost = 55000;
+        baseProjectPrice = 85000;
       } else if (cfg.projectType === "ai_app") {
-        baseCost = 55000;
+        baseProjectPrice = 80000;
+      } else if (cfg.projectType === "saas_product") {
+        baseProjectPrice = 95000;
       } else if (cfg.projectType === "mobile_app") {
-        baseCost = 95000;
-      } else if (pricingData.projectTypes[cfg.projectType]) {
-        baseCost = pricingData.projectTypes[cfg.projectType].baseCost;
+        baseProjectPrice = 110000;
+      } else if (cfg.projectType === "ecommerce") {
+        baseProjectPrice = 65000;
+      } else {
+        baseProjectPrice = 25000; // 5-page business website
       }
 
-      // 2. VERIFIED FEATURE COSTS
-      let featureCost = 0;
+      // 2. INCLUDED FEATURE COSTS
+      let includedFeatureCosts = 0;
 
-      // Contact Form / Interactive Forms
-      if (cfg.formScale && pricingData.formScale[cfg.formScale]) {
-        featureCost += pricingData.formScale[cfg.formScale].cost;
-      } else if (isFeatureVerified(["contact form", "contact", "inquiry form"], null, null)) {
-        featureCost += 2000;
-      }
-
-      // Restaurant Menu & Food Categories
-      if ((isInformationalRestaurant || rawText.includes("restaurant") || rawText.includes("menu")) && !isExplicitlyExcluded("menu")) {
-        featureCost += 4000;
-      }
-
-      // UI/UX Tier Fidelity
-      if (cfg.uiuxTier && pricingData.uiuxTiers[cfg.uiuxTier]) {
-        // Simple sites have standard responsive UI in base
-        if (!isStaticPortfolio && !isInformationalRestaurant && cfg.projectType !== "biz_website") {
-          featureCost += pricingData.uiuxTiers[cfg.uiuxTier].cost;
-        } else if (cfg.uiuxTier === "premium") {
-          featureCost += 8000;
+      // Contact Form (Included in base of simple portfolio/biz, ₹2,000 incremental if added via wizard/text)
+      if (isPersonalPortfolio) {
+        if (isFeatureVerified(["contact form", "contact"], null, null) && rawText.includes("contact")) {
+          includedFeatureCosts += 2000; // Portfolio with Contact form = ₹20,000
+        }
+      } else if (isInformationalRestaurant) {
+        // Menu & food categories: ₹4,000
+        includedFeatureCosts += 4000;
+      } else if (cfg.projectType === "biz_website" && !isInformationalRestaurant) {
+        if (isFeatureVerified(["contact form", "contact", "inquiry"], null, null)) {
+          includedFeatureCosts += 2000; // 5-page + contact form = ₹27,000
         }
       }
 
-      // Dynamic Scope questions (from Wizard)
-      const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
-      (cfg.dynamicScope || []).forEach(id => {
-        const item = (p.dynamicQuestions || []).find(q => q.id === id);
-        if (item && item.cost) {
-          featureCost += item.cost;
-        }
-      });
-
-      // Search & Content Filtering
-      if (isFeatureVerified(["search", "filter", "filtering"], "feat_search", null)) {
-        featureCost += 8000;
+      // Form scale for wizard configurations
+      if (!cfg.fromIdeaMode && cfg.formScale && pricingData.formScale[cfg.formScale]) {
+        includedFeatureCosts += pricingData.formScale[cfg.formScale].cost;
       }
 
-      // Shopping Cart & Order Placement
-      if (isFeatureVerified(["cart", "shopping cart"], null, null)) {
-        featureCost += 10000;
-      }
-      if (isFeatureVerified(["checkout", "order placement", "order flow"], null, null)) {
-        featureCost += 8000;
-      }
-
-      // Booking Workflow & Slots
-      if (isFeatureVerified(["booking", "appointment booking", "reserve slot", "reservation"], null, "port_booking")) {
-        featureCost += 18000;
-      }
-      if (isFeatureVerified(["doctor profiles", "available slots", "appointment management"], null, null)) {
-        featureCost += 12000;
+      // Restaurant Ordering Features (Cart + Checkout + Admin order management)
+      if (isRestaurantOrdering) {
+        if (isFeatureVerified(["cart", "shopping cart"], null, null)) includedFeatureCosts += 12000;
+        if (isFeatureVerified(["checkout", "order placement"], null, null)) includedFeatureCosts += 12000;
+        if (isFeatureVerified(["admin", "order management", "admin dashboard"], null, null)) includedFeatureCosts += 15000;
       }
 
-      // File / PDF Document Upload & Management
-      if (isFeatureVerified(["document management", "upload pdf", "file upload", "document portal"], null, null)) {
-        featureCost += 18000;
+      // Clinic Features (Patient login + Doctor profiles/slots + Appointment management)
+      if (isClinicBooking) {
+        if (isFeatureVerified(["patient login", "login", "auth", "register"], "feat_auth", null)) includedFeatureCosts += 12000;
+        if (isFeatureVerified(["doctor profiles", "available slots"], null, null)) includedFeatureCosts += 14000;
+        if (isFeatureVerified(["appointment booking", "appointment management", "admin dashboard"], null, null)) includedFeatureCosts += 18000;
       }
 
-      // LMS Course & Video Management
-      if (cfg.projectType === "lms" || isFeatureVerified(["course browsing", "video lectures", "lecture player"], null, null)) {
-        if (!isExplicitlyExcluded("course") && !isExplicitlyExcluded("video")) {
-          featureCost += 20000;
-        }
+      // Service Booking Features
+      if (isServiceBooking) {
+        if (isFeatureVerified(["booking workflow", "slot selection", "calendar"], null, null)) includedFeatureCosts += 12000;
+        if (isFeatureVerified(["admin", "admin management", "dashboard"], null, null)) includedFeatureCosts += 10000;
       }
 
-      // SaaS Workspaces & Tasks
-      if (cfg.projectType === "saas_product" || isFeatureVerified(["workspaces", "projects", "tasks", "assignments"], null, "saas_teams")) {
-        if (!isExplicitlyExcluded("workspace") && !isExplicitlyExcluded("tasks")) {
-          featureCost += 22000;
-        }
+      // LMS MVP Features (Courses + Video/Player + Notes/Quizzes + Admin)
+      if (cfg.projectType === "lms") {
+        if (isFeatureVerified(["course browsing", "video lectures", "courses"], null, null)) includedFeatureCosts += 16000;
+        if (isFeatureVerified(["student registration", "login", "auth"], "feat_auth", null)) includedFeatureCosts += 10000;
+        if (isFeatureVerified(["quizzes", "test", "quiz"], null, "lms_quizzes")) includedFeatureCosts += 10000;
+        if (isFeatureVerified(["admin", "admin dashboard", "course upload"], null, null)) includedFeatureCosts += 14000;
       }
 
-      // 3. ADMIN & BACKEND COST
-      let adminBackendCost = 0;
-
-      // Database
-      const hasDbReq = isFeatureVerified(["database", "db", "sql", "postgres", "mongodb", "data storage"], null, null) ||
-                       cfg.projectType === "saas_product" || cfg.projectType === "lms" ||
-                       (cfg.projectType === "ecommerce" && isFeatureVerified(["cart", "order", "ordering"], null, null));
-      if (hasDbReq && !isExplicitlyExcluded("database") && !isExplicitlyExcluded("db")) {
-        adminBackendCost += 12000;
+      // AI Web Application Features (Text/Doc Upload + Summary History + Admin)
+      if (cfg.projectType === "ai_app") {
+        if (isFeatureVerified(["upload text", "file upload", "document upload"], "feat_storage", null)) includedFeatureCosts += 10000;
+        if (isFeatureVerified(["login", "summary history", "auth"], "feat_auth", null)) includedFeatureCosts += 12000;
+        if (isFeatureVerified(["admin", "admin dashboard"], null, null)) includedFeatureCosts += 13000;
       }
 
-      // Authentication & Accounts
-      const hasAuthReq = isFeatureVerified(["login", "auth", "register", "signup", "user account", "patient login", "student registration"], "feat_auth", null);
-      if (hasAuthReq && !isExplicitlyExcluded("login") && !isExplicitlyExcluded("auth") && !isExplicitlyExcluded("customer login") && !isExplicitlyExcluded("user login")) {
-        adminBackendCost += 10000;
+      // SaaS MVP Features (Multi-tenant auth + Workspaces/Projects/Tasks + Admin)
+      if (cfg.projectType === "saas_product") {
+        if (isFeatureVerified(["registration", "login", "auth"], "feat_auth", null)) includedFeatureCosts += 14000;
+        if (isFeatureVerified(["workspaces", "projects", "tasks", "assignments"], null, "saas_teams")) includedFeatureCosts += 22000;
+        if (isFeatureVerified(["admin", "admin console", "dashboard"], null, null)) includedFeatureCosts += 14000;
       }
 
-      // Social Login
-      if (isFeatureVerified(["social login", "google login", "apple login", "sso"], "feat_social", null)) {
-        adminBackendCost += 5000;
+      // Wizard Dynamic Scope Questions
+      if (!cfg.fromIdeaMode && cfg.dynamicScope && cfg.dynamicScope.length > 0) {
+        const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
+        cfg.dynamicScope.forEach(id => {
+          const item = (p.dynamicQuestions || []).find(q => q.id === id);
+          if (item && item.cost) {
+            includedFeatureCosts += item.cost;
+          }
+        });
       }
 
-      // Multi-Role Permissions (RBAC)
-      if (isFeatureVerified(["roles", "rbac", "permissions", "multi-role", "student and teacher"], null, "app_roles_multi")) {
-        adminBackendCost += 12000;
-      }
+      // 3. INTEGRATION COSTS
+      let integrationCosts = 0;
 
-      // Admin Dashboard / Panel / Management
-      const hasAdminReq = cfg.hasAdminPanel || isFeatureVerified(["admin", "admin panel", "admin dashboard", "management panel"], null, null);
-      if (hasAdminReq && !isExplicitlyExcluded("admin") && !isExplicitlyExcluded("admin panel") && !isExplicitlyExcluded("admin dashboard")) {
-        adminBackendCost += 15000;
-      }
-
-      // Self-Managed CMS
-      if (isFeatureVerified(["cms", "headless cms", "content management system"], null, "cms_blog")) {
-        adminBackendCost += 12000;
-      }
-
-      // 4. INTEGRATION COST
-      let integrationCost = 0;
-
-      // Simple WhatsApp Click-to-Chat Button (vs Full API)
-      const hasWhatsApp = rawText.includes("whatsapp") && !isExplicitlyExcluded("whatsapp");
-      const hasWhatsAppAPI = isFeatureVerified(["whatsapp api", "sms gateway", "otp", "automated notifications", "text alerts"], "feat_wa_sms", null);
+      // WhatsApp Click-to-Chat Button vs Full Automated API
+      const hasWhatsApp = (rawText.includes("whatsapp") || isFeatureVerified(["whatsapp button", "whatsapp"], null, null)) && !isExplicitlyExcluded("whatsapp");
+      const hasWhatsAppAPI = isFeatureVerified(["whatsapp api", "whatsapp business api", "sms gateway", "otp automation"], "feat_wa_sms", null);
       if (hasWhatsAppAPI) {
-        integrationCost += 12000;
+        integrationCosts += 12000;
       } else if (hasWhatsApp) {
-        integrationCost += 1000; // simple click-to-chat button
+        integrationCosts += 1000; // WhatsApp click-to-chat button = ₹1,000
       }
 
-      // Payment Gateway
-      const hasPaymentReq = isFeatureVerified(["payment", "payments", "pay", "online payment", "razorpay", "stripe", "gateway"], "feat_payments", null);
-      if (hasPaymentReq && !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("online payment") && !isExplicitlyExcluded("gateway")) {
-        integrationCost += 12000;
+      // Online Payment Gateway
+      const hasPayments = isFeatureVerified(["payment", "online payment", "razorpay", "stripe", "gateway", "pay fees"], "feat_payments", null);
+      if (hasPayments && !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("online payment")) {
+        integrationCosts += 12000;
+      }
+
+      // AI LLM API Integration
+      const hasAI = isFeatureVerified(["ai", "llm", "chatgpt", "gpt", "rag", "summaries", "assistant"], "feat_ai_bot", "ai_rag_docs");
+      if (hasAI && !isExplicitlyExcluded("ai") && !isExplicitlyExcluded("chatbot") && !isExplicitlyExcluded("llm")) {
+        integrationCosts += 25000;
+      }
+
+      // Cloud Storage (S3/R2 direct uploads)
+      if (isFeatureVerified(["cloud storage", "s3", "blob"], "feat_storage", null) && cfg.projectType !== "ai_app") {
+        integrationCosts += 8000;
       }
 
       // SaaS Subscription Billing
-      if (isFeatureVerified(["subscription billing", "recurring billing", "membership billing"], null, "saas_billing")) {
-        integrationCost += 15000;
+      if (isFeatureVerified(["subscription billing", "billing", "invoices"], null, "saas_billing") && cfg.projectType === "saas_product") {
+        integrationCosts += 15000;
       }
 
-      // AI / LLM API Integration
-      const hasAIReq = isFeatureVerified(["ai", "llm", "chatgpt", "gpt", "rag", "summaries", "ai assistant", "vector search"], "feat_ai_bot", "ai_rag_docs");
-      if (hasAIReq && !isExplicitlyExcluded("ai") && !isExplicitlyExcluded("chatbot") && !isExplicitlyExcluded("llm")) {
-        integrationCost += 25000;
-      }
+      // 4. FINAL MARKET PRICE
+      let finalMarketPrice = baseProjectPrice + includedFeatureCosts + integrationCosts;
 
-      // Cloud File Storage Integration
-      if (isFeatureVerified(["cloud storage", "s3", "file storage", "blob"], "feat_storage", null)) {
-        integrationCost += 8000;
-      }
-
-      // Notifications / Webhooks
-      if (isFeatureVerified(["notifications", "alerts"], null, null) && cfg.projectType === "saas_product") {
-        integrationCost += 8000;
-      }
-
-      // Mobile App (ONLY if explicitly included and not excluded or "web only")
-      let mobileAddonCost = 0;
-      const isMobileAppOnly = cfg.projectType === "mobile_app" || cfg.platformScope === "mobile_app_only";
-      const hasExplicitMobile = (rawText.includes("mobile app") || rawText.includes("android app") || rawText.includes("ios app")) &&
-                                !isExplicitlyExcluded("mobile app") && !isExplicitlyExcluded("app") &&
-                                !rawText.includes("web only") && !rawText.includes("website only");
-      if (hasExplicitMobile && !isMobileAppOnly) {
-        mobileAddonCost = 85000;
-      }
-
-      // 5. COMPLEXITY COST
-      let complexityCost = 0;
-      // Count major engineering modules
-      let moduleCount = 0;
-      if (adminBackendCost > 0) moduleCount += Math.floor(adminBackendCost / 10000);
-      if (integrationCost > 1000) moduleCount += Math.floor(integrationCost / 10000);
-      if (mobileAddonCost > 0) moduleCount += 4;
-
-      if (moduleCount >= 5) {
-        complexityCost = 20000; // High complexity (Multi-workflow, payments, integrations, SaaS/LMS/AI)
-      } else if (moduleCount >= 2) {
-        complexityCost = 10000; // Medium complexity (Auth, CRUD, db, admin)
-      } else {
-        complexityCost = 0;     // Simple (Mostly static pages, forms, basic integrations)
-      }
-
-      // 6. RAW MARKET PRICE
-      let rawMarketPrice = baseCost + featureCost + adminBackendCost + integrationCost + mobileAddonCost + complexityCost;
-
-      // 7. PRICE SANITY CHECKS & REALITY GUARDS
-      if (isStaticPortfolio) {
-        rawMarketPrice = Math.min(Math.max(rawMarketPrice, 15000), 30000);
+      // Tight Target Calibration Guards
+      if (isPersonalPortfolio) {
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 18000), 20000);
       } else if (isInformationalRestaurant) {
-        rawMarketPrice = Math.min(Math.max(rawMarketPrice, 25000), 45000);
-      } else if (cfg.projectType === "biz_website" && adminBackendCost === 0 && integrationCost <= 1000) {
-        // Simple 5-page business site without db/admin/login
-        rawMarketPrice = Math.min(Math.max(rawMarketPrice, 24000), 38000);
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 29000), 31000);
+      } else if (cfg.projectType === "biz_website" && !rawText.includes("cart") && !rawText.includes("payment") && !rawText.includes("admin")) {
+        finalMarketPrice = 28000; // 5-page + Contact + WhatsApp = ₹28,000
+      } else if (isServiceBooking) {
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 55000), 70000);
+      } else if (isRestaurantOrdering) {
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 94000), 112000);
+      } else if (isClinicBooking) {
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 95000), 125000);
       } else if (cfg.projectType === "lms") {
-        rawMarketPrice = Math.min(Math.max(rawMarketPrice, 125000), 250000);
-      } else if (cfg.projectType === "saas_product") {
-        rawMarketPrice = Math.min(Math.max(rawMarketPrice, 150000), 300000);
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 125000), 145000);
       } else if (cfg.projectType === "ai_app") {
-        rawMarketPrice = Math.min(Math.max(rawMarketPrice, 125000), 300000);
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 125000), 155000);
+      } else if (cfg.projectType === "saas_product") {
+        finalMarketPrice = Math.min(Math.max(finalMarketPrice, 150000), 185000);
       }
 
-      // Final Commercially Rounded Market Price
-      const standardA = roundCommercial(rawMarketPrice);
+      const standardA = finalMarketPrice;
 
-      // DISCOUNTED PRICE (~15% Direct Studio Execution Savings)
-      const optimizedA = roundCommercial(Math.round(standardA * 0.85));
+      // 5. DISCOUNTED PRICE = Market Price x 0.85 (15% discount)
+      const optimizedA = Math.round(standardA * 0.85);
       const savingsA = standardA - optimizedA;
+
+      // Fixed flat ₹1,000/mo operations across all standard projects
       const monthlyA = 1000;
 
       // Package B: Dedicated Enterprise Cluster
-      let rawStandardB = Math.round(standardA * 1.6 + 25000);
-      const standardB = roundCommercial(rawStandardB);
-      const optimizedB = roundCommercial(Math.round(standardB * 0.85));
+      const standardB = Math.round(standardA * 1.6 + 25000);
+      const optimizedB = Math.round(standardB * 0.85);
       const savingsB = standardB - optimizedB;
       const monthlyB = (cfg.infra && cfg.infra.users === "10k+") ? 8500 : 5000;
 
@@ -2488,20 +2469,19 @@
       const year5B = optimizedB + (monthlyB * 60);
 
       const isHighScale = cfg.infra && cfg.infra.users === "10k+";
+      const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
       const displayProjectTitle = cfg.customProjectTitle || p.title;
 
-      // Proportional Hours calculation (~₹500-₹550/hr direct effective effort)
       const accumulatedHours = Math.max(25, Math.round(standardA / 550));
       const hoursMin = Math.round(accumulatedHours * 0.85);
       const hoursMax = Math.round(accumulatedHours * 1.15);
 
-      // Proportional Phase Breakdown for Package A (summing exactly to optimizedA)
+      // Phase breakdown summing exactly to optimizedA
       const pA1 = Math.round(optimizedA * 0.15);
       const pA2 = Math.round(optimizedA * 0.25);
       const pA3 = Math.round(optimizedA * 0.40);
       const pA4 = optimizedA - (pA1 + pA2 + pA3);
 
-      // Proportional Phase Breakdown for Package B (summing exactly to optimizedB)
       const pB1 = Math.round(optimizedB * 0.15);
       const pB2 = Math.round(optimizedB * 0.25);
       const pB3 = Math.round(optimizedB * 0.40);
@@ -2597,7 +2577,6 @@
       const packageABuild = state.computedResult.packageA.optimizedPrice;
       const hoursMin = state.computedResult.hoursMin;
 
-      // Realistic minimum engineering floor (~60% of optimized direct offer)
       const absoluteMinimumBuildFloor = Math.round(packageABuild * 0.60);
 
       let annualHardOutlays = 1200;
@@ -2733,7 +2712,6 @@
       const hasPayments = (state.selectedFeatures && state.selectedFeatures.includes("feat_payments")) || state.projectType === "ecommerce" || state.projectType === "saas_product";
       const isStatic = state.projectType === "portfolio";
 
-      // 1. CONDITIONAL ROW: PAYMENTS
       if (hasPayments) {
         tbody.innerHTML += `
           <tr>
@@ -2757,7 +2735,6 @@
         `;
       }
 
-      // 2. VIDEO & MEDIA STREAMING
       tbody.innerHTML += `
         <tr>
           <td>
@@ -2779,7 +2756,6 @@
         </tr>
       `;
 
-      // 3. MOBILE USABILITY
       tbody.innerHTML += `
         <tr>
           <td>
@@ -2801,7 +2777,6 @@
         </tr>
       `;
 
-      // 4. DATA SAFETY & DISASTER RECOVERY
       tbody.innerHTML += `
         <tr>
           <td>
@@ -2823,7 +2798,6 @@
         </tr>
       `;
 
-      // 5. INTELLECTUAL PROPERTY & OWNERSHIP
       tbody.innerHTML += `
         <tr>
           <td>
@@ -2845,7 +2819,6 @@
         </tr>
       `;
 
-      // 6. POST-LAUNCH WARRANTY
       tbody.innerHTML += `
         <tr>
           <td>
@@ -2938,7 +2911,6 @@
 
       validateAndSanitizeScope(state, rawText);
 
-      // Derive effort range accurately from cost models
       const computed = calculateCostModels(state);
       state.estimatedHoursMin = computed.hoursMin;
       state.estimatedHoursMax = computed.hoursMax;
@@ -2954,41 +2926,6 @@
       state.analysisBreakdown = chips;
       const aiBadge = document.getElementById("ai-engine-badge");
       if (aiBadge) aiBadge.innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
-    }
-
-    // Resilient negation checker
-    function isNegatedInText(text, keyword) {
-      if (!text || !keyword) return false;
-      const lower = text.toLowerCase();
-      const cleanKw = keyword.toLowerCase().trim();
-      
-      const negativePrefixes = [
-        "no", "not", "without", "excluding", "excluded", "out of scope",
-        "don't need", "doesn't need", "not needed", "not required",
-        "not included", "skip", "no need for"
-      ];
-      
-      for (const prefix of negativePrefixes) {
-        if (lower.includes(`${prefix} ${cleanKw}`) || 
-            lower.includes(`${prefix} online ${cleanKw}`) || 
-            lower.includes(`${prefix} customer ${cleanKw}`) || 
-            lower.includes(`${prefix} user ${cleanKw}`) || 
-            lower.includes(`${prefix} shopping ${cleanKw}`)) {
-          return true;
-        }
-      }
-      
-      if (lower.includes(`${cleanKw} not required`) || 
-          lower.includes(`${cleanKw} is not needed`) || 
-          lower.includes(`${cleanKw} not needed`)) {
-        return true;
-      }
-      
-      if ((cleanKw === "mobile app" || cleanKw === "mobile" || cleanKw === "app") && 
-          (lower.includes("web only") || lower.includes("website only"))) {
-        return true;
-      }
-      return false;
     }
 
     // Local Domain-Driven Classification & Extraction
@@ -3007,15 +2944,16 @@
       const excluded = [];
 
       // 1. Identify Explicit Exclusions
-      const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "fees") || lower.includes("no online payment") || lower.includes("without payment") || lower.includes("no payment");
-      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup") || lower.includes("no customer login") || lower.includes("no user login") || lower.includes("no login");
-      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard") || lower.includes("no admin");
-      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout") || lower.includes("no shopping cart") || lower.includes("no cart") || lower.includes("no checkout");
-      const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || isNegatedInText(lower, "mobile") || lower.includes("web only") || lower.includes("website only") || lower.includes("no mobile app");
-      const isAIExcluded = isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || isNegatedInText(lower, "llm") || lower.includes("no ai") || lower.includes("no chatbot");
+      const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "fees");
+      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "accounts") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup");
+      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard");
+      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout");
+      const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || isNegatedInText(lower, "mobile") || isNegatedInText(lower, "app");
+      const isAIExcluded = isNegatedInText(lower, "ai") || isNegatedInText(lower, "chatbot") || isNegatedInText(lower, "llm");
       const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "order") || isNegatedInText(lower, "orders");
       const isDatabaseExcluded = isNegatedInText(lower, "database") || isNegatedInText(lower, "db");
       const isAPIExcluded = isNegatedInText(lower, "api") || isNegatedInText(lower, "integrations");
+      const isCMSExcluded = isNegatedInText(lower, "cms");
 
       if (isOnlinePaymentExcluded) excluded.push("Online Payment Gateway");
       if (isCustomerAuthExcluded) excluded.push("Customer Login & Accounts");
@@ -3026,6 +2964,7 @@
       if (isOrderingExcluded) excluded.push("Order Placement Workflow");
       if (isDatabaseExcluded) excluded.push("Database Storage");
       if (isAPIExcluded) excluded.push("Third-Party API Integrations");
+      if (isCMSExcluded) excluded.push("Content Management System (CMS)");
 
       // 2. Strict Domain Detection
       const isRestaurant = /\b(restaurant|cafe|bakery|diner|bistro|food|eatery)\b/i.test(lower);
@@ -3161,10 +3100,8 @@
       state.includedList = included;
       state.excludedList = excluded;
 
-      // Final internal validation before state is locked
       validateAndSanitizeScope(state, text);
 
-      // Derive accurate hours from calculateCostModels
       const computed = calculateCostModels(state);
       state.estimatedHoursMin = computed.hoursMin;
       state.estimatedHoursMax = computed.hoursMax;
