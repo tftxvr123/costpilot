@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="knowledge-base.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CostPilot — Digital Project Cost & Architecture Estimator</title>
@@ -13,6 +12,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- CostPilot External Knowledge Base -->
+  <script src="knowledge-base.js"></script>
 
   <style>
     /* ==========================================================================
@@ -1574,12 +1576,12 @@
           <div class="analysis-header-badge">
             <div style="display:flex; align-items:center; gap:0.5rem;">
               <span class="badge badge-ai">✨ Smart Requirement Extraction</span>
-              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Domain Scoping Engine</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary);" id="ai-engine-badge">Knowledge Base Match Engine</span>
             </div>
             <span class="badge badge-success" id="effort-hours-badge">0 Dev Hours</span>
           </div>
           <p style="font-size: 0.9rem; color: var(--text-muted);">
-            CostPilot analyzed your concept, mapped domain workflows, and strictly enforced your exclusions:
+            CostPilot mapped your requirements against verified commercial benchmark packages:
           </p>
           <div class="analysis-prompt-quote" id="analysis-prompt-text"></div>
           <div class="analysis-interpretations-grid" id="analysis-chips-grid"></div>
@@ -2012,11 +2014,10 @@
 
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- JAVASCRIPT PRICING & APPLICATION ENGINE -->
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
   <script>
     /**
      * SECURE AI PROXY CONFIGURATION
-     * Automatically routes to your Vercel serverless function at /api/classify
      */
     const AI_WORKER_URL = "/api/classify";
 
@@ -2027,104 +2028,14 @@
       lastUpdated: "February 2026",
 
       projectTypes: {
-        "portfolio": {
-          id: "portfolio",
-          title: "Portfolio Website",
-          icon: "🎨",
-          desc: "Personal profile, creator showcase, developer or designer portfolio.",
-          baseCost: 12000,
-          baseHours: 14,
-          dynamicQuestions: [
-            { id: "port_anim", label: "Interactive Micro-Interactions", cost: 3000, hours: 4 },
-            { id: "port_booking", label: "Client Inquiry & Booking Flow", cost: 15000, hours: 16 }
-          ]
-        },
-        "biz_website": {
-          id: "biz_website",
-          title: "Business Website",
-          icon: "🏢",
-          desc: "Corporate brand presence, conversion pages, and contact workflows.",
-          baseCost: 22000,
-          baseHours: 26,
-          dynamicQuestions: [
-            { id: "pages_large", label: "Expanded Content (10–20+ pages)", cost: 5000, hours: 7 },
-            { id: "cms_blog", label: "Self-Managed Headless CMS", cost: 14000, hours: 14 },
-            { id: "seo_adv", label: "Advanced Structured Data SEO", cost: 3000, hours: 4 }
-          ]
-        },
-        "ecommerce": {
-          id: "ecommerce",
-          title: "E-Commerce Platform",
-          icon: "🛍️",
-          desc: "Online catalog, shopping cart, checkout, and inventory.",
-          baseCost: 48000,
-          baseHours: 55,
-          dynamicQuestions: [
-            { id: "ecom_shipping", label: "Logistics & Courier API Integration", cost: 7000, hours: 8 },
-            { id: "ecom_inventory", label: "Multi-Warehouse Inventory Tracking", cost: 9000, hours: 10 }
-          ]
-        },
-        "web_app": {
-          id: "web_app",
-          title: "Web Application",
-          icon: "💻",
-          desc: "Client dashboards, internal portals, or dynamic SaaS MVP.",
-          baseCost: 45000,
-          baseHours: 50,
-          dynamicQuestions: [
-            { id: "app_roles_multi", label: "Multi-Tenant RBAC Permissions", cost: 9000, hours: 10 },
-            { id: "app_analytics", label: "Interactive Analytics & CSV/PDF Export", cost: 7000, hours: 8 },
-            { id: "app_webhooks", label: "Public REST API & Webhooks", cost: 8000, hours: 9 }
-          ]
-        },
-        "mobile_app": {
-          id: "mobile_app",
-          title: "Mobile Application",
-          icon: "📱",
-          desc: "Cross-platform iOS and Android mobile app (Flutter/React Native).",
-          baseCost: 110000,
-          baseHours: 110,
-          dynamicQuestions: [
-            { id: "mob_push", label: "Push Notifications (FCM/APNS)", cost: 5000, hours: 6 },
-            { id: "mob_offline", label: "Offline-First Local Sync", cost: 10000, hours: 12 }
-          ]
-        },
-        "saas_product": {
-          id: "saas_product",
-          title: "SaaS Product",
-          icon: "🚀",
-          desc: "Multi-tier subscription platform with billing & accounts.",
-          baseCost: 70000,
-          baseHours: 75,
-          dynamicQuestions: [
-            { id: "saas_billing", label: "Subscription Billing & Tax Invoices", cost: 12000, hours: 12 },
-            { id: "saas_teams", label: "Team Workspaces & Member Seats", cost: 10000, hours: 10 }
-          ]
-        },
-        "lms": {
-          id: "lms",
-          title: "Learning Management (LMS)",
-          icon: "🎓",
-          desc: "EdTech platform for students, video lectures, and quizzes.",
-          baseCost: 60000,
-          baseHours: 70,
-          dynamicQuestions: [
-            { id: "lms_quizzes", label: "Timed Quizzes & Automated Scoring", cost: 8000, hours: 9 },
-            { id: "lms_certs", label: "Dynamic PDF Certificate Generation", cost: 5000, hours: 6 }
-          ]
-        },
-        "ai_app": {
-          id: "ai_app",
-          title: "AI / LLM Application",
-          icon: "🤖",
-          desc: "RAG knowledge base, AI customer agent, or workflow tool.",
-          baseCost: 65000,
-          baseHours: 70,
-          dynamicQuestions: [
-            { id: "ai_rag_docs", label: "Custom Document Vector Store (RAG)", cost: 12000, hours: 14 },
-            { id: "ai_chat_widget", label: "Streaming Chat UI with Token Quotas", cost: 8000, hours: 9 }
-          ]
-        }
+        "portfolio": { id: "portfolio", title: "Portfolio Website", icon: "🎨", desc: "Showcase for creators, designers, architects, and photographers." },
+        "biz_website": { id: "biz_website", title: "Business Website", icon: "🏢", desc: "Corporate brand presence, conversion pages, and contact workflows." },
+        "ecommerce": { id: "ecommerce", title: "E-Commerce Platform", icon: "🛍️", desc: "Online catalog, shopping cart, checkout, and inventory." },
+        "web_app": { id: "web_app", title: "Web Application", icon: "💻", desc: "Client dashboards, internal portals, or dynamic SaaS MVP." },
+        "mobile_app": { id: "mobile_app", title: "Mobile Application", icon: "📱", desc: "Cross-platform iOS and Android mobile app (Flutter/React Native)." },
+        "saas_product": { id: "saas_product", title: "SaaS Product", icon: "🚀", desc: "Multi-tier subscription platform with billing & accounts." },
+        "lms": { id: "lms", title: "Learning Management (LMS)", icon: "🎓", desc: "EdTech platform for students, video lectures, and quizzes." },
+        "ai_app": { id: "ai_app", title: "AI / LLM Application", icon: "🤖", desc: "RAG knowledge base, AI customer agent, or workflow tool." }
       },
 
       uiuxTiers: {
@@ -2188,399 +2099,26 @@
     };
 
     // ==========================================================================
-    // ROBUST NEGATION PARSER & EXCLUSION CHECKER
-    // ==========================================================================
-    function extractNegatedTerms(text) {
-      if (!text) return [];
-      const lower = text.toLowerCase();
-      const terms = new Set();
-
-      const negativeClauses = /(?:^|[.;\n]|(?:\b(?:but|however|except)\b))\s*(?:no|not|without|excluding|exclude|skip|no need for|don't need|doesn't need|don't want|free of|out of scope)\s+([^.;\n]+)/gi;
-      let match;
-      while ((match = negativeClauses.exec(lower)) !== null) {
-        const clause = match[1];
-        const items = clause.split(/,|\band\b|\bor\b|\bnor\b|&|\+/);
-        for (let item of items) {
-          const clean = item.trim().replace(/^[\s\-_]+|[\s\-_]+$/g, '');
-          if (clean.length >= 2) {
-            terms.add(clean);
-          }
-        }
-      }
-
-      const suffixMatches = /([a-z0-9\s_-]{2,30}?)\s+(?:is\s+|are\s+)?(?:not needed|not required|not included|out of scope)/gi;
-      while ((match = suffixMatches.exec(lower)) !== null) {
-        const item = match[1].trim();
-        if (item.length >= 2) {
-          terms.add(item);
-        }
-      }
-
-      return Array.from(terms);
-    }
-
-    function isNegatedInText(text, keyword) {
-      if (!text || !keyword) return false;
-      const lower = text.toLowerCase();
-      const cleanKw = keyword.toLowerCase().trim();
-
-      if ((cleanKw === "mobile app" || cleanKw === "mobile application" || cleanKw === "mobile" || cleanKw === "app" || cleanKw === "ios" || cleanKw === "android") &&
-          (lower.includes("web only") || lower.includes("website only") || lower.includes("desktop only"))) {
-        return true;
-      }
-
-      const negatedTerms = extractNegatedTerms(text);
-      for (const term of negatedTerms) {
-        if (term === cleanKw || term.includes(cleanKw) || cleanKw.includes(term)) {
-          return true;
-        }
-      }
-
-      const directRegex = new RegExp(`\\b(?:no|not|without|excluding|skip)\\s+(?:[\\w-]+\\s+){0,3}${cleanKw}\\b`, 'i');
-      if (directRegex.test(lower)) return true;
-
-      const suffixRegex = new RegExp(`\\b${cleanKw}\\b\\s+(?:is\\s+|are\\s+)?(?:not needed|not required|not included|out of scope)`, 'i');
-      if (suffixRegex.test(lower)) return true;
-
-      return false;
-    }
-
-    // ==========================================================================
-    // LOGICAL COMPLEXITY & PRICING ENGINE
-    // Formula:
-    // Final Market Price = Base Project Price + Included Feature Costs + Integration Costs
-    // Discounted Price = Market Price x 0.85 (15% discount)
+    // DELEGATED CALCULATION ENGINE (CALLS knowledge-base.js)
     // ==========================================================================
     function calculateCostModels(cfg) {
-      const rawText = (cfg.rawIdeaText || "").toLowerCase();
+      let standardA = 28000;
+      let optimizedA = 23800;
+      let savingsA = 4200;
+      let monthlyA = 1000;
+      let displayProjectTitle = cfg.customProjectTitle || "Business Website";
 
-      function isExplicitlyExcluded(term) {
-        if (cfg.excludedList && cfg.excludedList.some(ex => ex.toLowerCase().includes(term.toLowerCase()))) {
-          return true;
-        }
-        if (rawText && isNegatedInText(rawText, term)) {
-          return true;
-        }
-        return false;
+      // Call external Knowledge Base Match Engine if available
+      if (typeof CostPilotKB !== "undefined" && CostPilotKB.match) {
+        const queryText = cfg.rawIdeaText || (cfg.customProjectTitle || cfg.projectType);
+        const matchResult = CostPilotKB.match(queryText);
+
+        standardA = matchResult.marketPrice;
+        optimizedA = matchResult.discountedPrice;
+        savingsA = matchResult.savings;
+        monthlyA = matchResult.monthly;
+        displayProjectTitle = cfg.customProjectTitle || matchResult.package.title;
       }
-
-      function isFeatureVerified(keywords, featureId, dynamicId) {
-        for (const kw of keywords) {
-          if (isExplicitlyExcluded(kw)) return false;
-        }
-        if (featureId && cfg.selectedFeatures && cfg.selectedFeatures.includes(featureId)) return true;
-        if (dynamicId && cfg.dynamicScope && cfg.dynamicScope.includes(dynamicId)) return true;
-        if (cfg.includedList && cfg.includedList.some(inc => keywords.some(k => inc.toLowerCase().includes(k.toLowerCase())))) return true;
-        if (rawText) {
-          return keywords.some(k => rawText.includes(k));
-        }
-        return false;
-      }
-
-      // Architecture Complexity Tiers
-      const isBookingExcluded = isExplicitlyExcluded("booking system") || isExplicitlyExcluded("booking") || isExplicitlyExcluded("appointment");
-      const isAuthExcluded = isExplicitlyExcluded("login") || isExplicitlyExcluded("customer registration") || isExplicitlyExcluded("customer accounts");
-      const isDbExcluded = isExplicitlyExcluded("database");
-      const isCmsExcluded = isExplicitlyExcluded("cms");
-      const isAdminExcluded = isExplicitlyExcluded("admin") || isExplicitlyExcluded("admin panel") || isExplicitlyExcluded("admin dashboard");
-
-      // Specific Archetype Classifications
-      const isPurePortfolio = cfg.projectType === "portfolio" || (rawText.includes("portfolio") && !rawText.includes("lms"));
-      const isInformationalRestaurant = (rawText.includes("restaurant") || rawText.includes("cafe")) &&
-        (rawText.includes("menu") || rawText.includes("categories")) &&
-        !isFeatureVerified(["ordering", "order placement", "takeout", "shopping cart", "cart", "checkout"], null, null);
-      
-      const isRestaurantOrdering = (rawText.includes("restaurant") || rawText.includes("cafe") || cfg.projectType === "ecommerce") &&
-        isFeatureVerified(["ordering", "order placement", "shopping cart", "cart", "checkout"], null, null);
-
-      const isClinicApp = isFeatureVerified(["clinic", "patient", "doctor", "specialties"], null, null) && !isBookingExcluded;
-      const isServiceBooking = isFeatureVerified(["service booking", "book appointments", "booking request", "preferred date and time"], null, null) && !isBookingExcluded && !isClinicApp;
-      
-      const isDocManagement = isFeatureVerified(["document management", "upload pdf documents", "folders"], "feat_storage", null) && !cfg.projectType.includes("lms");
-      const isSaaS = cfg.projectType === "saas_product" || isFeatureVerified(["saas", "workspaces", "task management", "tasks"], null, null);
-      const isAIApp = cfg.projectType === "ai_app" || isFeatureVerified(["ai web application", "ai summaries", "generate ai", "llm"], "feat_ai_bot", null);
-      const isCmsBusiness = !isCmsExcluded && isFeatureVerified(["cms", "manage website content", "blog posts"], null, "cms_blog") && !isAdminExcluded;
-
-      // LMS Classification
-      const isLMS = cfg.projectType === "lms" || (
-        isFeatureVerified(["lms", "courses", "course", "video lectures", "learning management"], null, null) &&
-        !rawText.includes("document management")
-      );
-
-      let lmsTier = 0;
-      if (isLMS) {
-        const hasLmsStudentAuth = isFeatureVerified(["student login", "student registration", "students can register", "login", "auth"], "feat_auth", null) && !isAuthExcluded;
-        const hasLmsEnrollment = isFeatureVerified(["enroll", "enrollment", "course enrollment"], null, null);
-        const hasLmsProgress = isFeatureVerified(["progress", "track their learning progress", "progress tracking"], null, null);
-        const hasLmsAdmin = isFeatureVerified(["admin", "admin dashboard", "course upload", "uploading videos", "managing students"], null, null) && !isAdminExcluded;
-        const hasLmsPayments = isFeatureVerified(["payment", "payments", "payment gateway", "subscription", "subscriptions", "paid courses", "razorpay", "stripe"], "feat_payments", "saas_billing") && !isExplicitlyExcluded("payment");
-        const hasLmsQuizzes = isFeatureVerified(["quiz", "quizzes", "test", "exams", "timed quizzes"], null, "lms_quizzes");
-        const hasLmsCerts = isFeatureVerified(["certificate", "certificates", "dynamic pdf certificate"], null, "lms_certs");
-        const hasLmsLive = isFeatureVerified(["live classes", "live sessions", "zoom", "webrtc", "live streaming"], null, null);
-        const hasLmsAnalytics = isFeatureVerified(["analytics", "detailed student analytics", "reports"], null, "app_analytics");
-        const hasLmsRoles = isFeatureVerified(["roles", "rbac", "instructor and student", "multi-role", "teachers and students"], null, "app_roles_multi");
-
-        const hasLmsAdvancedFeatures = hasLmsQuizzes || hasLmsCerts || hasLmsLive || hasLmsAnalytics || hasLmsRoles;
-        const hasStudentPortal = hasLmsStudentAuth || hasLmsEnrollment || hasLmsProgress;
-
-        if (hasLmsAdvancedFeatures) {
-          lmsTier = 5; // Advanced LMS: ₹2.5L–₹5L+
-        } else if (hasLmsPayments) {
-          lmsTier = 4; // LMS with payments/subscriptions: ₹1.75L–₹3L+
-        } else if (hasStudentPortal) {
-          lmsTier = 3; // LMS with student login, enrollment & progress: ₹1.25L–₹2L
-        } else if (hasLmsAdmin || isFeatureVerified(["course uploads", "upload courses"], null, null)) {
-          lmsTier = 2; // Basic LMS with admin and course uploads: ₹90K–₹1.4L
-        } else {
-          lmsTier = 1; // Static course showcase website: ₹25K–₹50K
-        }
-      }
-
-      // ========================================================================
-      // 1. BASE PROJECT PRICE DETERMINATION
-      // ========================================================================
-      let baseProjectPrice = 22000;
-      let includedFeatureCosts = 0;
-      let integrationCosts = 0;
-
-      // PORTFOLIO PACKAGES (11 TRAINING DATA TIERS)
-      if (isPurePortfolio) {
-        const hasAI = isFeatureVerified(["ai", "chatbot", "ai chatbot", "ai resume helper", "ai project assistant", "llm"], "feat_ai_bot", null) && !isExplicitlyExcluded("ai");
-        const hasBooking = isFeatureVerified(["booking", "consultation booking", "service booking", "consultation", "appointment"], null, "port_booking") && !isBookingExcluded;
-        const hasCMS = isFeatureVerified(["cms", "client can update", "update projects through admin", "admin"], null, "cms_blog") && !isCmsExcluded && !isAdminExcluded;
-        const hasBlog = isFeatureVerified(["blog", "articles", "posts", "categories", "search"], null, null) && !isCmsExcluded;
-        const isDesigner = isFeatureVerified(["designer", "creative", "photographer", "photography", "artist", "visual design", "video gallery", "filtering", "image/video gallery"], null, null);
-        const isDeveloper = isFeatureVerified(["developer", "tech", "github", "tech stack", "code", "demo sections", "api demo", "case studies"], null, null);
-        const isPremiumBrand = isFeatureVerified(["premium personal brand", "personal brand", "premium", "advanced animations"], null, null) || cfg.uiuxTier === "premium";
-        const hasCaseStudiesOrAnim = isFeatureVerified(["case studies", "animations", "interactive micro-interactions", "micro-interactions", "seo basics"], null, "port_anim");
-        const isOnePageStarter = (rawText.includes("1-page") || rawText.includes("1 page") || rawText.includes("one page") || rawText.includes("single page") || rawText.includes("starter")) && !rawText.includes("4-5") && !rawText.includes("5-page");
-        const hasResumeAndContact = isFeatureVerified(["resume", "downloadable resume", "pdf resume", "downloadable cv", "cv"], null, null) && isFeatureVerified(["contact form", "contact"], null, null);
-
-        if (hasAI) {
-          // Portfolio with AI Features: ₹50,000–₹1L+
-          baseProjectPrice = 30000;
-          includedFeatureCosts = 10000;
-          integrationCosts = 25000; // Total: ₹65,000
-        } else if (hasBooking) {
-          // Portfolio with Booking: ₹35,000–₹70,000
-          baseProjectPrice = 25000;
-          includedFeatureCosts = 15000;
-          integrationCosts = 8000;  // Total: ₹48,000
-        } else if (hasCMS) {
-          // Portfolio with CMS: ₹35,000–₹60,000
-          baseProjectPrice = 22000;
-          includedFeatureCosts = 20000; // Total: ₹42,000
-        } else if (hasBlog) {
-          // Portfolio with Blog: ₹30,000–₹55,000
-          baseProjectPrice = 20000;
-          includedFeatureCosts = 16000; // Total: ₹36,000
-        } else if (isDesigner) {
-          // Designer/Creative Portfolio: ₹25,000–₹50,000
-          baseProjectPrice = 22000;
-          includedFeatureCosts = 12000; // Total: ₹34,000
-        } else if (isDeveloper) {
-          // Developer/Tech Portfolio: ₹20,000–₹35,000
-          baseProjectPrice = 18000;
-          includedFeatureCosts = 8000;  // Total: ₹26,000
-        } else if (isPremiumBrand) {
-          // Premium Personal Brand: ₹30,000–₹50,000
-          baseProjectPrice = 22000;
-          includedFeatureCosts = 16000; // Total: ₹38,000
-        } else if (hasCaseStudiesOrAnim || rawText.includes("5-page") || rawText.includes("5-7 pages") || rawText.includes("professional")) {
-          // Professional Portfolio: ₹18,000–₹30,000
-          baseProjectPrice = 18000;
-          includedFeatureCosts = 6000;  // Total: ₹24,000
-        } else if (hasResumeAndContact) {
-          // Resume + Portfolio Website: ₹12,000–₹22,000
-          baseProjectPrice = 15000;
-          includedFeatureCosts = 3000;  // Total: ₹18,000 (Matches Test 2)
-        } else if (isOnePageStarter) {
-          // Starter Portfolio: ₹5,000–₹8,000
-          baseProjectPrice = 6000;
-          includedFeatureCosts = 1000;  // Total: ₹7,000
-        } else {
-          // Basic Portfolio: 4–5 pages, responsive design, projects, resume, contact form: ₹10,000–₹15,000
-          baseProjectPrice = 10000;
-          includedFeatureCosts = 3000;  // Total: ₹13,000
-        }
-      } else if (isLMS) {
-        if (lmsTier === 1) baseProjectPrice = 25000;      // Static showcase base
-        else if (lmsTier === 2) baseProjectPrice = 55000; // Basic LMS base
-        else if (lmsTier === 3) baseProjectPrice = 60000; // Student LMS base
-        else if (lmsTier === 4) baseProjectPrice = 75000; // Paid LMS base
-        else if (lmsTier === 5) baseProjectPrice = 90000; // Advanced LMS base
-      } else if (isInformationalRestaurant) {
-        baseProjectPrice = 26000;
-      } else if (isRestaurantOrdering) {
-        baseProjectPrice = 48000;
-      } else if (isClinicApp) {
-        baseProjectPrice = 50000;
-      } else if (isServiceBooking) {
-        baseProjectPrice = 45000;
-      } else if (isDocManagement) {
-        baseProjectPrice = 52000;
-      } else if (isSaaS) {
-        baseProjectPrice = 70000;
-      } else if (isAIApp) {
-        baseProjectPrice = 65000;
-      } else if (isCmsBusiness) {
-        baseProjectPrice = 25000;
-      } else if (cfg.projectType === "mobile_app") {
-        baseProjectPrice = 110000;
-      } else {
-        // Standard business brochure website (Home, About, Services, Gallery, Contact)
-        baseProjectPrice = 25000;
-      }
-
-      // ========================================================================
-      // 2. INCLUDED FEATURE COSTS (For non-portfolio projects)
-      // ========================================================================
-      if (!isPurePortfolio) {
-        // Contact Form
-        if (isFeatureVerified(["contact form", "enquiry through a contact form", "contact us"], null, null)) {
-          includedFeatureCosts += 2000;
-        }
-
-        // Restaurant informational showcase
-        if (isInformationalRestaurant) {
-          includedFeatureCosts += 5000;
-        }
-
-        // CMS & Content Management
-        if (isCmsBusiness) {
-          includedFeatureCosts += 14000;
-        }
-
-        // Admin Auth & Dashboard
-        const needsAdmin = (!isLMS && (isCmsBusiness || isServiceBooking || isRestaurantOrdering || isClinicApp || isDocManagement || isSaaS || isAIApp || cfg.hasAdminPanel)) && !isAdminExcluded;
-        if (needsAdmin) {
-          includedFeatureCosts += 15000;
-        }
-
-        // Service Booking Workflow
-        if (isServiceBooking) {
-          includedFeatureCosts += 18000;
-        }
-
-        // Restaurant Ordering Workflow
-        if (isRestaurantOrdering) {
-          includedFeatureCosts += 16000;
-          if (isFeatureVerified(["order placement", "order history"], null, null)) includedFeatureCosts += 8000;
-        }
-
-        // Clinic Workflow
-        if (isClinicApp) {
-          includedFeatureCosts += 18000;
-          includedFeatureCosts += 16000;
-        }
-
-        // Document Management Workflow
-        if (isDocManagement) {
-          includedFeatureCosts += 22000;
-          if (isFeatureVerified(["search and filter", "search", "filter"], null, null)) includedFeatureCosts += 8000;
-        }
-
-        // LMS Modular Workflows
-        if (isLMS) {
-          if (lmsTier === 1) {
-            includedFeatureCosts += 5000;
-          } else if (lmsTier === 2) {
-            includedFeatureCosts += 35000;
-            includedFeatureCosts += 20000;
-          } else if (lmsTier === 3) {
-            includedFeatureCosts += 16000;
-            includedFeatureCosts += 25000;
-            includedFeatureCosts += 14000;
-            includedFeatureCosts += 20000;
-          } else if (lmsTier === 4) {
-            includedFeatureCosts += 16000;
-            includedFeatureCosts += 25000;
-            includedFeatureCosts += 14000;
-            includedFeatureCosts += 20000;
-            includedFeatureCosts += 45000;
-          } else if (lmsTier === 5) {
-            includedFeatureCosts += 20000;
-            includedFeatureCosts += 30000;
-            includedFeatureCosts += 15000;
-            includedFeatureCosts += 25000;
-            includedFeatureCosts += 45000;
-            includedFeatureCosts += 25000;
-            includedFeatureCosts += 15000;
-            includedFeatureCosts += 30000;
-            includedFeatureCosts += 20000;
-          }
-        }
-
-        // SaaS Workflow
-        if (isSaaS) {
-          includedFeatureCosts += 28000;
-          if (isFeatureVerified(["assignments", "task assignments", "notifications"], null, null)) includedFeatureCosts += 14000;
-        }
-
-        // AI Application Workflow
-        if (isAIApp) {
-          includedFeatureCosts += 16000;
-        }
-
-        // Customer Registration & Authentication
-        const needsUserAuth = (!isLMS && (isRestaurantOrdering || isClinicApp || isDocManagement || isSaaS || isAIApp || cfg.selectedFeatures.includes("feat_auth"))) && !isAuthExcluded;
-        if (needsUserAuth) {
-          includedFeatureCosts += 12000;
-        }
-
-        // Form scale (Wizard mode)
-        if (!cfg.fromIdeaMode && cfg.formScale && pricingData.formScale[cfg.formScale]) {
-          includedFeatureCosts += pricingData.formScale[cfg.formScale].cost;
-        }
-
-        // Dynamic questions from Wizard mode
-        if (!cfg.fromIdeaMode && cfg.dynamicScope && cfg.dynamicScope.length > 0) {
-          const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
-          cfg.dynamicScope.forEach(id => {
-            const item = (p.dynamicQuestions || []).find(q => q.id === id);
-            if (item && item.cost) {
-              includedFeatureCosts += item.cost;
-            }
-          });
-        }
-      }
-
-      // ========================================================================
-      // 3. INTEGRATION COSTS (For non-portfolio projects)
-      // ========================================================================
-      if (!isPurePortfolio) {
-        // WhatsApp Click-to-Chat Button vs WhatsApp Automated API Gateway
-        const hasWhatsApp = (rawText.includes("whatsapp") || isFeatureVerified(["whatsapp button", "whatsapp"], null, null)) && !isExplicitlyExcluded("whatsapp");
-        const hasWhatsAppAPI = isFeatureVerified(["whatsapp api", "whatsapp business api", "sms gateway", "otp"], "feat_wa_sms", null);
-        if (hasWhatsAppAPI) {
-          integrationCosts += 12000;
-        } else if (hasWhatsApp) {
-          integrationCosts += 1000;
-        }
-
-        // Payment Gateway
-        const hasPayments = !isLMS && isFeatureVerified(["payment gateway", "online payment gateway", "payment", "razorpay", "stripe"], "feat_payments", null);
-        if (hasPayments && !isExplicitlyExcluded("payment") && !isExplicitlyExcluded("payment gateway")) {
-          integrationCosts += 14000;
-        }
-
-        // AI LLM API Integration
-        const hasAI = isFeatureVerified(["ai-powered summaries", "ai summaries", "ai", "llm", "chatgpt", "gpt"], "feat_ai_bot", null);
-        if (hasAI && !isExplicitlyExcluded("ai")) {
-          integrationCosts += 26000;
-        }
-      }
-
-      // 4. FINAL MARKET PRICE
-      const finalMarketPrice = baseProjectPrice + includedFeatureCosts + integrationCosts;
-      const standardA = finalMarketPrice;
-
-      // 5. DISCOUNTED PRICE = Market Price x 0.85 (Exact 15% discount)
-      const optimizedA = Math.round(standardA * 0.85);
-      const savingsA = standardA - optimizedA;
-
-      // Flat ₹1,000/mo Cloud & Operations
-      const monthlyA = 1000;
 
       // Package B: Dedicated Enterprise Cluster
       const standardB = Math.round(standardA * 1.6 + 25000);
@@ -2597,9 +2135,6 @@
       const year5B = optimizedB + (monthlyB * 60);
 
       const isHighScale = cfg.infra && cfg.infra.users === "10k+";
-      const p = pricingData.projectTypes[cfg.projectType] || pricingData.projectTypes["biz_website"];
-      const displayProjectTitle = cfg.customProjectTitle || p.title;
-
       const accumulatedHours = Math.max(25, Math.round(standardA / 550));
       const hoursMin = Math.round(accumulatedHours * 0.85);
       const hoursMax = Math.round(accumulatedHours * 1.15);
@@ -2668,21 +2203,12 @@
             { item: "Priority SLA & Infrastructure Telemetry", spec: "24/7 uptime monitoring & rapid ticket resolution", cost: `₹${monthlyB - 4500} / mo` }
           ]
         },
-        reasons: generateWhyReasons(cfg, hoursMin, hoursMax)
+        reasons: [
+          `Derived from ${hoursMin}–${hoursMax} hours of verified technical development effort`,
+          "Matched directly against verified commercial knowledge base benchmarks",
+          "Includes 100% full source code handover and 30-day written bug-fix warranty"
+        ]
       };
-    }
-
-    function generateWhyReasons(cfg, hMin, hMax) {
-      const reasons = [];
-      reasons.push(`Derived from ${hMin}–${hMax} hours of verified technical development effort`);
-      if (cfg.excludedList && cfg.excludedList.length > 0) {
-        reasons.push(`Scope actively reduced by explicit exclusions: ${cfg.excludedList.join(', ')}`);
-      }
-      if (cfg.uiuxTier === "premium") reasons.push("High-fidelity studio UI/UX and micro-interaction sprints");
-      if (cfg.formScale === "9-15" || cfg.formScale === "15+") reasons.push("Complex multi-step interactive workflows & validations");
-      if (cfg.selectedFeatures && cfg.selectedFeatures.includes("feat_payments")) reasons.push("Payment gateway webhooks & automated tax receipt generation");
-      if (cfg.selectedFeatures && cfg.selectedFeatures.includes("feat_ai_bot")) reasons.push("AI LLM streaming token integration & vector search pipeline");
-      return reasons;
     }
 
     // ==========================================================================
@@ -2970,7 +2496,7 @@
     }
 
     // ==========================================================================
-    // DOMAIN-DRIVEN REQUIREMENT EXTRACTION & PROCESSOR
+    // DOMAIN ANALYSIS & PROMPT ROUTER (Calls Knowledge Base Engine)
     // ==========================================================================
     async function processIdeaMode() {
       const inputEl = document.getElementById("idea-input");
@@ -2987,383 +2513,43 @@
         btnEl.innerText = "Analyzing Requirements & Domain...";
       }
 
-      if (AI_WORKER_URL) {
-        try {
-          const response = await fetch(AI_WORKER_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: text })
-          });
+      state.fromIdeaMode = true;
+      state.rawIdeaText = text;
 
-          if (response.ok) {
-            const aiData = await response.json();
-            applyAIClassification(aiData, text, true);
-            if (btnEl) {
-              btnEl.disabled = false;
-              btnEl.innerText = "Analyze & Value Project →";
-            }
-            showToast("✨ Precision domain analysis complete!");
-            showResultsView();
-            return;
-          }
-        } catch (err) {
-          console.warn("AI proxy unavailable, switching to local domain analyzer.", err);
+      // Leverage Knowledge Base Match Engine
+      if (typeof CostPilotKB !== "undefined" && CostPilotKB.match) {
+        const matchResult = CostPilotKB.match(text);
+
+        state.customProjectTitle = matchResult.package.title;
+        state.projectType = matchResult.package.domain;
+        state.includedList = matchResult.package.inclusions;
+
+        const hoursMin = Math.round(matchResult.marketPrice / 600);
+        const hoursMax = Math.round(matchResult.marketPrice / 450);
+
+        state.analysisBreakdown = [
+          { title: "🎯 Scoped Package", desc: `${matchResult.package.title}` },
+          { title: "⏱️ Engineering Effort", desc: `${hoursMin} – ${hoursMax} Dev Hours` },
+          { title: "✅ Benchmark Scope", desc: matchResult.package.inclusions.join(', ') },
+          { title: "💡 Pricing Logic", desc: "Derived from verified market knowledge base package specifications." }
+        ];
+
+        if (btnEl) {
+          btnEl.disabled = false;
+          btnEl.innerText = "Analyze & Value Project →";
         }
+
+        showToast("Knowledge base package matched!");
+        showResultsView();
+        return;
       }
 
-      applyLocalClassification(text);
+      // Fallback
       if (btnEl) {
         btnEl.disabled = false;
         btnEl.innerText = "Analyze & Value Project →";
       }
-      showToast("Smart domain requirement analysis complete!");
       showResultsView();
-    }
-
-    function applyAIClassification(ai, rawText, isAiLive) {
-      state.fromIdeaMode = true;
-      state.rawIdeaText = rawText;
-      state.projectType = ai.archetype || "biz_website";
-      state.uiuxTier = "custom";
-      state.formScale = "1-3";
-      state.selectedFeatures = ai.detected_features || [];
-      state.dynamicScope = [];
-
-      state.includedList = ai.included_features || [];
-      state.excludedList = ai.excluded_features || [];
-      state.hasAdminPanel = !!ai.has_admin_panel;
-      state.userRolesCount = ai.user_roles_count || 1;
-      state.platformScope = ai.platform_scope || "website_only";
-
-      state.customProjectTitle = ai.project_title || generateSmartTitle(rawText, state.projectType);
-
-      validateAndSanitizeScope(state, rawText);
-
-      const computed = calculateCostModels(state);
-      state.estimatedHoursMin = computed.hoursMin;
-      state.estimatedHoursMax = computed.hoursMax;
-
-      const chips = [
-        { title: "🎯 Scoped Product", desc: `${state.customProjectTitle}` },
-        { title: "⏱️ Engineering Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
-        { title: "✅ Explicit Inclusions", desc: state.includedList.length ? state.includedList.slice(0, 5).join(', ') : "Core Workflow Requirements" },
-        { title: "🚫 Scope Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested add-ons)" },
-        { title: "💡 Architect's Insight", desc: ai.architectural_summary || "Priced to exact requirements with zero unrequested feature inflation." }
-      ];
-
-      state.analysisBreakdown = chips;
-      const aiBadge = document.getElementById("ai-engine-badge");
-      if (aiBadge) aiBadge.innerText = isAiLive ? "Gemini 1.5 Flash Precision Engine" : "Local Scoping Engine";
-    }
-
-    // Local Domain-Driven Classification & Extraction
-    function applyLocalClassification(text) {
-      const lower = (text || "").toLowerCase();
-      state.fromIdeaMode = true;
-      state.rawIdeaText = text;
-      state.selectedFeatures = [];
-      state.dynamicScope = [];
-      state.uiuxTier = "custom";
-      state.formScale = "none";
-      state.infra.users = "under100";
-      state.infra.storage = "5gb";
-
-      const included = [];
-      const excluded = [];
-
-      // 1. Identify Explicit Exclusions
-      const isOnlinePaymentExcluded = isNegatedInText(lower, "payment") || isNegatedInText(lower, "online payment") || isNegatedInText(lower, "gateway") || isNegatedInText(lower, "payment gateway") || isNegatedInText(lower, "fees");
-      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "customer accounts") || isNegatedInText(lower, "customer account") || isNegatedInText(lower, "customer registration") || isNegatedInText(lower, "registration") || isNegatedInText(lower, "signup");
-      const isAdminExcluded = isNegatedInText(lower, "admin") || isNegatedInText(lower, "admin panel") || isNegatedInText(lower, "admin dashboard");
-      const isCartExcluded = isNegatedInText(lower, "cart") || isNegatedInText(lower, "shopping cart") || isNegatedInText(lower, "checkout");
-      const isMobileExcluded = isNegatedInText(lower, "mobile app") || isNegatedInText(lower, "mobile application") || isNegatedInText(lower, "mobile") || isNegatedInText(lower, "app");
-      const isAIExcluded = isNegatedInText(lower, "ai") || isNegatedInText(lower, "ai features") || isNegatedInText(lower, "chatbot") || isNegatedInText(lower, "llm") || isNegatedInText(lower, "ocr");
-      const isOrderingExcluded = isNegatedInText(lower, "ordering") || isNegatedInText(lower, "online ordering") || isNegatedInText(lower, "order") || isNegatedInText(lower, "orders");
-      const isBookingExcluded = isNegatedInText(lower, "booking") || isNegatedInText(lower, "booking system") || isNegatedInText(lower, "appointment");
-      const isDatabaseExcluded = isNegatedInText(lower, "database") || isNegatedInText(lower, "db");
-      const isAPIExcluded = isNegatedInText(lower, "api") || isNegatedInText(lower, "api integration") || isNegatedInText(lower, "integrations");
-      const isCMSExcluded = isNegatedInText(lower, "cms");
-
-      if (isOnlinePaymentExcluded) excluded.push("Payment Gateway");
-      if (isCustomerAuthExcluded) excluded.push("Customer Login & Accounts");
-      if (isAdminExcluded) excluded.push("Admin Dashboard & Panel");
-      if (isCartExcluded) excluded.push("Shopping Cart & Checkout");
-      if (isMobileExcluded) excluded.push("Mobile Application");
-      if (isAIExcluded) excluded.push("AI / Machine Learning Features");
-      if (isOrderingExcluded) excluded.push("Online Ordering System");
-      if (isBookingExcluded) excluded.push("Booking Engine");
-      if (isDatabaseExcluded) excluded.push("Database Storage");
-      if (isAPIExcluded) excluded.push("Third-Party API Integrations");
-      if (isCMSExcluded) excluded.push("Content Management System (CMS)");
-
-      // 2. Strict Domain & Archetype Detection
-      const isRestaurant = /\b(restaurant|cafe|bakery|diner|food|eatery)\b/i.test(lower);
-      const isClinic = /\b(clinic|doctor|patient|specialties)\b/i.test(lower) && !isBookingExcluded;
-      const isDocManagement = /\b(document\s*management|upload\s*pdf|pdf\s*documents|folders)\b/i.test(lower) && !/\b(course|school|lms)\b/i.test(lower);
-      const isLMS = /\b(lms|course|courses|student|students|video\s*lectures|learning\s*progress)\b/i.test(lower);
-      const isSaaS = /\b(saas|workspaces|task\s*management|tasks|projects)\b/i.test(lower) && !isLMS;
-      const isAI = /\b(ai\s*web\s*application|ai\s*summaries|generate\s*ai|llm|summaries)\b/i.test(lower) && !isAIExcluded;
-      const isServiceBooking = (/\b(service\s*booking|choose\s*a\s*preferred\s*date|booking\s*request|book\s*appointments)\b/i.test(lower) || (/\b(booking|appointments)\b/i.test(lower))) && !isBookingExcluded && !isClinic;
-      const isPortfolio = /\b(portfolio|photographer|artist|resume\s*and\s*contact|showcase)\b/i.test(lower) && !isLMS;
-
-      // 3. Populate Archetype & Inclusions
-      if (isRestaurant) {
-        const hasOrdering = (lower.includes("order") || lower.includes("ordering") || lower.includes("cart") || lower.includes("checkout")) && !isOrderingExcluded && !isCartExcluded;
-        if (hasOrdering) {
-          state.projectType = "ecommerce";
-          state.customProjectTitle = "Restaurant Ordering Web Application";
-          included.push("Food Categories & Menu Items");
-          included.push("Shopping Cart & Checkout");
-          included.push("Customer Order Placement");
-          if (!isCustomerAuthExcluded) included.push("Customer Registration & Order History");
-          if (!isOnlinePaymentExcluded) included.push("Online Payment Gateway");
-          if (!isAdminExcluded) { included.push("Admin Dashboard for Orders"); state.hasAdminPanel = true; }
-        } else {
-          state.projectType = "biz_website";
-          state.customProjectTitle = "Informational Restaurant Website";
-          included.push("Menu & Food Categories Showcase");
-          included.push("Food Gallery & Photos");
-          included.push("Location, Opening Hours & Contact");
-          if (lower.includes("whatsapp") && !isNegatedInText(lower, "whatsapp")) included.push("WhatsApp Click-to-Chat Button");
-        }
-      } else if (isClinic) {
-        state.projectType = "web_app";
-        state.customProjectTitle = "Clinic Appointment Web Application";
-        if (!isCustomerAuthExcluded) { included.push("Patient Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("Doctors & Specialties Directory");
-        included.push("Available Slots & Appointment Booking");
-        included.push("Patient Appointment History");
-        if (!isAdminExcluded) { included.push("Admin Management Dashboard"); state.hasAdminPanel = true; }
-      } else if (isServiceBooking) {
-        state.projectType = "web_app";
-        state.customProjectTitle = "Service Booking Website";
-        included.push("Service Catalog & Options");
-        included.push("Date & Time Slot Selection");
-        included.push("Booking Request Submission");
-        if (!isAdminExcluded) { included.push("Admin Dashboard for Booking Requests"); state.hasAdminPanel = true; }
-      } else if (isDocManagement) {
-        state.projectType = "web_app";
-        state.customProjectTitle = "Document Management Web Application";
-        if (!isCustomerAuthExcluded) { included.push("User Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("PDF Document Upload & Cloud Storage");
-        included.push("Folder Hierarchy & Organization");
-        included.push("Document Search, Filtering & Download");
-        if (!isAdminExcluded) { included.push("Admin User & Document Panel"); state.hasAdminPanel = true; }
-      } else if (isLMS) {
-        state.projectType = "lms";
-        const hasStudentAuth = !isCustomerAuthExcluded && (lower.includes("student") || lower.includes("login") || lower.includes("enroll"));
-        const hasAdmin = !isAdminExcluded && (lower.includes("admin") || lower.includes("upload"));
-        const hasPayments = !isOnlinePaymentExcluded && (lower.includes("payment") || lower.includes("subscription"));
-        const hasAdvanced = lower.includes("quiz") || lower.includes("certificate") || lower.includes("live") || lower.includes("analytics") || lower.includes("roles");
-
-        if (hasAdvanced) {
-          state.customProjectTitle = "Advanced Learning Management System (LMS)";
-        } else if (hasPayments) {
-          state.customProjectTitle = "Paid / Subscription LMS Web Application";
-        } else if (hasStudentAuth) {
-          state.customProjectTitle = "LMS Web Application";
-        } else if (hasAdmin) {
-          state.customProjectTitle = "Course Management LMS";
-        } else {
-          state.customProjectTitle = "Static Course Showcase Website";
-        }
-
-        if (hasStudentAuth) { included.push("Student Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("Course Catalog & Syllabus");
-        if (lower.includes("video") || lower.includes("resource") || hasAdmin || hasStudentAuth) included.push("Video Lectures & PDF Resources");
-        if (lower.includes("progress")) included.push("Learning Progress Tracking");
-        if (hasAdmin) { included.push("Admin Course & Student Dashboard"); state.hasAdminPanel = true; }
-        if (hasPayments) included.push("Payment Gateway / Subscriptions");
-        if (hasAdvanced) included.push("Quizzes, Certificates & Interactive Modules");
-      } else if (isSaaS) {
-        state.projectType = "saas_product";
-        state.customProjectTitle = "SaaS Task Management Web Application";
-        if (!isCustomerAuthExcluded) { included.push("User Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("Workspaces, Projects & Tasks");
-        included.push("Task Assignments & Status Management");
-        included.push("Notifications Engine");
-        if (!isAdminExcluded) { included.push("Workspace Admin Dashboard"); state.hasAdminPanel = true; }
-      } else if (isAI) {
-        state.projectType = "ai_app";
-        state.customProjectTitle = "AI Summary Web Application";
-        if (!isCustomerAuthExcluded) { included.push("User Registration & Login"); state.selectedFeatures.push("feat_auth"); }
-        included.push("Text Document Upload & Extraction");
-        included.push("AI Summary Generation Pipeline");
-        included.push("Saved Summary History");
-        if (!isAdminExcluded) { included.push("Admin User Management Dashboard"); state.hasAdminPanel = true; }
-      } else if (isPortfolio) {
-        state.projectType = "portfolio";
-        
-        // Match specific portfolio tier title
-        if (lower.includes("ai") && !isAIExcluded) {
-          state.customProjectTitle = "Portfolio with AI Features";
-        } else if (lower.includes("booking") && !isBookingExcluded) {
-          state.customProjectTitle = "Portfolio Website with Booking";
-        } else if ((lower.includes("cms") || lower.includes("admin")) && !isCmsExcluded && !isAdminExcluded) {
-          state.customProjectTitle = "Portfolio Website with CMS";
-        } else if (lower.includes("blog")) {
-          state.customProjectTitle = "Portfolio Website with Blog";
-        } else if (lower.includes("designer") || lower.includes("creative") || lower.includes("artist") || lower.includes("photographer")) {
-          state.customProjectTitle = "Designer / Creative Portfolio";
-        } else if (lower.includes("developer") || lower.includes("tech") || lower.includes("github")) {
-          state.customProjectTitle = "Developer / Tech Portfolio";
-        } else if (lower.includes("brand") || lower.includes("premium")) {
-          state.customProjectTitle = "Premium Personal Brand Website";
-        } else if (lower.includes("1-page") || lower.includes("one page") || lower.includes("single page") || lower.includes("starter")) {
-          state.customProjectTitle = "Starter Portfolio Website";
-        } else if (lower.includes("resume") || lower.includes("cv")) {
-          state.customProjectTitle = "Resume & Portfolio Website";
-        } else {
-          state.customProjectTitle = "Personal Portfolio Website";
-        }
-
-        included.push("Personal Profile & Projects Showcase");
-        if (lower.includes("resume") || lower.includes("cv") || lower.includes("download")) included.push("Resume / Downloadable CV");
-        if (lower.includes("contact") && !isNegatedInText(lower, "contact")) included.push("Contact Form / Links");
-        if (lower.includes("github") || lower.includes("tech stack")) included.push("GitHub Links & Tech Stack Overview");
-        if (lower.includes("gallery") || lower.includes("video")) included.push("Visual Media Showcase & Galleries");
-        if (lower.includes("blog")) included.push("Blog Section & Article Feed");
-        if (lower.includes("cms")) included.push("Admin Project Management Panel");
-        if (lower.includes("booking")) included.push("Consultation / Service Booking Workflow");
-        if (lower.includes("ai") && !isAIExcluded) included.push("AI Assistant / Feature Integration");
-      } else {
-        // Business brochure website
-        state.projectType = "biz_website";
-        state.customProjectTitle = lower.includes("services") ? "Service Business Website" : "Business Website";
-        included.push("Responsive Website Pages");
-        if (lower.includes("blog") || lower.includes("cms")) {
-          included.push("Headless / Flat CMS Integration");
-          if (!isAdminExcluded) { included.push("Admin Content Dashboard"); state.hasAdminPanel = true; }
-        }
-        if (lower.includes("contact") && !isNegatedInText(lower, "contact")) included.push("Contact Enquiry Form");
-        if (lower.includes("whatsapp") && !isNegatedInText(lower, "whatsapp")) included.push("WhatsApp Click-to-Chat Button");
-      }
-
-      state.includedList = included;
-      state.excludedList = excluded;
-
-      validateAndSanitizeScope(state, text);
-
-      const computed = calculateCostModels(state);
-      state.estimatedHoursMin = computed.hoursMin;
-      state.estimatedHoursMax = computed.hoursMax;
-
-      const chips = [
-        { title: "🎯 Scoped Domain", desc: `${state.customProjectTitle}` },
-        { title: "⏱️ Estimated Effort", desc: `${state.estimatedHoursMin} – ${state.estimatedHoursMax} Dev Hours` },
-        { title: "✅ Verified Inclusions", desc: state.includedList.join(', ') },
-        { title: "🚫 Strict Exclusions", desc: state.excludedList.length ? state.excludedList.join(', ') : "Standard scope (No unrequested features)" },
-        { title: "💡 Architect's Validation", desc: "Domain workflows mapped strictly. Excluded features contribute ₹0." }
-      ];
-
-      state.analysisBreakdown = chips;
-      const aiBadge = document.getElementById("ai-engine-badge");
-      if (aiBadge) aiBadge.innerText = "Domain Scoping Engine";
-    }
-
-    // ==========================================================================
-    // PRE-DISPLAY VALIDATION & SANITIZATION GATE
-    // ==========================================================================
-    function validateAndSanitizeScope(st, text) {
-      const lower = (text || "").toLowerCase();
-
-      const hasExplicitAI = /\b(ai\s*app|ai\s*platform|llm|chatbot|claude|gemini|rag|summaries|ai\s*resume)\b/i.test(lower) && !isNegatedInText(lower, "ai");
-      const hasExplicitMobile = /\b(mobile\s*app|android\s*app|ios\s*app|flutter|react\s*native)\b/i.test(lower) && !isNegatedInText(lower, "mobile app");
-      const hasExplicitPayment = /\b(online\s*payment|payment\s*gateway|razorpay|stripe|pay\s*fees|pay\s*online)\b/i.test(lower) && !isNegatedInText(lower, "online payment") && !isNegatedInText(lower, "payment");
-
-      // 1. Purge Unrequested or Excluded AI
-      if (!hasExplicitAI || st.excludedList.some(e => /ai|chatbot/i.test(e))) {
-        st.includedList = (st.includedList || []).filter(item => !/\b(ai|llm|chatbot|summary\s*generation|ai\s*assistant)\b/i.test(item));
-        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_ai_bot");
-        if (st.projectType === "ai_app") st.projectType = "web_app";
-      }
-
-      // 2. Purge Unrequested or Excluded Mobile
-      if (!hasExplicitMobile || st.excludedList.some(e => /mobile/i.test(e))) {
-        st.includedList = (st.includedList || []).filter(item => !/\bmobile\s*app|android|ios\b/i.test(item));
-        if (st.projectType === "mobile_app") st.projectType = "web_app";
-        st.platformScope = "website_only";
-      }
-
-      // 3. Purge Unrequested or Excluded Payments
-      if (!hasExplicitPayment || st.excludedList.some(e => /payment|gateway/i.test(e))) {
-        st.includedList = (st.includedList || []).filter(item => !/\bpayment|gateway\b/i.test(item));
-        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_payments");
-      }
-
-      // 4. Purge Excluded Customer Login
-      const isCustomerAuthExcluded = isNegatedInText(lower, "customer login") || isNegatedInText(lower, "user login") || isNegatedInText(lower, "login") || isNegatedInText(lower, "customer accounts") || isNegatedInText(lower, "customer account") || st.excludedList.some(e => /customer login|login/i.test(e));
-      if (isCustomerAuthExcluded) {
-        st.includedList = (st.includedList || []).filter(item => !/\bcustomer\s*login|user\s*login|patient\s*registration|student\s*registration|user\s*registration|customer\s*accounts\b/i.test(item));
-        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_auth");
-        if (!st.excludedList.some(e => /customer login/i.test(e))) {
-          st.excludedList.push("Customer Login & Accounts");
-        }
-      }
-
-      // 5. Purge Excluded Admin
-      const isAdminExcluded = isNegatedInText(lower, "admin") || st.excludedList.some(e => /admin/i.test(e));
-      if (isAdminExcluded) {
-        st.includedList = (st.includedList || []).filter(item => !/\badmin\b/i.test(item));
-        st.hasAdminPanel = false;
-        if (!st.excludedList.some(e => /admin/i.test(e))) {
-          st.excludedList.push("Admin Dashboard & Panel");
-        }
-      }
-
-      // 6. Purge WhatsApp API if Only a Button
-      const hasWhatsAppOnlyButton = /\b(whatsapp\s*button|whatsapp\s*link|contact\s*via\s*whatsapp|click-to-chat)\b/i.test(lower) && !/\b(api|sms\s*gateway|otp)\b/i.test(lower);
-      if (hasWhatsAppOnlyButton) {
-        st.selectedFeatures = (st.selectedFeatures || []).filter(f => f !== "feat_wa_sms");
-        st.includedList = (st.includedList || []).filter(item => !/whatsapp\s*&\s*sms\s*api/i.test(item));
-        if (!st.includedList.includes("WhatsApp Click-to-Chat Button")) {
-          st.includedList.push("WhatsApp Click-to-Chat Button");
-        }
-      }
-
-      // 7. Dynamic Title Validation
-      st.customProjectTitle = generateSmartTitle(text, st.projectType);
-    }
-
-    function generateSmartTitle(text, type) {
-      const lower = (text || "").toLowerCase();
-      const isBookingExcluded = isNegatedInText(lower, "booking") || isNegatedInText(lower, "booking system");
-
-      if (/\b(clinic|patient|doctor|specialties)\b/i.test(lower) && !isBookingExcluded) return "Clinic Appointment Web Application";
-      if (/\b(document\s*management|upload\s*pdf|pdf\s*documents|folders)\b/i.test(lower) && !/\b(lms|course)\b/i.test(lower)) return "Document Management Web Application";
-      if (/\b(restaurant|cafe|bakery)\b/i.test(lower)) {
-        if (/\b(order|ordering|cart|checkout)\b/i.test(lower) && !isNegatedInText(lower, "ordering") && !isNegatedInText(lower, "cart")) {
-          return "Restaurant Ordering Web Application";
-        }
-        return "Informational Restaurant Website";
-      }
-      if (/\b(lms|course|courses|video\s*lectures)\b/i.test(lower)) {
-        if (lower.includes("quiz") || lower.includes("certificate") || lower.includes("live") || lower.includes("analytics")) return "Advanced Learning Management System (LMS)";
-        if (lower.includes("payment") || lower.includes("subscription")) return "Paid / Subscription LMS Web Application";
-        if (lower.includes("student") || lower.includes("login") || lower.includes("enroll")) return "LMS Web Application";
-        if (lower.includes("admin") || lower.includes("upload")) return "Course Management LMS";
-        return "Static Course Showcase Website";
-      }
-      if (/\b(saas|task\s*management|workspaces)\b/i.test(lower)) return "SaaS Task Management Web Application";
-      if (/\b(ai\s*web\s*application|ai\s*summaries|generate\s*ai)\b/i.test(lower)) return "AI Summary Web Application";
-      if (/\b(service\s*booking|preferred\s*date|booking\s*request)\b/i.test(lower) && !isBookingExcluded) return "Service Booking Web Platform";
-      if (/\b(services)\b/i.test(lower) && isBookingExcluded) return "Service Business Website";
-      if (/\b(portfolio|resume\s*and\s*contact)\b/i.test(lower)) {
-        if (lower.includes("ai")) return "Portfolio with AI Features";
-        if (lower.includes("booking")) return "Portfolio Website with Booking";
-        if (lower.includes("cms")) return "Portfolio Website with CMS";
-        if (lower.includes("blog")) return "Portfolio Website with Blog";
-        if (lower.includes("designer") || lower.includes("creative")) return "Designer / Creative Portfolio";
-        if (lower.includes("developer") || lower.includes("tech")) return "Developer / Tech Portfolio";
-        if (lower.includes("brand") || lower.includes("premium")) return "Premium Personal Brand Website";
-        if (lower.includes("1-page") || lower.includes("starter")) return "Starter Portfolio Website";
-        if (lower.includes("resume") || lower.includes("cv")) return "Resume & Portfolio Website";
-        return "Personal Portfolio Website";
-      }
-      if (type === "portfolio") return "Personal Portfolio Website";
-      if (type === "ecommerce") return "E-Commerce Web Application";
-      if (type === "mobile_app") return "Cross-Platform Mobile Application";
-      return "Business Website";
     }
 
     // ==========================================================================
@@ -3538,26 +2724,7 @@
       
       const dynBox = document.getElementById("scope-dynamic-options");
       dynBox.innerHTML = "";
-      if (p.dynamicQuestions && p.dynamicQuestions.length > 0) {
-        p.dynamicQuestions.forEach(q => {
-          const isSel = state.dynamicScope.includes(q.id);
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = `pill-btn ${isSel ? 'selected' : ''}`;
-          btn.innerText = (isSel ? "✓ " : "+ ") + q.label;
-          btn.onclick = () => {
-            if (state.dynamicScope.includes(q.id)) {
-              state.dynamicScope = state.dynamicScope.filter(x => x !== q.id);
-            } else {
-              state.dynamicScope.push(q.id);
-            }
-            renderStep2();
-          };
-          dynBox.appendChild(btn);
-        });
-      } else {
-        dynBox.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">Standard architecture scope applies.</span>`;
-      }
+      dynBox.innerHTML = `<span style="font-size:0.85rem; color:var(--text-muted);">Standard architecture scope applies.</span>`;
 
       // UI/UX
       const uiBox = document.getElementById("uiux-options-container");
